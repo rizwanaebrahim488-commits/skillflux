@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Marketplace</title>
+    <title>SkillFlux | The Global Skill Standard</title>
     <style>
         :root {
             --bg-black: #000000;
@@ -29,28 +29,30 @@
         .blue { color: var(--accent-blue); }
         
         .nav-menu { display: flex; gap: 25px; align-items: center; }
-        .nav-link { color: var(--text-gray); text-decoration: none; font-weight: 500; transition: 0.3s; cursor: pointer; border: none; background: none; font-size: 1rem;}
+        .nav-link { color: var(--text-gray); text-decoration: none; font-weight: 500; cursor: pointer; border: none; background: none; font-size: 1rem;}
         .nav-link:hover { color: var(--accent-blue); }
         .btn-solid { background: var(--accent-blue); color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        /* HERO & AUTH */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 8%; }
+        /* TITAN HERO SECTION */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 8%; background: radial-gradient(circle at 90% 10%, #1d4ed815 0%, transparent 40%); }
         .hero h1 { font-size: clamp(5rem, 15vw, 10rem); font-weight: 950; line-height: 0.85; letter-spacing: -6px; margin-bottom: 20px; }
-        
+        .hero h2 { font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; color: var(--text-gray); margin-bottom: 40px; }
+
+        /* AUTH CARD (WITH CONFIRM PASSWORD) */
         #auth-view { padding: 100px 8%; display: flex; justify-content: center; }
         .auth-card { background: var(--card-dark); padding: 50px; border-radius: 24px; border: 1px solid var(--border-gray); width: 100%; max-width: 480px; text-align: center; }
         input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; font-size: 1rem; }
-        
-        /* DASHBOARD & SERVICES */
-        #dashboard-view { padding: 120px 8% 60px; }
-        .dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 1px solid var(--border-gray); padding-bottom: 20px;}
-        .credit-badge { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 10px 20px; border-radius: 30px; border: 1px solid var(--accent-blue); font-weight: 800; font-size: 1.2rem;}
+        input:focus { border-color: var(--accent-blue); outline: none; }
 
-        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-        .service-card { background: var(--card-dark); border: 1px solid var(--border-gray); padding: 40px; border-radius: 24px; }
-        .service-card h3 { font-size: 2rem; margin-bottom: 20px; }
+        /* DASHBOARD & MARKETPLACE */
+        #dashboard-view { padding: 120px 8%; }
+        .dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 1px solid var(--border-gray); padding-bottom: 20px;}
+        .credit-badge { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 12px 24px; border-radius: 30px; border: 1px solid var(--accent-blue); font-weight: 800; font-size: 1.4rem;}
+
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .card { background: var(--card-dark); border: 1px solid var(--border-gray); padding: 40px; border-radius: 24px; }
         
-        .skill-item { background: #111; padding: 15px; border-radius: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222;}
+        .skill-list-item { background: #050505; padding: 15px; border-radius: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1a1a1a;}
         .hidden { display: none; }
     </style>
 </head>
@@ -59,12 +61,12 @@
     <nav>
         <div class="brand">Skill<span class="blue">Flux</span></div>
         <div class="nav-menu" id="guest-nav">
-            <button class="nav-link" onclick="showAuth()">Learn More</button>
+            <button class="nav-link" onclick="showAuth()">How it Works</button>
             <button class="btn-solid" onclick="showAuth()">Join Exchange</button>
         </div>
         <div class="nav-menu hidden" id="user-nav">
-            <button class="nav-link" onclick="switchTab('earn')">Teach & Earn</button>
-            <button class="nav-link" onclick="switchTab('learn')">Marketplace</button>
+            <button class="nav-link" onclick="switchTab('earn')">Earn Credits</button>
+            <button class="nav-link" onclick="switchTab('learn')">Learn Skills</button>
             <button class="nav-link" style="color: #ff4444" onclick="handleLogout()">Logout</button>
         </div>
     </nav>
@@ -72,18 +74,18 @@
     <div id="landing-view">
         <section class="hero">
             <h1>Skill<span class="blue">Flux</span></h1>
-            <h2 style="color:var(--text-gray); font-size: 2rem;">The Professional Skill Standard.</h2>
-            <button class="btn-solid" style="margin-top: 30px; padding: 20px 40px;" onclick="showAuth()">Get Started</button>
-        </header>
+            <h2>The Global Standard for Peer-to-Peer Exchange.</h2>
+            <button class="btn-solid" style="width: 250px; padding: 20px;" onclick="showAuth()">Get Started</button>
+        </section>
 
         <section id="auth-view" class="hidden">
             <div class="auth-card">
-                <h2 style="margin-bottom: 30px;">Initialize Profile</h2>
+                <h2 style="margin-bottom: 30px;">Secure Entry</h2>
                 <input type="email" id="email" placeholder="Professional Email">
                 <input type="password" id="password" placeholder="Create Password">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password">
-                <button onclick="handleSignUp()" class="btn-solid" style="width:100%; padding: 18px;">Create Account</button>
-                <button onclick="handleLogin()" style="background:none; border:none; color:var(--text-gray); margin-top:20px; cursor:pointer; text-decoration: underline;">Existing User? Login</button>
+                <button onclick="handleSignUp()" class="btn-solid" style="width:100%; padding: 18px;">Initialize Account</button>
+                <p style="margin-top:20px; color:var(--text-gray); font-size: 0.9rem;">Already a member? <span onclick="handleLogin()" style="color:var(--accent-blue); cursor:pointer; text-decoration: underline;">Login here</span></p>
             </div>
         </section>
     </div>
@@ -91,38 +93,35 @@
     <div id="dashboard-view" class="hidden">
         <div class="dash-header">
             <div>
-                <h1 style="font-size: 3rem;">Dashboard</h1>
-                <p style="color: var(--text-gray)">Active Member: <span id="user-display" class="blue"></span></p>
+                <h1 style="font-size: 3.5rem; letter-spacing: -2px;">Dashboard</h1>
+                <p style="color: var(--text-gray)">Active Node: <span id="user-display" class="blue"></span></p>
             </div>
             <div class="credit-badge"><span id="credit-display">0</span> Flux Credits</div>
         </div>
 
         <div id="earn-section" class="service-grid">
-            <div class="service-card">
-                <h3>Teach & Earn</h3>
-                <p style="color:var(--text-gray); margin-bottom: 20px;">List your expertise to earn credits from the community.</p>
-                <input type="text" id="skillInput" placeholder="e.g. Advanced Python, UI Design">
-                <button onclick="addSkill()" class="btn-solid" style="width:100%; background:var(--accent-green)">Add New Service</button>
-                <div style="margin-top:30px;">
-                    <h4>My Active Services:</h4>
+            <div class="card">
+                <h3>Teach to Earn</h3>
+                <p style="color:var(--text-gray); margin-bottom: 25px;">Post a service you can provide to the community to earn credits.</p>
+                <input type="text" id="skillInput" placeholder="e.g. Master React, Digital Marketing">
+                <button onclick="addSkill()" class="btn-solid" style="width:100%; background:var(--accent-green)">Publish Service</button>
+                <div style="margin-top:40px;">
+                    <h4 style="border-bottom: 1px solid #222; padding-bottom: 10px;">My Active Services</h4>
                     <ul id="mySkillsList" style="list-style:none;"></ul>
                 </div>
             </div>
-            <div style="padding: 40px; background: rgba(16, 185, 129, 0.05); border-radius: 24px; border: 1px dashed var(--accent-green);">
-                <h4 style="color:var(--accent-green)">Earning Potential</h4>
-                <p style="margin-top:15px; font-size: 0.9rem; color:var(--text-gray)">Every time a peer requests your service, 1 Credit is transferred to your account. Verified experts earn at a higher rate.</p>
+            <div style="padding: 40px;">
+                <h3 class="blue">System Status</h3>
+                <p style="color:var(--text-gray)">Your account is initialized with 2 Flux Credits. Every time you teach a peer, your balance increases. Credits can be traded for any skill in the Marketplace.</p>
             </div>
         </div>
 
         <div id="learn-section" class="hidden">
-            <div class="service-card" style="grid-column: span 2;">
-                <h3>Global Marketplace</h3>
-                <p style="color:var(--text-gray); margin-bottom: 30px;">Exchange your credits for world-class mentorship.</p>
+            <div class="card" style="width: 100%;">
+                <h3>Skill Marketplace</h3>
+                <p style="color:var(--text-gray); margin-bottom: 30px;">Visit a service to learn and spend your credits.</p>
                 <div id="marketplaceList">
-                    <div class="skill-item">
-                        <span>Loading community skills...</span>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -145,7 +144,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // NAVIGATION LOGIC
+        // UI HELPERS
         window.showAuth = () => {
             document.getElementById('auth-view').classList.remove('hidden');
             document.getElementById('auth-view').scrollIntoView({ behavior: 'smooth' });
@@ -157,14 +156,15 @@
             if(tab === 'learn') loadMarketplace();
         };
 
-        // AUTH WITH CONFIRM PASSWORD
+        // AUTH LOGIC WITH CONFIRM PASSWORD
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             const confirm = document.getElementById('confirmPassword').value;
 
             if(pass !== confirm) return alert("Passwords do not match!");
-            
+            if(pass.length < 6) return alert("Password must be at least 6 characters.");
+
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, pass);
                 await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, skills: [], createdAt: new Date() });
@@ -179,7 +179,7 @@
 
         window.handleLogout = () => signOut(auth);
 
-        // SKILL MANAGEMENT
+        // DATA LOGIC
         window.addSkill = async () => {
             const skill = document.getElementById('skillInput').value;
             if(!skill) return;
@@ -189,7 +189,6 @@
                 });
                 document.getElementById('skillInput').value = "";
                 loadUserData(auth.currentUser.uid);
-                alert("Service Published!");
             } catch (e) { alert(e.message); }
         };
 
@@ -199,7 +198,7 @@
                 const data = snap.data();
                 document.getElementById('credit-display').innerText = data.credits;
                 const list = document.getElementById('mySkillsList');
-                list.innerHTML = (data.skills || []).map(s => `<li class="skill-item">${s} <span style="color:var(--accent-green)">Active</span></li>`).join('');
+                list.innerHTML = (data.skills || []).map(s => `<li class="skill-list-item">${s} <span style="color:var(--accent-green)">Live</span></li>`).join('');
             }
         }
 
@@ -212,19 +211,15 @@
                 if(userDoc.id !== auth.currentUser.uid && userData.skills) {
                     userData.skills.forEach(skill => {
                         marketplace.innerHTML += `
-                            <div class="skill-item">
-                                <div>
-                                    <strong>${skill}</strong><br>
-                                    <small style="color:var(--text-gray)">Expert: ${userData.email.split('@')[0]}</small>
-                                </div>
-                                <button class="btn-solid" style="padding: 5px 15px; font-size: 0.8rem;">Request (1 Credit)</button>
+                            <div class="skill-list-item">
+                                <div><strong>${skill}</strong><br><small style="color:var(--text-gray)">Expert: ${userData.email}</small></div>
+                                <button class="btn-solid" style="padding: 5px 15px; font-size: 0.8rem;">Request Session (1 Credit)</button>
                             </div>`;
                     });
                 }
             });
         }
 
-        // STATE WATCHER
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('landing-view').classList.add('hidden');
