@@ -3,149 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Peer-to-Peer Exchange</title>
+    <title>SkillFlux | Professional Skill Exchange</title>
     <style>
         :root {
-            --bg-dark: #000000;
-            --card-dark: #111111;
+            --bg-black: #000000;
+            --card-gray: #111111;
             --accent-blue: #3b82f6;
-            --text-white: #ffffff;
-            --text-gray: #a1a1aa;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-white);
-            line-height: 1.6;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-black); color: var(--text-primary); line-height: 1.6; scroll-behavior: smooth; }
 
         /* NAVIGATION BAR */
         nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid #222;
+            position: fixed; top: 0; width: 100%; padding: 20px 6%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(12px); z-index: 1000;
         }
-
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
-        .nav-links button {
-            background: transparent; color: white; border: none;
-            margin-left: 20px; font-weight: 600; cursor: pointer;
-        }
-        .btn-join { 
-            background: var(--accent-blue) !important; 
-            padding: 8px 20px; border-radius: 8px !important; 
-        }
+        .brand { font-size: 1.6rem; font-weight: 800; letter-spacing: -1px; color: var(--text-primary); }
+        .blue { color: var(--accent-blue); }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; cursor: pointer; border: none; background: none; font-size: 1rem; }
+        .nav-link:hover { color: var(--text-primary); }
+        .btn-cta { background: var(--accent-blue); color: white; padding: 10px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; }
 
         /* HERO SECTION */
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 10%;
-            background: radial-gradient(circle at 80% 20%, #1d4ed833 0%, transparent 50%);
-        }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 8%; background: radial-gradient(circle at 90% 10%, #1d4ed822 0%, transparent 40%); }
+        h1 { font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 900; line-height: 0.95; margin-bottom: 25px; }
+        .hero p { max-width: 600px; font-size: 1.3rem; color: var(--text-secondary); margin-bottom: 40px; }
 
-        h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-        .blue-text { color: var(--accent-blue); }
+        /* HOW IT WORKS SECTION */
+        .info-section { padding: 100px 8%; border-top: 1px solid #222; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+        .step { background: var(--card-gray); padding: 30px; border-radius: 16px; border: 1px solid #222; }
+        .step h3 { margin-bottom: 15px; color: var(--accent-blue); }
 
-        .description {
-            max-width: 600px;
-            font-size: 1.25rem;
-            color: var(--text-gray);
-            margin-bottom: 40px;
-        }
-
-        /* AUTH SECTION (SCROLL TARGET) */
-        #auth-container {
-            padding: 100px 5%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .auth-card {
-            background: var(--card-dark);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #222;
-            width: 100%;
-            max-width: 450px;
-        }
-
-        input {
-            width: 100%; padding: 16px; margin-bottom: 15px;
-            background: #000; border: 1px solid #333;
-            border-radius: 10px; color: white; font-size: 1rem;
-        }
-
-        .main-btn {
-            width: 100%; padding: 16px; background: var(--accent-blue);
-            color: white; border: none; border-radius: 10px;
-            font-weight: 700; cursor: pointer; font-size: 1rem;
-        }
+        /* AUTH SECTION (HIDDEN UNTIL CLICKED) */
+        #auth-view { padding: 120px 8%; display: flex; justify-content: center; }
+        .auth-card { background: var(--card-gray); padding: 50px; border-radius: 24px; border: 1px solid #333; width: 100%; max-width: 480px; text-align: center; }
+        input { width: 100%; padding: 16px; margin-bottom: 15px; background: #000; border: 1px solid #333; border-radius: 12px; color: white; font-size: 1rem; }
+        .submit-btn { width: 100%; padding: 16px; background: var(--accent-blue); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1.1rem; }
 
         .hidden { display: none; }
-
+        
         /* DASHBOARD */
-        #dashboard-section { padding: 120px 10%; }
-        .credit-badge { 
-            font-size: 3rem; font-weight: 800; color: var(--accent-blue); 
-            margin: 20px 0;
-        }
+        #dashboard-view { padding: 140px 8%; }
+        .stat { font-size: 4rem; font-weight: 800; color: var(--accent-blue); margin: 20px 0; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">Skill<span class="blue-text">Flux</span></div>
-        <div class="nav-links" id="nav-guest">
-            <button onclick="scrollToAuth()">Login</button>
-            <button onclick="scrollToAuth()" class="btn-join">Register</button>
+        <div class="brand">Skill<span class="blue">Flux</span></div>
+        <div class="nav-links" id="guest-nav">
+            <button class="nav-link" onclick="scrollToInfo()">How it works</button>
+            <button class="btn-cta" onclick="showAuth()">Sign In / Login</button>
         </div>
-        <div class="nav-links hidden" id="nav-user">
-            <button onclick="handleLogout()">Logout</button>
+        <div class="nav-links hidden" id="user-nav">
+            <button class="nav-link" onclick="handleLogout()">Logout</button>
         </div>
     </nav>
 
-    <div id="landing-page">
-        <header>
-            <h1>Peer-to-peer <br>skill exchange <br><span class="blue-text">platform.</span></h1>
-            <p class="description">
-                Find the skills you need. Share the skills you have. 
-                Connect with community members to learn and share valuable expertise.
-            </p>
-            <button onclick="scrollToAuth()" class="main-btn" style="width: 250px;">Get Started</button>
-        </header>
+    <div id="landing-view">
+        <div class="hero">
+            <h1>Peer-to-peer <br>skill exchange <br><span class="blue">standard.</span></h1>
+            <p>Exchange what you know for what you need. A borderless community built on shared knowledge and mutual growth.</p>
+            <button class="btn-cta" style="width: 200px; padding: 18px;" onclick="showAuth()">Start Learning</button>
+        </div>
 
-        <section id="auth-container">
+        <section id="info" class="info-section">
+            <h2 style="margin-bottom: 50px; font-size: 2.5rem;">The Ecosystem</h2>
+            <div class="grid">
+                <div class="step">
+                    <h3>1. Create</h3>
+                    <p>Build a professional profile listing your unique skills and expertise.</p>
+                </div>
+                <div class="step">
+                    <h3>2. Exchange</h3>
+                    <p>Connect with peers to trade skills. No money needed, just credits.</p>
+                </div>
+                <div class="step">
+                    <h3>3. Grow</h3>
+                    <p>Unlock new opportunities by learning directly from experts in the community.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="auth-view" class="hidden">
             <div class="auth-card">
-                <h2 style="margin-bottom:20px">Join the Community</h2>
-                <input type="email" id="email" placeholder="Enter email">
+                <h2 style="margin-bottom: 25px;">Enter SkillFlux</h2>
+                <input type="email" id="email" placeholder="Email Address">
                 <input type="password" id="password" placeholder="Password">
-                <button onclick="handleSignUp()" class="main-btn">Create Account</button>
-                <button onclick="handleLogin()" style="background:transparent; color:var(--text-gray); margin-top:15px; width:100%; border:none; cursor:pointer">Already have an account? Sign In</button>
+                <button onclick="handleSignUp()" class="submit-btn">Register New Account</button>
+                <button onclick="handleLogin()" style="background:none; border:none; color:var(--text-secondary); margin-top:15px; text-decoration:underline; cursor:pointer;">Login Existing Account</button>
             </div>
         </section>
     </div>
 
-    <div id="dashboard-section" class="hidden">
-        <h1>Welcome back, <span id="user-display" class="blue-text"></span></h1>
-        <p style="color:var(--text-gray)">Manage your exchanges and view your balance below.</p>
-        
-        <div style="background:var(--card-dark); padding:30px; border-radius:15px; margin-top:30px; border:1px solid #222">
-            <p>Available Credits</p>
-            <div class="credit-badge" id="credit-display">0</div>
-        </div>
+    <div id="dashboard-view" class="hidden">
+        <h1>Welcome back, <span id="user-display" class="blue"></span></h1>
+        <div class="stat" id="credit-display">0</div>
+        <p style="color:var(--text-secondary)">Your current credit balance.</p>
     </div>
 
     <script type="module">
@@ -153,7 +113,6 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
             authDomain: "skillflux-c4088.firebaseapp.com",
@@ -167,53 +126,41 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // UI HELPERS
-        window.scrollToAuth = () => {
-            document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+        // UI ACTIONS
+        window.scrollToInfo = () => document.getElementById('info').scrollIntoView({ behavior: 'smooth' });
+        window.showAuth = () => {
+            document.getElementById('auth-view').classList.remove('hidden');
+            document.getElementById('auth-view').scrollIntoView({ behavior: 'smooth' });
         };
 
-        // AUTH LOGIC
+        // FIREBASE LOGIC
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
-                alert("Account created! 2 Credits awarded.");
             } catch (e) { alert(e.message); }
         };
 
-        window.handleLogin = () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
-        };
-
+        window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
         window.handleLogout = () => signOut(auth);
 
-        // STATE OBSERVER
         onAuthStateChanged(auth, async (user) => {
-            const landing = document.getElementById('landing-page');
-            const dashboard = document.getElementById('dashboard-section');
-            const guestNav = document.getElementById('nav-guest');
-            const userNav = document.getElementById('nav-user');
-
             if (user) {
-                landing.classList.add('hidden');
-                dashboard.classList.remove('hidden');
-                guestNav.classList.add('hidden');
-                userNav.classList.remove('hidden');
+                document.getElementById('landing-view').classList.add('hidden');
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('guest-nav').classList.add('hidden');
+                document.getElementById('user-nav').classList.remove('hidden');
                 
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
                 const snap = await getDoc(doc(db, "users", user.uid));
-                if (snap.exists()) {
-                    document.getElementById('credit-display').innerText = snap.data().credits;
-                }
+                if (snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
             } else {
-                landing.classList.remove('hidden');
-                dashboard.classList.add('hidden');
-                guestNav.classList.remove('hidden');
-                userNav.classList.add('hidden');
+                document.getElementById('landing-view').classList.remove('hidden');
+                document.getElementById('dashboard-view').classList.add('hidden');
+                document.getElementById('guest-nav').classList.remove('hidden');
+                document.getElementById('user-nav').classList.add('hidden');
             }
         });
     </script>
