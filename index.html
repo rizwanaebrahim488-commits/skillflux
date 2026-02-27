@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SkillFlux | Peer-to-Peer</title>
+    <style>
+        /* Simple styling to make it look clean */
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f0f2f5; }
+        .box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;}
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;}
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>SkillFlux</h1>
+        
+        <div id="auth-section">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="handleSignUp()">Register (Get 2 Credits)</button>
+            <button onclick="handleLogin()" style="background:#28a745">Login</button>
+        </div>
+
+        <div id="dashboard-section" class="hidden">
+            <h3>Welcome, <span id="user-display"></span></h3>
+            <p>Your Credits: <strong id="credit-display">0</strong></p>
+            <button onclick="handleLogout()" style="background:#dc3545">Logout</button>
+        </div>
+    </div>
+
+    <script type="module">
+    // 1. Import tools from Google's servers
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 2. Your specific connection keys
+    const firebaseConfig = {
+        apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+        authDomain: "skillflux-c4088.firebaseapp.com",
+        projectId: "skillflux-c4088",
+        storageBucket: "skillflux-c4088.appspot.com",
+        messagingSenderId: "347039323368",
+        appId: "1:347039323368:web:0f610227dc3715581a255d"
+    };
+
+    // 3. Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // 4. Registration Function (Adds user to Auth and Database)
+    window.handleSignUp = async () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        try {
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            // This creates the user profile in Firestore with 2 credits
+            await setDoc(doc(db, "users", result.user.uid), {
+                email: email,
+                credits: 2,
+                createdAt: new Date()
+            });
+            alert("Registration successful!");
+        } catch (e) { alert(e.message); }
+    };
+
+    // 5. Login and Auth State (Handles switching the screen)
+    window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
+    window.handleLogout = () => signOut(auth);
+
+    onAuthStateChanged(auth, async (user) => {
+        const authDiv = document.getElementById('auth-section');
+        const dashDiv = document.getElementById('dashboard-section');
+        
+        if (user) {
+            authDiv.classList.add('hidden');
+            dashDiv.classList.remove('hidden');
+            document.getElementById('user-display').innerText = user.email;
+            
+            // Get credits from database
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if (snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
+        } else {
+            authDiv.classList.remove('hidden');
+            dashDiv.classList.add('hidden');
+        }
+    });
+</script>
+</body>
+</html>
