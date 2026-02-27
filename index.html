@@ -3,92 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Peer-to-Peer Exchange</title>
+    <title>SkillFlux | The Exchange Standard</title>
     <style>
         :root {
             --bg-black: #000000;
             --card-dark: #0a0a0a;
             --accent-blue: #3b82f6;
             --text-white: #ffffff;
-            --text-gray: #a1a1aa;
+            --text-gray: #94a3b8;
             --border-standard: #1e293b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
 
         /* NAVIGATION */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 6%;
+            position: fixed; top: 0; width: 100%; padding: 25px 6%;
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); z-index: 1000;
             border-bottom: 1px solid var(--border-standard);
         }
-        .brand { font-size: 1.4rem; font-weight: 900; letter-spacing: -1px; }
+        .brand { font-size: 1.6rem; font-weight: 900; letter-spacing: -1.5px; }
         .blue { color: var(--accent-blue); }
 
         /* HERO SECTION */
         .hero {
-            height: 85vh; display: flex; flex-direction: column; justify-content: center;
-            padding: 0 8%; background: radial-gradient(circle at 90% 10%, #1d4ed810 0%, transparent 40%);
+            height: 90vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 0 8%; background: radial-gradient(circle at 80% 20%, #1d4ed810 0%, transparent 50%);
         }
+        /* PRIMARY HEADLINE - MASSIVE FONT */
         .hero h1 { 
-            font-size: clamp(3.5rem, 10vw, 7.5rem); font-weight: 950; 
-            line-height: 0.9; letter-spacing: -5px; margin-bottom: 25px;
+            font-size: clamp(3.5rem, 12vw, 8rem); font-weight: 950; 
+            line-height: 0.85; letter-spacing: -5px; margin-bottom: 30px;
         }
-        /* BRIEF DESCRIPTION HIGHLIGHT */
-        .highlight-box {
-            border-left: 4px solid var(--accent-blue);
-            padding: 10px 25px;
-            max-width: 650px;
-            background: rgba(59, 130, 246, 0.03);
-            margin-bottom: 40px;
+        /* SHORT BRIEF DESCRIPTION HIGHLIGHT */
+        .highlight-brief {
+            border-left: 3px solid var(--accent-blue);
+            padding-left: 30px; margin-bottom: 50px; max-width: 600px;
         }
-        .highlight-box p { font-size: 1.25rem; color: var(--text-gray); font-weight: 400; }
+        .highlight-brief p { font-size: 1.4rem; color: var(--text-gray); font-weight: 400; }
 
-        /* HOW IT WORKS DIV BARS (THE BOARDS) */
+        /* HOW IT WORKS - DIV BARS */
         .how-section { padding: 100px 8%; background: #050505; }
-        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 50px; text-align: center; }
-        
-        .board-container { display: flex; flex-direction: column; gap: 20px; max-width: 1000px; margin: 0 auto; }
+        .bar-container { display: flex; flex-direction: column; gap: 15px; max-width: 900px; margin: 0 auto; }
         
         .div-bar {
-            background: var(--card-dark);
-            border: 2px solid var(--border-standard);
-            padding: 30px 40px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            transition: all 0.3s ease;
+            background: var(--card-dark); border: 1px solid var(--border-standard);
+            padding: 35px 45px; border-radius: 20px;
+            display: flex; align-items: center; gap: 40px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .div-bar:hover { border-color: var(--accent-blue); transform: scale(1.02); }
-        .bar-num { font-size: 2rem; font-weight: 900; color: var(--accent-blue); opacity: 0.5; }
-        .bar-content h3 { font-size: 1.5rem; margin-bottom: 5px; }
-        .bar-content p { color: var(--text-gray); font-size: 1rem; }
+        .div-bar:hover { border-color: var(--accent-blue); transform: translateX(15px); background: #0c0c0c; }
+        .bar-step { font-size: 2.5rem; font-weight: 900; color: var(--accent-blue); opacity: 0.4; }
+        .bar-text h3 { font-size: 1.8rem; margin-bottom: 8px; }
+        .bar-text p { color: var(--text-gray); font-size: 1.1rem; }
 
         /* AUTH SECTION */
         #auth-view { padding: 100px 8%; display: flex; justify-content: center; }
         .auth-card { 
             background: #000; border: 1px solid var(--border-standard); 
-            padding: 45px; border-radius: 24px; width: 100%; max-width: 460px; 
+            padding: 50px; border-radius: 30px; width: 100%; max-width: 480px; 
         }
         input { 
             width: 100%; padding: 18px; margin-bottom: 12px; background: #0a0a0a; 
-            border: 1px solid #1e293b; border-radius: 12px; color: white; font-size: 1rem;
+            border: 1px solid var(--border-standard); border-radius: 12px; color: white; font-size: 1rem;
         }
         .btn-main { 
             width: 100%; padding: 18px; background: var(--accent-blue); color: white; 
             border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem;
         }
 
-        /* DASHBOARD (NEW PAGE) */
-        #dashboard-page { padding: 120px 8%; min-height: 100vh; }
-        .vault { 
+        /* POST-LOGIN PAGE */
+        #dashboard-page { padding: 150px 8%; min-height: 100vh; }
+        .vault-card { 
             background: var(--card-dark); border: 2px solid var(--accent-blue);
-            padding: 40px; border-radius: 24px; display: inline-block; text-align: center;
+            padding: 60px; border-radius: 30px; display: inline-block;
         }
-        .vault span { font-size: 5rem; font-weight: 950; display: block; line-height: 1; }
+        .vault-card span { font-size: 6rem; font-weight: 950; display: block; line-height: 1; margin: 10px 0; }
 
         .hidden { display: none !important; }
     </style>
@@ -98,42 +90,45 @@
     <nav>
         <div class="brand">Skill<span class="blue">Flux</span></div>
         <div id="guest-nav">
-            <button class="nav-link" style="color:white; margin-right:20px; cursor:pointer; background:none; border:none;" onclick="scrollToAuth()">Sign In</button>
-            <button class="btn-main" style="padding: 10px 20px; width: auto;" onclick="scrollToAuth()">Join Exchange</button>
+            <button class="nav-link" style="background:none; border:none; color:var(--text-gray); cursor:pointer; margin-right:25px; font-weight:600;" onclick="scrollToWork()">How it Works</button>
+            <button class="btn-main" style="width:auto; padding: 12px 25px;" onclick="scrollToAuth()">Join Now</button>
+        </div>
+        <div id="user-nav" class="hidden">
+            <button class="btn-main" style="width:auto; background:#ef4444;" onclick="handleLogout()">Sign Out</button>
         </div>
     </nav>
 
     <div id="landing-view">
         <section class="hero">
             <h1>Peer to Peer<br><span class="blue">Exchange.</span></h1>
-            <div class="highlight-box">
-                <p>An elite ecosystem for trading professional expertise. No currency required—just pure knowledge transfer powered by Flux Credits.</p>
+            <div class="highlight-brief">
+                <p>An elite digital ecosystem designed for the seamless transfer of professional skills without financial friction.</p>
             </div>
-            <button class="btn-main" style="width: 250px;" onclick="scrollToAuth()">Get Started Now</button>
+            <button class="btn-main" style="width: 250px;" onclick="scrollToAuth()">Enter the Marketplace</button>
         </section>
 
-        <section class="how-section">
-            <h2 class="section-title">The <span class="blue">Protocol</span></h2>
-            <div class="board-container">
+        <section class="how-section" id="work">
+            <h2 style="font-size: 3rem; font-weight: 900; margin-bottom: 60px; text-align: center;">The <span class="blue">Framework</span></h2>
+            <div class="bar-container">
                 <div class="div-bar">
-                    <div class="bar-num">01</div>
-                    <div class="bar-content">
-                        <h3>Initialize Identity</h3>
-                        <p>Register your account and receive 2 startup Flux Credits to enter the learning marketplace.</p>
+                    <div class="bar-step">01</div>
+                    <div class="bar-text">
+                        <h3>Sync Account</h3>
+                        <p>Register with your professional credentials and confirm your vault security to receive 2 Flux Credits.</p>
                     </div>
                 </div>
                 <div class="div-bar">
-                    <div class="bar-num">02</div>
-                    <div class="bar-content">
-                        <h3>Publish Services</h3>
-                        <p>List your unique professional skills. Earn 1 Credit every time a peer requests your expertise.</p>
+                    <div class="bar-step">02</div>
+                    <div class="bar-text">
+                        <h3>List Expertise</h3>
+                        <p>Populate the global directory with your specialized services to earn credits from peers worldwide.</p>
                     </div>
                 </div>
                 <div class="div-bar">
-                    <div class="bar-num">03</div>
-                    <div class="bar-content">
-                        <h3>Acquire Knowledge</h3>
-                        <p>Exchange your earned credits for personalized, live sessions with experts across the globe.</p>
+                    <div class="bar-step">03</div>
+                    <div class="bar-text">
+                        <h3>Acquire Skills</h3>
+                        <p>Redeem your accumulated credits for personalized learning sessions with top-tier industry experts.</p>
                     </div>
                 </div>
             </div>
@@ -141,35 +136,26 @@
 
         <section id="auth-view">
             <div class="auth-card">
-                <h2 style="margin-bottom: 25px; text-align: center;">Secure Registration</h2>
+                <h2 style="margin-bottom: 30px; text-align: center;">Initialize Vault</h2>
                 <input type="email" id="email" placeholder="Professional Email">
                 <input type="password" id="password" placeholder="Create Password">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password">
                 <button onclick="handleSignUp()" class="btn-main">Create Account</button>
                 <p style="text-align:center; margin-top:20px; color:var(--text-gray); font-size:0.9rem;">
-                    Already registered? <span onclick="handleLogin()" style="color:var(--accent-blue); cursor:pointer; text-decoration: underline;">Login to Vault</span>
+                    Already verified? <span onclick="handleLogin()" style="color:var(--accent-blue); cursor:pointer;">Login to Dashboard</span>
                 </p>
             </div>
         </section>
     </div>
 
     <div id="dashboard-page" class="hidden">
-        <h1 style="font-size: 3.5rem; margin-bottom: 10px;">Control <span class="blue">Center</span></h1>
-        <p style="color:var(--text-gray); margin-bottom: 50px;">Welcome back, <span id="user-display"></span></p>
+        <h1 style="font-size: 4rem; letter-spacing: -2px;">Personal <span class="blue">Vault</span></h1>
+        <p style="color:var(--text-gray); font-size: 1.2rem; margin-bottom: 40px;">Authenticated as: <span id="user-display" style="color:white"></span></p>
 
-        <div class="vault">
-            <small style="color:var(--accent-blue); font-weight: 800; letter-spacing: 2px;">FLUX BALANCE</small>
+        <div class="vault-card">
+            <small style="color:var(--accent-blue); font-weight: 800; letter-spacing: 3px; text-transform: uppercase;">Available Flux Credits</small>
             <span id="credit-display">0</span>
-        </div>
-
-        <div class="board-container" style="margin-top: 50px; margin-left: 0;">
-            <div class="div-bar" style="cursor:pointer">
-                <div class="bar-num">→</div>
-                <div class="bar-content">
-                    <h3>Marketplace</h3>
-                    <p>Visit the directory to spend your credits on new skills.</p>
-                </div>
-            </div>
+            <p style="color:var(--text-gray)">Trade these for any skill in the marketplace.</p>
         </div>
     </div>
 
@@ -192,6 +178,7 @@
         const db = getFirestore(app);
 
         window.scrollToAuth = () => document.getElementById('auth-view').scrollIntoView({behavior:'smooth'});
+        window.scrollToWork = () => document.getElementById('work').scrollIntoView({behavior:'smooth'});
 
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
@@ -210,18 +197,27 @@
             signInWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
         };
 
+        window.handleLogout = () => signOut(auth);
+
         onAuthStateChanged(auth, async (user) => {
             const landing = document.getElementById('landing-view');
             const dash = document.getElementById('dashboard-page');
+            const guestNav = document.getElementById('guest-nav');
+            const userNav = document.getElementById('user-nav');
+
             if (user) {
                 landing.classList.add('hidden');
                 dash.classList.remove('hidden');
-                document.getElementById('user-display').innerText = user.email.split('@')[0];
+                guestNav.classList.add('hidden');
+                userNav.classList.remove('hidden');
+                document.getElementById('user-display').innerText = user.email;
                 const snap = await getDoc(doc(db, "users", user.uid));
                 if(snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
             } else {
                 landing.classList.remove('hidden');
                 dash.classList.add('hidden');
+                guestNav.classList.remove('hidden');
+                userNav.classList.add('hidden');
             }
         });
     </script>
