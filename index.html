@@ -6,145 +6,145 @@
     <title>SkillFlux | Peer-to-Peer Exchange</title>
     <style>
         :root {
-            --bg-dark: #0a0a0a;
-            --card-dark: #141414;
+            --bg-dark: #000000;
+            --card-dark: #111111;
             --accent-blue: #3b82f6;
             --text-white: #ffffff;
             --text-gray: #a1a1aa;
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-white);
+            line-height: 1.6;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .nav-links button {
+            background: transparent; color: white; border: none;
+            margin-left: 20px; font-weight: 600; cursor: pointer;
+        }
+        .btn-join { 
+            background: var(--accent-blue) !important; 
+            padding: 8px 20px; border-radius: 8px !important; 
+        }
+
+        /* HERO SECTION */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+            background: radial-gradient(circle at 80% 20%, #1d4ed833 0%, transparent 50%);
+        }
+
+        h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+        .blue-text { color: var(--accent-blue); }
+
+        .description {
+            max-width: 600px;
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+        }
+
+        /* AUTH SECTION (SCROLL TARGET) */
+        #auth-container {
+            padding: 100px 5%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
 
-        .container {
+        .auth-card {
+            background: var(--card-dark);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #222;
             width: 100%;
-            max-width: 440px;
-            text-align: left;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            margin-bottom: 10px;
-        }
-
-        .hero-text {
-            font-size: 1.1rem;
-            color: var(--text-gray);
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .blue-glow {
-            color: var(--accent-blue);
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .input-group {
-            margin-bottom: 15px;
+            max-width: 450px;
         }
 
         input {
-            width: 100%;
-            padding: 16px;
-            background: var(--card-dark);
-            border: 1px solid #27272a;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border 0.3s;
+            width: 100%; padding: 16px; margin-bottom: 15px;
+            background: #000; border: 1px solid #333;
+            border-radius: 10px; color: white; font-size: 1rem;
         }
 
-        input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-        }
-
-        button {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-primary {
-            background-color: var(--accent-blue);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-gray);
-            text-decoration: underline;
+        .main-btn {
+            width: 100%; padding: 16px; background: var(--accent-blue);
+            color: white; border: none; border-radius: 10px;
+            font-weight: 700; cursor: pointer; font-size: 1rem;
         }
 
         .hidden { display: none; }
 
-        /* Dashboard specific */
-        .status-card {
-            background: var(--card-dark);
-            padding: 24px;
-            border-radius: 16px;
-            border: 1px solid #27272a;
-            margin-top: 20px;
-        }
-
-        .credit-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent-blue);
+        /* DASHBOARD */
+        #dashboard-section { padding: 120px 10%; }
+        .credit-badge { 
+            font-size: 3rem; font-weight: 800; color: var(--accent-blue); 
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Skill<span class="blue-glow">Flux</span></h1>
-        
-        <div id="auth-section">
-            <p class="hero-text">Find the skills you need. Share the skills you have. Connect to learn and grow.</p>
-            
-            <div class="input-group">
-                <input type="email" id="email" placeholder="Enter your email">
-            </div>
-            <div class="input-group">
-                <input type="password" id="password" placeholder="Choose a password">
-            </div>
-            
-            <button onclick="handleSignUp()" class="btn-primary">Join SkillFlux</button>
-            <button onclick="handleLogin()" class="btn-ghost">Already have an account? Sign in</button>
+    <nav>
+        <div class="logo">Skill<span class="blue-text">Flux</span></div>
+        <div class="nav-links" id="nav-guest">
+            <button onclick="scrollToAuth()">Login</button>
+            <button onclick="scrollToAuth()" class="btn-join">Register</button>
         </div>
+        <div class="nav-links hidden" id="nav-user">
+            <button onclick="handleLogout()">Logout</button>
+        </div>
+    </nav>
 
-        <div id="dashboard-section" class="hidden">
-            <p class="hero-text">Welcome back, <span id="user-display" class="blue-glow"></span></p>
-            
-            <div class="status-card">
-                <p style="margin:0; color:var(--text-gray)">Available Credits</p>
-                <div class="credit-value" id="credit-display">0</div>
+    <div id="landing-page">
+        <header>
+            <h1>Peer-to-peer <br>skill exchange <br><span class="blue-text">platform.</span></h1>
+            <p class="description">
+                Find the skills you need. Share the skills you have. 
+                Connect with community members to learn and share valuable expertise.
+            </p>
+            <button onclick="scrollToAuth()" class="main-btn" style="width: 250px;">Get Started</button>
+        </header>
+
+        <section id="auth-container">
+            <div class="auth-card">
+                <h2 style="margin-bottom:20px">Join the Community</h2>
+                <input type="email" id="email" placeholder="Enter email">
+                <input type="password" id="password" placeholder="Password">
+                <button onclick="handleSignUp()" class="main-btn">Create Account</button>
+                <button onclick="handleLogin()" style="background:transparent; color:var(--text-gray); margin-top:15px; width:100%; border:none; cursor:pointer">Already have an account? Sign In</button>
             </div>
+        </section>
+    </div>
 
-            <button onclick="handleLogout()" class="btn-ghost" style="margin-top:40px">Logout from session</button>
+    <div id="dashboard-section" class="hidden">
+        <h1>Welcome back, <span id="user-display" class="blue-text"></span></h1>
+        <p style="color:var(--text-gray)">Manage your exchanges and view your balance below.</p>
+        
+        <div style="background:var(--card-dark); padding:30px; border-radius:15px; margin-top:30px; border:1px solid #222">
+            <p>Available Credits</p>
+            <div class="credit-badge" id="credit-display">0</div>
         </div>
     </div>
 
@@ -153,7 +153,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your verified Firebase configuration
+        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
             authDomain: "skillflux-c4088.firebaseapp.com",
@@ -167,17 +167,19 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // UI HELPERS
+        window.scrollToAuth = () => {
+            document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // AUTH LOGIC
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", res.user.uid), { 
-                    email, 
-                    credits: 2, 
-                    createdAt: new Date() 
-                });
-                alert("Welcome! 2 Credits awarded.");
+                await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
+                alert("Account created! 2 Credits awarded.");
             } catch (e) { alert(e.message); }
         };
 
@@ -189,20 +191,29 @@
 
         window.handleLogout = () => signOut(auth);
 
+        // STATE OBSERVER
         onAuthStateChanged(auth, async (user) => {
-            const authDiv = document.getElementById('auth-section');
-            const dashDiv = document.getElementById('dashboard-section');
+            const landing = document.getElementById('landing-page');
+            const dashboard = document.getElementById('dashboard-section');
+            const guestNav = document.getElementById('nav-guest');
+            const userNav = document.getElementById('nav-user');
+
             if (user) {
-                authDiv.classList.add('hidden');
-                dashDiv.classList.remove('hidden');
+                landing.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                guestNav.classList.add('hidden');
+                userNav.classList.remove('hidden');
+                
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
                 const snap = await getDoc(doc(db, "users", user.uid));
                 if (snap.exists()) {
                     document.getElementById('credit-display').innerText = snap.data().credits;
                 }
             } else {
-                authDiv.classList.remove('hidden');
-                dashDiv.classList.add('hidden');
+                landing.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+                guestNav.classList.remove('hidden');
+                userNav.classList.add('hidden');
             }
         });
     </script>
