@@ -3,164 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Peer-to-Peer Knowledge Standard</title>
+    <title>SkillFlux | Peer-to-Peer Exchange</title>
     <style>
         :root {
             --bg-black: #000000;
-            --card-dark: #0a0a0a;
+            --card-dark: #0d0d0d;
             --accent-blue: #3b82f6;
-            --accent-green: #10b981;
             --text-white: #ffffff;
             --text-gray: #a1a1aa;
-            --border-gray: #1a1a1a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.5; scroll-behavior: smooth; }
 
         /* NAVIGATION BAR */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 6%;
+            position: fixed; top: 0; width: 100%; padding: 25px 6%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 1000;
-            border-bottom: 1px solid var(--border-gray);
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 1000;
+            border-bottom: 1px solid #1a1a1a;
         }
-        .brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; cursor: pointer; }
-        .blue { color: var(--accent-blue); }
+        .brand { font-size: 2rem; font-weight: 900; letter-spacing: -1.5px; cursor: pointer; }
+        .blue { color: var(--accent-blue); text-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         
-        .nav-menu { display: flex; gap: 25px; align-items: center; }
-        .nav-link { color: var(--text-gray); text-decoration: none; font-weight: 500; cursor: pointer; border: none; background: none; font-size: 1rem; transition: 0.3s;}
-        .nav-link:hover { color: var(--accent-blue); }
-        .btn-solid { background: var(--accent-blue); color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .nav-actions { display: flex; gap: 20px; }
+        .btn-nav { background: transparent; color: var(--text-white); border: 1px solid #333; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-nav:hover { background: #1a1a1a; border-color: var(--accent-blue); }
+        .btn-primary { background: var(--accent-blue); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        /* --- LANDING PAGE SECTIONS --- */
+        /* HERO SECTION */
         .hero { 
             height: 100vh; display: flex; flex-direction: column; justify-content: center; 
-            padding: 0 8%; background: radial-gradient(circle at 90% 10%, #1d4ed815 0%, transparent 40%); 
+            padding: 0 8%; background: radial-gradient(circle at 85% 15%, #1e40af22 0%, transparent 45%); 
         }
-        .hero h1 { font-size: clamp(5rem, 15vw, 10rem); font-weight: 950; line-height: 0.85; letter-spacing: -6px; margin-bottom: 20px; }
-        .hero h2 { font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; color: var(--text-gray); margin-bottom: 40px; }
+        .hero h1 { font-size: clamp(3.5rem, 12vw, 6.5rem); font-weight: 900; line-height: 0.9; margin-bottom: 30px; letter-spacing: -3px; }
+        .hero p { max-width: 650px; font-size: 1.4rem; color: var(--text-gray); margin-bottom: 45px; font-weight: 400; }
 
-        .how-it-works { padding: 100px 8%; background: #050505; border-top: 1px solid var(--border-gray); }
-        .section-title { font-size: 3rem; font-weight: 800; margin-bottom: 50px; letter-spacing: -1px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { background: var(--card-dark); padding: 40px; border-radius: 20px; border: 1px solid var(--border-gray); }
-        .card h3 { color: var(--accent-blue); margin-bottom: 15px; font-size: 1.5rem; }
+        /* INFO SECTION */
+        .description-box { padding: 120px 8%; border-top: 1px solid #1a1a1a; }
+        .desc-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
+        .desc-text { font-size: 1.2rem; color: var(--text-gray); max-width: 800px; margin-bottom: 60px; }
 
-        /* --- AUTH SECTION --- */
-        #auth-view { padding: 100px 8%; display: flex; justify-content: center; }
-        .auth-box { background: var(--card-dark); padding: 50px; border-radius: 24px; border: 1px solid var(--border-gray); width: 100%; max-width: 480px; text-align: center; }
-        input { width: 100%; padding: 16px; margin-bottom: 12px; background: #000; border: 1px solid #222; border-radius: 10px; color: white; }
+        /* AUTH SECTION */
+        #auth-view { padding: 100px 8%; display: flex; justify-content: center; background: #050505; }
+        .auth-card { background: var(--card-dark); padding: 50px; border-radius: 24px; border: 1px solid #222; width: 100%; max-width: 480px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; font-size: 1rem; }
+        input:focus { border-color: var(--accent-blue); outline: none; }
+        .auth-btn { width: 100%; padding: 18px; background: var(--accent-blue); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
 
-        /* --- DASHBOARD VIEW (THE NEW PAGE) --- */
-        #dashboard-page { padding: 120px 8% 60px; min-height: 100vh; background: #000; }
-        .dash-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
-        .flux-counter { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-blue); padding: 20px 40px; border-radius: 20px; text-align: center; }
-        .flux-counter span { display: block; font-size: 3rem; font-weight: 900; color: var(--accent-blue); line-height: 1; }
-        
-        .market-section { margin-top: 40px; }
-        .skill-item { 
-            background: var(--card-dark); border: 1px solid var(--border-gray); 
-            padding: 20px; border-radius: 15px; margin-bottom: 15px; 
-            display: flex; justify-content: space-between; align-items: center;
-            transition: 0.3s;
-        }
-        .skill-item:hover { border-color: var(--accent-blue); background: #0c0c0c; }
+        .hidden { display: none; }
 
-        .hidden { display: none !important; }
+        /* DASHBOARD */
+        #dashboard-view { padding: 150px 8%; text-align: left; }
+        .credit-display { font-size: 5rem; font-weight: 900; color: var(--accent-blue); margin: 20px 0; letter-spacing: -2px; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="brand" onclick="location.reload()">Skill<span class="blue">Flux</span></div>
-        <div class="nav-menu" id="guest-nav">
-            <button class="nav-link" onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})">How it Works</button>
-            <button class="btn-solid" onclick="showAuth()">Login / Register</button>
+        <div class="brand" onclick="window.location.reload()">Skill<span class="blue">Flux</span></div>
+        <div class="nav-actions" id="guest-nav">
+            <button class="btn-nav" onclick="showAuth()">Sign In</button>
+            <button class="btn-primary" onclick="showAuth()">Join Free</button>
         </div>
-        <div class="nav-menu hidden" id="user-nav">
-            <button class="nav-link" onclick="showSection('dashboard-content')">My Dashboard</button>
-            <button class="nav-link" onclick="showSection('market-content')">Learn Skills</button>
-            <button class="btn-solid" style="background:#ff4444" onclick="handleLogout()">Logout</button>
+        <div class="nav-actions hidden" id="user-nav">
+            <button class="btn-nav" onclick="handleLogout()">Logout</button>
         </div>
     </nav>
 
     <div id="landing-page">
-        <section class="hero">
-            <h1>Skill<span class="blue">Flux</span></h1>
-            <h2>The Premium Peer-to-Peer Knowledge Economy.</h2>
-            <button class="btn-solid" style="width: 250px; padding: 20px;" onclick="showAuth()">Start Exchanging</button>
-        </section>
+        <header class="hero">
+            <h1>Skill<span class="blue">Flux.</span></h1>
+            <p>The premier global ecosystem for peer-to-peer knowledge exchange. Trade your expertise, earn credits, and unlock world-class skills without spending a dime.</p>
+            <button class="btn-primary" style="width: 240px; padding: 20px; font-size: 1.2rem;" onclick="showAuth()">Get Started Now</button>
+        </header>
 
-        <section id="work" class="how-it-works">
-            <h2 class="section-title">How it <span class="blue">Works</span></h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>1. Join</h3>
-                    <p>Create a professional profile and receive 2 complimentary Flux Credits to start your journey.</p>
+        <section class="description-box">
+            <h2 class="desc-title">Empowering the <span class="blue">Knowledge Economy</span></h2>
+            <p class="desc-text">SkillFlux is built on the principle of mutual growth. Whether you are a master coder, a linguist, or a creative designer, our platform allows you to monetize your time through teaching while gaining access to a diverse library of skills from other experts globally.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+                <div style="background: #0d0d0d; padding: 35px; border-radius: 15px; border: 1px solid #1a1a1a;">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 15px;">Zero-Cost Learning</h3>
+                    <p style="color: var(--text-gray);">Eliminate financial barriers. Use the credits you earn by teaching to "buy" lessons from others.</p>
                 </div>
-                <div class="card">
-                    <h3>2. Teach</h3>
-                    <p>List your expertise. For every peer you help, you earn Flux Credits directly into your vault.</p>
-                </div>
-                <div class="card">
-                    <h3>3. Learn</h3>
-                    <p>Visit our marketplace to spend your credits on high-value skills from verified experts.</p>
+                <div style="background: #0d0d0d; padding: 35px; border-radius: 15px; border: 1px solid #1a1a1a;">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 15px;">Verified Experts</h3>
+                    <p style="color: var(--text-gray);">Connect with a curated community of professionals and enthusiasts dedicated to high-quality exchange.</p>
                 </div>
             </div>
         </section>
 
         <section id="auth-view" class="hidden">
-            <div class="auth-box">
-                <h2 style="margin-bottom: 25px">Secure Access</h2>
+            <div class="auth-card">
+                <h2 style="margin-bottom: 30px; font-size: 2rem;">Join SkillFlux</h2>
                 <input type="email" id="email" placeholder="Email Address">
-                <input type="password" id="password" placeholder="Password">
-                <input type="password" id="confirmPassword" placeholder="Confirm Password">
-                <button onclick="handleSignUp()" class="btn-solid" style="width:100%; padding:15px; margin-top:10px">Register Account</button>
-                <p style="color:var(--text-gray); margin-top:15px; font-size:0.9rem">Already a member? <span onclick="handleLogin()" style="color:var(--accent-blue); cursor:pointer">Login</span></p>
+                <input type="password" id="password" placeholder="Create Password">
+                <button onclick="handleSignUp()" class="auth-btn">Create Your Account</button>
+                <button onclick="handleLogin()" style="background:none; border:none; color:var(--text-gray); margin-top:20px; cursor:pointer; text-decoration: underline;">Already a member? Login here</button>
             </div>
         </section>
     </div>
 
-    <div id="dashboard-page" class="hidden">
-        <div id="dashboard-content">
-            <div class="dash-top">
-                <div>
-                    <h1 style="font-size: 3rem;">Welcome Back, <span id="user-display" class="blue"></span></h1>
-                    <p style="color:var(--text-gray)">Your SkillFlux node is active and synchronized.</p>
-                </div>
-                <div class="flux-counter">
-                    <span id="credit-display">0</span>
-                    <small style="color:var(--text-gray); font-weight:700">FLUX CREDITS</small>
-                </div>
-            </div>
-
-            <div class="grid">
-                <div class="card">
-                    <h3>Add New Skill</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 20px;">What can you teach today?</p>
-                    <input type="text" id="skillInput" placeholder="e.g. Graphic Design, French">
-                    <button onclick="addSkill()" class="btn-solid" style="width:100%; background:var(--accent-green)">Publish Service</button>
-                </div>
-                <div class="card">
-                    <h3>My Stats</h3>
-                    <p>Skill Level: <span class="blue">Beginner</span></p>
-                    <p>Exchanges Completed: 0</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="market-content" class="market-section hidden">
-            <h2 class="section-title">Learn <span class="blue">Skills</span></h2>
-            <div id="marketplaceList">
-                </div>
-        </div>
+    <div id="dashboard-view" class="hidden">
+        <h2 style="font-size: 3rem; font-weight: 800;">Welcome, <span id="user-display" class="blue"></span></h2>
+        <div class="credit-display" id="credit-display">0</div>
+        <p style="font-size: 1.2rem; color: var(--text-gray);">Current Account Balance (Credits)</p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
@@ -175,88 +129,42 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // NAVIGATION
         window.showAuth = () => {
             document.getElementById('auth-view').classList.remove('hidden');
-            document.getElementById('auth-view').scrollIntoView({behavior:'smooth'});
+            document.getElementById('auth-view').scrollIntoView({ behavior: 'smooth' });
         };
 
-        window.showSection = (sectionId) => {
-            document.getElementById('dashboard-content').classList.toggle('hidden', sectionId !== 'dashboard-content');
-            document.getElementById('market-content').classList.toggle('hidden', sectionId !== 'market-content');
-            if(sectionId === 'market-content') loadMarket();
-        };
-
-        // FIREBASE AUTH
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            const confirm = document.getElementById('confirmPassword').value;
-
-            if(pass !== confirm) return alert("Passwords do not match!");
+            const password = document.getElementById('password').value;
             try {
-                const res = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, skills: [], createdAt: new Date() });
+                const res = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
             } catch (e) { alert(e.message); }
         };
 
         window.handleLogin = () => {
             const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
+            const password = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
         };
 
         window.handleLogout = () => signOut(auth);
 
-        // DATA LOGIC
-        window.addSkill = async () => {
-            const skill = document.getElementById('skillInput').value;
-            if(!skill) return;
-            try {
-                await updateDoc(doc(db, "users", auth.currentUser.uid), { skills: arrayUnion(skill) });
-                document.getElementById('skillInput').value = "";
-                alert("Skill added to your profile!");
-            } catch (e) { alert(e.message); }
-        };
-
-        async function loadMarket() {
-            const marketplace = document.getElementById('marketplaceList');
-            marketplace.innerHTML = '<p>Searching for experts...</p>';
-            const querySnapshot = await getDocs(collection(db, "users"));
-            marketplace.innerHTML = "";
-            querySnapshot.forEach((userDoc) => {
-                const data = userDoc.data();
-                if(userDoc.id !== auth.currentUser.uid && data.skills) {
-                    data.skills.forEach(skill => {
-                        marketplace.innerHTML += `
-                            <div class="skill-item">
-                                <div><strong>${skill}</strong><br><small>${data.email}</small></div>
-                                <button class="btn-solid" style="padding: 8px 15px;">Learn (1 Credit)</button>
-                            </div>`;
-                    });
-                }
-            });
-        }
-
         onAuthStateChanged(auth, async (user) => {
-            const landing = document.getElementById('landing-page');
-            const dashPage = document.getElementById('dashboard-page');
-            const guestNav = document.getElementById('guest-nav');
-            const userNav = document.getElementById('user-nav');
-
             if (user) {
-                landing.classList.add('hidden');
-                dashPage.classList.remove('hidden');
-                guestNav.classList.add('hidden');
-                userNav.classList.remove('hidden');
+                document.getElementById('landing-page').classList.add('hidden');
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('guest-nav').classList.add('hidden');
+                document.getElementById('user-nav').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
                 const snap = await getDoc(doc(db, "users", user.uid));
-                if(snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
+                if (snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
             } else {
-                landing.classList.remove('hidden');
-                dashPage.classList.add('hidden');
-                guestNav.classList.remove('hidden');
-                userNav.classList.add('hidden');
+                document.getElementById('landing-page').classList.remove('hidden');
+                document.getElementById('dashboard-view').classList.add('hidden');
+                document.getElementById('guest-nav').classList.remove('hidden');
+                document.getElementById('user-nav').classList.add('hidden');
             }
         });
     </script>
