@@ -188,34 +188,38 @@
             } catch (e) { alert(e.message); }
         };
 
-        // LOAD MARKETPLACE
-        function loadMarketplace() {
-            const q = query(collection(db, "skills"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('marketplace-feed');
-                feed.innerHTML = '';
-                
-                snapshot.forEach((skillDoc) => {
-                    const skill = skillDoc.data();
-                    const isOwnSkill = skill.ownerId === auth.currentUser.uid;
+        // --- REPLACE YOUR OLD loadMarketplace WITH THIS ---
+function loadMarketplace() {
+    const q = query(collection(db, "skills"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const feed = document.getElementById('marketplace-feed');
+        feed.innerHTML = '';
+        
+        snapshot.forEach((skillDoc) => {
+            const skill = skillDoc.data();
+            const isOwnSkill = skill.ownerId === auth.currentUser.uid;
 
-                    feed.innerHTML += `
-                        <div class="square-board">
-                            <div>
-                                <div class="board-tag">${isOwnSkill ? 'Personal Posting' : 'Peer Offering'}</div>
-                                <h3>${skill.title}</h3>
-                                <p>${skill.desc}</p>
-                            </div>
-                            <div class="board-footer">
-                                <div class="price">${skill.cost} FLUX</div>
-                                ${!isOwnSkill ? `<button class="btn-exchange" onclick="executeExchange('${skillDoc.id}', '${skill.ownerId}')">Acquire</button>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
+            // Notice we added skill.title and skill.ownerEmail to the button below
+            feed.innerHTML += `
+                <div class="square-board">
+                    <div>
+                        <div class="board-tag">${isOwnSkill ? 'Personal Posting' : 'Peer Offering'}</div>
+                        <h3>${skill.title}</h3>
+                        <p>${skill.desc}</p>
+                    </div>
+                    <div class="board-footer">
+                        <div class="price">${skill.cost} FLUX</div>
+                        ${!isOwnSkill ? `
+                            <button class="btn-exchange" 
+                                onclick="executeExchange('${skillDoc.id}', '${skill.ownerId}', '${skill.title}', '${skill.ownerEmail}')">
+                                Acquire
+                            </button>` : ''}
+                    </div>
+                </div>
+            `;
+        });
+    });
+}
         // TRANSACTION ENGINE (THE EXCHANGE)
         window.executeExchange = async (skillId, sellerId, skillTitle, sellerEmail) => {
     if (userProfile.credits < 1) return alert("Insufficient Liquidity.");
