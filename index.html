@@ -3,85 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Peer-to-Peer Exchange</title>
+    <title>SkillFlux | Peer-to-Peer Knowledge Exchange</title>
     <style>
         :root {
             --bg-black: #000000;
             --card-dark: #0a0a0a;
-            --flux-blue: #3b82f6; /* Your specific Flux Blue */
+            --flux-blue: #3b82f6; 
             --text-white: #ffffff;
             --text-gray: #94a3b8;
             --border-standard: #1e293b;
-            --nav-height: 80px;
+            --nav-height: 100px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; }
 
-        /* FIXED NAVIGATION */
+        /* FIXED NAVIGATION - ELITE LAYOUT */
         nav {
             position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 1000;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 1000;
             border-bottom: 1px solid var(--border-standard);
         }
         
-        .nav-left { display: flex; align-items: center; gap: 20px; }
-        .brand { font-size: 1.7rem; font-weight: 900; color: var(--flux-blue); letter-spacing: -1.5px; }
+        .nav-left { display: flex; align-items: baseline; gap: 15px; }
+        .brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; color: white; }
+        .brand span { color: var(--flux-blue); }
         
-        /* Peer to Peer Exchange Description in Nav */
-        .p2p-sub { 
-            font-size: 0.75rem; font-weight: 700; color: var(--text-gray);
-            border-left: 1px solid var(--border-standard); padding-left: 20px;
-            text-transform: uppercase; letter-spacing: 1.5px;
+        .p2p-description { 
+            font-size: 0.85rem; font-weight: 600; color: var(--text-gray);
+            border-left: 2px solid var(--flux-blue); padding-left: 15px;
+            text-transform: uppercase; letter-spacing: 2px;
         }
 
-        .nav-right { display: flex; gap: 25px; align-items: center; }
-        .nav-btn { background: none; border: none; color: white; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
-        .btn-main { background: var(--flux-blue); color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .nav-right { display: flex; gap: 30px; align-items: center; }
+        .how-btn { background: none; border: none; color: white; font-weight: 600; cursor: pointer; font-size: 1rem; transition: color 0.3s; }
+        .how-btn:hover { color: var(--flux-blue); }
+        .btn-join { background: var(--flux-blue); color: white; border: none; padding: 12px 28px; border-radius: 10px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
 
         /* HERO SECTION */
         main { padding-top: var(--nav-height); }
         .hero {
-            height: 65vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 0 8%;
         }
-        .hero h1 { font-size: clamp(3.5rem, 10vw, 7.5rem); font-weight: 950; letter-spacing: -5px; line-height: 0.9; margin-bottom: 20px; }
-        .blue-text { color: var(--flux-blue); }
-        .hero p { max-width: 600px; color: var(--text-gray); font-size: 1.25rem; }
+        .hero h1 { font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 950; letter-spacing: -6px; line-height: 0.85; margin-bottom: 25px; }
+        .elite-side { color: var(--flux-blue); }
+        .hero p { max-width: 700px; color: var(--text-gray); font-size: 1.4rem; font-weight: 400; }
 
-        /* ELEGANT SQUARE BOARDS */
-        .how-it-works { padding: 80px 6%; background: #050505; }
+        /* HOW IT WORKS - RICH STANDARD SQUARE BOARDS */
+        .how-section { padding: 100px 6%; background: #050505; }
         .board-grid { 
             display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 30px; max-width: 1200px; margin: 0 auto; 
+            gap: 30px; max-width: 1300px; margin: 0 auto; 
         }
         .square-board {
             background: var(--card-dark); border: 1px solid var(--border-standard);
-            aspect-ratio: 1 / 1; padding: 45px; border-radius: 24px;
-            display: flex; flex-direction: column; justify-content: flex-start;
-            transition: 0.3s ease-in-out;
-            position: relative; overflow: hidden;
+            aspect-ratio: 1 / 1; padding: 50px; border-radius: 32px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .square-board:hover { border-color: var(--flux-blue); transform: translateY(-10px); background: #0c0c0c; }
+        .square-board:hover { border-color: var(--flux-blue); transform: translateY(-15px); background: #0c0c0c; }
         
-        .step-indicator { 
-            width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1); 
-            color: var(--flux-blue); border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; font-weight: 900; margin-bottom: 30px;
-        }
-        .square-board h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px; }
-        .square-board p { color: var(--text-gray); font-size: 1.05rem; line-height: 1.5; }
+        .board-header { font-size: 0.9rem; font-weight: 800; color: var(--flux-blue); letter-spacing: 3px; }
+        .square-board h3 { font-size: 2rem; font-weight: 800; margin: 15px 0; }
+        .square-board p { color: var(--text-gray); font-size: 1.1rem; line-height: 1.6; }
 
         /* AUTH & DASHBOARD */
-        #auth-view { padding: 100px 8%; display: flex; justify-content: center; }
-        .auth-card { background: var(--card-dark); border: 1px solid var(--border-standard); padding: 50px; border-radius: 32px; width: 100%; max-width: 480px; }
-        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border-standard); border-radius: 12px; color: white; }
+        #auth-view { padding: 80px 8%; display: flex; justify-content: center; }
+        .auth-card { background: var(--card-dark); border: 1px solid var(--border-standard); padding: 60px; border-radius: 40px; width: 100%; max-width: 500px; }
+        input { width: 100%; padding: 20px; margin-bottom: 15px; background: #000; border: 1px solid var(--border-standard); border-radius: 14px; color: white; font-size: 1rem; }
 
         #dashboard-view { padding: 120px 8%; text-align: center; }
-        .credit-vault { border: 2px solid var(--flux-blue); padding: 50px; border-radius: 30px; display: inline-block; background: rgba(59,130,246,0.02); }
+        .vault-display { border: 2px solid var(--flux-blue); padding: 60px; border-radius: 40px; display: inline-block; background: radial-gradient(circle at top right, #1d4ed815, transparent); }
 
-        @media (max-width: 900px) { .board-grid { grid-template-columns: 1fr; } .square-board { aspect-ratio: auto; } }
+        @media (max-width: 1000px) { .board-grid { grid-template-columns: 1fr; } .square-board { aspect-ratio: auto; } }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -89,67 +85,71 @@
 
     <nav>
         <div class="nav-left">
-            <div class="brand">SkillFlux</div>
-            <div class="p2p-sub">Peer-to-Peer Exchange</div>
+            <div class="brand">Skill<span>Flux</span></div>
+            <div class="p2p-description">Peer-to-Peer Exchange</div>
         </div>
         <div class="nav-right" id="guest-nav">
-            <button class="nav-btn" onclick="scrollToWork()">How it Works</button>
-            <button class="btn-main" onclick="scrollToAuth()">Join Exchange</button>
+            <button class="how-btn" onclick="scrollToWork()">Protocol</button>
+            <button class="btn-join" onclick="scrollToAuth()">Initialize Vault</button>
         </div>
         <div class="nav-right hidden" id="user-nav">
-            <button class="btn-main" style="background:#ef4444" onclick="handleLogout()">Sign Out</button>
+            <button class="btn-join" style="background:#ef4444" onclick="handleLogout()">Disconnect</button>
         </div>
     </nav>
 
     <main id="landing-view">
-        <section class="hero">
-            <h1>Peer to Peer <br><span class="blue-text">Exchange.</span></h1>
-            <p>The global standard for professional skill sharing. Experience a frictionless marketplace where knowledge is the ultimate currency.</p>
-        </section>
+        <header class="hero">
+            <h1>Elite <span class="elite-side">Exchange.</span></h1>
+            <p>The global standard for professional knowledge capital. Trade expertise, earn credits, and master new domains in a frictionless peer-to-peer ecosystem.</p>
+        </header>
 
         
 
-        <section class="how-it-works" id="work">
+        <section class="how-section" id="work">
             <div class="board-grid">
                 <div class="square-board">
-                    <div class="step-indicator">1</div>
-                    <h3>Initialize</h3>
-                    <p>Register your account to unlock your digital vault. Every new user starts with 2 Flux Credits to begin their journey.</p>
+                    <div class="board-header">PHASE 01</div>
+                    <div>
+                        <h3>Auth Sync</h3>
+                        <p>Initialize your professional identity. Secure your vault to receive an immediate allocation of 2 Flux Credits to begin trading.</p>
+                    </div>
                 </div>
                 <div class="square-board">
-                    <div class="step-indicator">2</div>
-                    <h3>Provide</h3>
-                    <p>List your unique expertise. For every peer you mentor or assist, you earn Flux Credits directly into your vault.</p>
+                    <div class="board-header">PHASE 02</div>
+                    <div>
+                        <h3>Liquidity</h3>
+                        <p>Publish your specialized skills to the global index. Earn credits every time you provide high-value mentorship to a peer.</p>
+                    </div>
                 </div>
                 <div class="square-board">
-                    <div class="step-indicator">3</div>
-                    <h3>Exchange</h3>
-                    <p>Browse the global directory and use your credits to acquire new high-value skills from certified experts.</p>
+                    <div class="board-header">PHASE 03</div>
+                    <div>
+                        <h3>Acquisition</h3>
+                        <p>Leverage your earned Flux Credits to acquire one-on-one sessions with industry-leading experts across the marketplace.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="auth-view">
             <div class="auth-card">
-                <h2 style="margin-bottom: 30px; text-align:center">Secure Login</h2>
+                <h2 style="margin-bottom: 35px; text-align:center; font-size: 2rem;">Secure Access</h2>
                 <input type="email" id="email" placeholder="Professional Email">
-                <input type="password" id="password" placeholder="Password">
+                <input type="password" id="password" placeholder="Vault Password">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password">
-                <button onclick="handleSignUp()" class="btn-main" style="width:100%; padding:18px">Activate Account</button>
-                <p style="text-align:center; margin-top:20px; color:var(--text-gray); font-size:0.9rem">
-                    Already a member? <span onclick="handleLogin()" style="color:var(--flux-blue); cursor:pointer">Sign in here</span>
-                </p>
+                <button onclick="handleSignUp()" class="btn-join" style="width:100%; padding:20px; font-size:1.1rem;">Create Account</button>
             </div>
         </section>
     </main>
 
     <main id="dashboard-view" class="hidden">
-        <h1 style="font-size: 3.5rem">Personal <span class="blue-text">Vault</span></h1>
-        <p style="color:var(--text-gray); margin-bottom: 40px">Welcome back, <span id="user-display" style="color:white"></span></p>
+        <h1 style="font-size: 4rem; letter-spacing: -3px;">Master <span class="elite-side">Vault</span></h1>
+        <p style="color:var(--text-gray); font-size: 1.2rem; margin-bottom: 50px;">Node Identity: <span id="user-display" style="color:white"></span></p>
         
-        <div class="credit-vault">
-            <small style="color:var(--flux-blue); font-weight:800; letter-spacing:2px">TOTAL FLUX BALANCE</small>
-            <h1 style="font-size: 7rem; line-height:1" id="credit-display">0</h1>
+        <div class="vault-display">
+            <small style="color:var(--flux-blue); font-weight:900; letter-spacing:3px; text-transform: uppercase;">Available Flux Liquidity</small>
+            <h1 style="font-size: 8rem; line-height:1; margin: 15px 0;" id="credit-display">0</h1>
+            <p style="color:var(--text-gray)">Verified Knowledge Credits</p>
         </div>
     </main>
 
@@ -185,12 +185,6 @@
             } catch (e) { alert(e.message); }
         };
 
-        window.handleLogin = () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
-        };
-
         window.handleLogout = () => signOut(auth);
 
         onAuthStateChanged(auth, async (user) => {
@@ -201,7 +195,7 @@
                 dash.classList.remove('hidden');
                 document.getElementById('guest-nav').classList.add('hidden');
                 document.getElementById('user-nav').classList.remove('hidden');
-                document.getElementById('user-display').innerText = user.email.split('@')[0];
+                document.getElementById('user-display').innerText = user.email;
                 const snap = await getDoc(doc(db, "users", user.uid));
                 if(snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
             } else {
