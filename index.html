@@ -3,110 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | The Global Exchange</title>
+    <title>SkillFlux | Peer-to-Peer Exchange</title>
     <style>
         :root {
             --bg-black: #000000;
             --card-dark: #0a0a0a;
-            /* SkillFlux Colored Theme */
-            --flux-blue: #3b82f6;
-            --flux-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --flux-blue: #3b82f6; /* Your specific Flux Blue */
             --text-white: #ffffff;
             --text-gray: #94a3b8;
             --border-standard: #1e293b;
-            --nav-height: 85px;
+            --nav-height: 80px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; }
 
-        /* FIXED COLORED NAVIGATION */
+        /* FIXED NAVIGATION */
         nav {
             position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); z-index: 1000;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 1000;
             border-bottom: 1px solid var(--border-standard);
         }
         
-        .nav-left { display: flex; align-items: center; gap: 15px; }
-        .brand { 
-            font-size: 1.6rem; font-weight: 900; letter-spacing: -1.5px;
-            background: var(--flux-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        /* Peer to Peer as a DESCRIPTION label, not a button */
-        .p2p-description { 
-            font-size: 0.75rem; font-weight: 600; color: var(--text-gray);
-            border-left: 1px solid var(--border-standard); padding-left: 15px;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .brand { font-size: 1.7rem; font-weight: 900; color: var(--flux-blue); letter-spacing: -1.5px; }
         
-        /* How it Works as a BUTTON */
-        .btn-link { 
-            background: none; border: none; color: var(--text-white); 
-            font-weight: 600; cursor: pointer; font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-        .btn-link:hover { color: var(--flux-blue); }
-
-        .btn-flux { 
-            background: var(--flux-gradient); color: white; border: none; 
-            padding: 10px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; 
+        /* Peer to Peer Exchange Description in Nav */
+        .p2p-sub { 
+            font-size: 0.75rem; font-weight: 700; color: var(--text-gray);
+            border-left: 1px solid var(--border-standard); padding-left: 20px;
+            text-transform: uppercase; letter-spacing: 1.5px;
         }
 
-        /* CONTENT WRAPPER */
-        main { padding-top: var(--nav-height); }
+        .nav-right { display: flex; gap: 25px; align-items: center; }
+        .nav-btn { background: none; border: none; color: white; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+        .btn-main { background: var(--flux-blue); color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
         /* HERO SECTION */
+        main { padding-top: var(--nav-height); }
         .hero {
-            height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 65vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 0 8%;
         }
-        .hero h1 { 
-            font-size: clamp(3rem, 10vw, 7rem); font-weight: 950; letter-spacing: -6px; 
-            line-height: 0.85; margin-bottom: 20px;
-        }
-        .colored-text { background: var(--flux-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero h1 { font-size: clamp(3.5rem, 10vw, 7.5rem); font-weight: 950; letter-spacing: -5px; line-height: 0.9; margin-bottom: 20px; }
+        .blue-text { color: var(--flux-blue); }
+        .hero p { max-width: 600px; color: var(--text-gray); font-size: 1.25rem; }
 
-        /* SQUARE BOARDS - 3 IN A LINE */
-        .boards-section { padding: 60px 6%; }
+        /* ELEGANT SQUARE BOARDS */
+        .how-it-works { padding: 80px 6%; background: #050505; }
         .board-grid { 
             display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 25px; max-width: 1200px; margin: 0 auto; 
+            gap: 30px; max-width: 1200px; margin: 0 auto; 
         }
         .square-board {
             background: var(--card-dark); border: 1px solid var(--border-standard);
-            aspect-ratio: 1 / 1; padding: 40px; border-radius: 30px;
-            display: flex; flex-direction: column; justify-content: center;
-            transition: 0.4s ease;
+            aspect-ratio: 1 / 1; padding: 45px; border-radius: 24px;
+            display: flex; flex-direction: column; justify-content: flex-start;
+            transition: 0.3s ease-in-out;
+            position: relative; overflow: hidden;
         }
-        .square-board:hover { border-color: var(--flux-blue); transform: scale(1.03); background: #050505; }
-        .step-num { font-size: 3rem; font-weight: 900; opacity: 0.1; line-height: 1; margin-bottom: 10px; }
-        .square-board h3 { font-size: 1.8rem; margin-bottom: 15px; background: var(--flux-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .square-board:hover { border-color: var(--flux-blue); transform: translateY(-10px); background: #0c0c0c; }
+        
+        .step-indicator { 
+            width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1); 
+            color: var(--flux-blue); border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; font-weight: 900; margin-bottom: 30px;
+        }
+        .square-board h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px; }
+        .square-board p { color: var(--text-gray); font-size: 1.05rem; line-height: 1.5; }
 
-        /* AUTH BOX */
-        .auth-container { padding: 80px 8%; display: flex; justify-content: center; }
-        .auth-card { 
-            background: var(--card-dark); border: 1px solid var(--border-standard); 
-            padding: 50px; border-radius: 32px; width: 100%; max-width: 480px; 
-        }
-        input { 
-            width: 100%; padding: 18px; margin-bottom: 15px; background: #000; 
-            border: 1px solid var(--border-standard); border-radius: 12px; color: white; 
-        }
+        /* AUTH & DASHBOARD */
+        #auth-view { padding: 100px 8%; display: flex; justify-content: center; }
+        .auth-card { background: var(--card-dark); border: 1px solid var(--border-standard); padding: 50px; border-radius: 32px; width: 100%; max-width: 480px; }
+        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border-standard); border-radius: 12px; color: white; }
 
-        /* DASHBOARD */
-        #dashboard-view { padding: 100px 8%; text-align: center; }
-        .vault-box { 
-            background: var(--flux-gradient); padding: 3px; border-radius: 25px; 
-            display: inline-block; margin-top: 30px; 
-        }
-        .vault-inner { background: #000; padding: 50px 80px; border-radius: 22px; }
+        #dashboard-view { padding: 120px 8%; text-align: center; }
+        .credit-vault { border: 2px solid var(--flux-blue); padding: 50px; border-radius: 30px; display: inline-block; background: rgba(59,130,246,0.02); }
 
-        @media (max-width: 900px) { .board-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .board-grid { grid-template-columns: 1fr; } .square-board { aspect-ratio: auto; } }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -115,70 +90,66 @@
     <nav>
         <div class="nav-left">
             <div class="brand">SkillFlux</div>
-            <div class="p2p-description">Peer-to-Peer Knowledge Exchange</div>
+            <div class="p2p-sub">Peer-to-Peer Exchange</div>
         </div>
         <div class="nav-right" id="guest-nav">
-            <button class="btn-link" onclick="scrollToWork()">How it Works</button>
-            <button class="btn-flux" onclick="scrollToAuth()">Join Vault</button>
+            <button class="nav-btn" onclick="scrollToWork()">How it Works</button>
+            <button class="btn-main" onclick="scrollToAuth()">Join Exchange</button>
         </div>
         <div class="nav-right hidden" id="user-nav">
-            <button class="btn-flux" style="background: #ef4444;" onclick="handleLogout()">Logout</button>
+            <button class="btn-main" style="background:#ef4444" onclick="handleLogout()">Sign Out</button>
         </div>
     </nav>
 
     <main id="landing-view">
         <section class="hero">
-            <h1>Expertise <br><span class="colored-text">Unlocked.</span></h1>
-            <p style="color:var(--text-gray); max-width: 500px; font-size: 1.2rem; margin-top: 20px;">
-                The premium standard for direct professional skill trading.
-            </p>
+            <h1>Peer to Peer <br><span class="blue-text">Exchange.</span></h1>
+            <p>The global standard for professional skill sharing. Experience a frictionless marketplace where knowledge is the ultimate currency.</p>
         </section>
 
         
 
-        <section class="boards-section" id="work">
+        <section class="how-it-works" id="work">
             <div class="board-grid">
                 <div class="square-board">
-                    <div class="step-num">01</div>
+                    <div class="step-indicator">1</div>
                     <h3>Initialize</h3>
-                    <p style="color:var(--text-gray)">Set up your secure professional profile and confirm your access to claim startup credits.</p>
+                    <p>Register your account to unlock your digital vault. Every new user starts with 2 Flux Credits to begin their journey.</p>
                 </div>
                 <div class="square-board">
-                    <div class="step-num">02</div>
+                    <div class="step-indicator">2</div>
                     <h3>Provide</h3>
-                    <p style="color:var(--text-gray)">List your top skills in our global index. Earn Flux Credits every time you assist a peer.</p>
+                    <p>List your unique expertise. For every peer you mentor or assist, you earn Flux Credits directly into your vault.</p>
                 </div>
                 <div class="square-board">
-                    <div class="step-num">03</div>
+                    <div class="step-indicator">3</div>
                     <h3>Exchange</h3>
-                    <p style="color:var(--text-gray)">Use your earned credits to book sessions with specialists and grow your own career path.</p>
+                    <p>Browse the global directory and use your credits to acquire new high-value skills from certified experts.</p>
                 </div>
             </div>
         </section>
 
-        <section id="auth-view" class="auth-container">
+        <section id="auth-view">
             <div class="auth-card">
-                <h2 style="margin-bottom: 30px; text-align: center;">Secure Registration</h2>
+                <h2 style="margin-bottom: 30px; text-align:center">Secure Login</h2>
                 <input type="email" id="email" placeholder="Professional Email">
-                <input type="password" id="password" placeholder="Create Password">
+                <input type="password" id="password" placeholder="Password">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password">
-                <button onclick="handleSignUp()" class="btn-flux" style="width:100%; padding:18px;">Create Account</button>
-                <p style="text-align:center; margin-top:20px; color:var(--text-gray); font-size:0.9rem;">
-                    Already a member? <span onclick="handleLogin()" style="color:var(--flux-blue); cursor:pointer;">Sign In</span>
+                <button onclick="handleSignUp()" class="btn-main" style="width:100%; padding:18px">Activate Account</button>
+                <p style="text-align:center; margin-top:20px; color:var(--text-gray); font-size:0.9rem">
+                    Already a member? <span onclick="handleLogin()" style="color:var(--flux-blue); cursor:pointer">Sign in here</span>
                 </p>
             </div>
         </section>
     </main>
 
     <main id="dashboard-view" class="hidden">
-        <h1>Personal <span class="colored-text">Vault</span></h1>
-        <p style="color:var(--text-gray)">Active Node: <span id="user-display" style="color:white"></span></p>
+        <h1 style="font-size: 3.5rem">Personal <span class="blue-text">Vault</span></h1>
+        <p style="color:var(--text-gray); margin-bottom: 40px">Welcome back, <span id="user-display" style="color:white"></span></p>
         
-        <div class="vault-box">
-            <div class="vault-inner">
-                <small style="color:var(--text-gray); text-transform:uppercase; letter-spacing:2px;">Flux Credit Balance</small>
-                <h1 style="font-size: 6rem; margin: 10px 0;" id="credit-display">0</h1>
-            </div>
+        <div class="credit-vault">
+            <small style="color:var(--flux-blue); font-weight:800; letter-spacing:2px">TOTAL FLUX BALANCE</small>
+            <h1 style="font-size: 7rem; line-height:1" id="credit-display">0</h1>
         </div>
     </main>
 
@@ -211,7 +182,6 @@
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, pass);
                 await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
-                alert("Account Initialized!");
             } catch (e) { alert(e.message); }
         };
 
