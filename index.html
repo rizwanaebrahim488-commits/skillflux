@@ -3,89 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Exchange</title>
+    <title>SkillFlux | Peer-to-Peer Exchange</title>
     <style>
         :root {
-            --brand-primary: #4f46e5; /* Modern Indigo */
-            --brand-success: #10b981; /* Emerald Green */
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --text-main: #1f2937;
-            --glass: rgba(255, 255, 255, 0.95);
+            --bg-dark: #0a0a0a;
+            --card-dark: #141414;
+            --accent-blue: #3b82f6;
+            --text-white: #ffffff;
+            --text-gray: #a1a1aa;
         }
 
-        body { 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            background: var(--bg-gradient); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
 
-        .container { 
-            background: var(--glass); 
-            padding: 40px; 
-            border-radius: 20px; 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); 
-            width: 100%; 
-            max-width: 400px; 
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .container {
+            width: 100%;
+            max-width: 440px;
+            text-align: left;
         }
 
-        h1 { color: var(--brand-primary); font-size: 2rem; margin-bottom: 8px; font-weight: 800; }
-        .tagline { color: #6b7280; font-size: 0.95rem; margin-bottom: 32px; }
-
-        input { 
-            width: 100%; padding: 14px; margin: 10px 0; 
-            border: 1px solid #e5e7eb; border-radius: 12px; 
-            box-sizing: border-box; font-size: 1rem; transition: border 0.2s;
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 10px;
         }
 
-        input:focus { outline: none; border-color: var(--brand-primary); ring: 2px solid var(--brand-primary); }
-
-        button { 
-            width: 100%; padding: 14px; border-radius: 12px; 
-            font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-size: 1rem;
+        .hero-text {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 30px;
         }
 
-        .btn-main { background: var(--brand-primary); color: white; margin-top: 10px; }
-        .btn-main:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .blue-glow {
+            color: var(--accent-blue);
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
 
-        .btn-alt { background: transparent; color: var(--brand-primary); border: 2px solid var(--brand-primary); margin-top: 12px; }
-        .btn-alt:hover { background: rgba(79, 70, 229, 0.05); }
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            background: var(--card-dark);
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-gray);
+            text-decoration: underline;
+        }
 
         .hidden { display: none; }
 
-        /* Dashboard Styles */
-        .credit-card { 
-            background: #fff; border: 1px solid #e5e7eb; padding: 15px; 
-            border-radius: 12px; margin: 20px 0; display: flex; 
-            justify-content: space-between; align-items: center; 
+        /* Dashboard specific */
+        .status-card {
+            background: var(--card-dark);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #27272a;
+            margin-top: 20px;
         }
-        .credit-count { font-size: 1.5rem; font-weight: 700; color: var(--brand-success); }
+
+        .credit-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>SkillFlux</h1>
-        <p class="tagline">The premium peer-to-peer marketplace.</p>
+        <h1>Skill<span class="blue-glow">Flux</span></h1>
         
         <div id="auth-section">
-            <input type="email" id="email" placeholder="Email Address">
-            <input type="password" id="password" placeholder="Create Password">
-            <button onclick="handleLogin()" class="btn-main">Sign In</button>
-            <button onclick="handleSignUp()" class="btn-alt">Join Community</button>
+            <p class="hero-text">Find the skills you need. Share the skills you have. Connect to learn and grow.</p>
+            
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Choose a password">
+            </div>
+            
+            <button onclick="handleSignUp()" class="btn-primary">Join SkillFlux</button>
+            <button onclick="handleLogin()" class="btn-ghost">Already have an account? Sign in</button>
         </div>
 
         <div id="dashboard-section" class="hidden">
-            <p>Welcome back, <strong id="user-display"></strong></p>
-            <div class="credit-card">
-                <span>Available Credits</span>
-                <span class="credit-count" id="credit-display">0</span>
+            <p class="hero-text">Welcome back, <span id="user-display" class="blue-glow"></span></p>
+            
+            <div class="status-card">
+                <p style="margin:0; color:var(--text-gray)">Available Credits</p>
+                <div class="credit-value" id="credit-display">0</div>
             </div>
-            <button onclick="handleLogout()" style="color: #ef4444; background: transparent; font-size: 0.9rem;">Sign Out</button>
+
+            <button onclick="handleLogout()" class="btn-ghost" style="margin-top:40px">Logout from session</button>
         </div>
     </div>
 
@@ -94,6 +153,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Your verified Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
             authDomain: "skillflux-c4088.firebaseapp.com",
@@ -107,18 +167,26 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Logic for Login/Signup
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
-                alert("Account created successfully!");
+                await setDoc(doc(db, "users", res.user.uid), { 
+                    email, 
+                    credits: 2, 
+                    createdAt: new Date() 
+                });
+                alert("Welcome! 2 Credits awarded.");
             } catch (e) { alert(e.message); }
         };
 
-        window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
+        window.handleLogin = () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
+        };
+
         window.handleLogout = () => signOut(auth);
 
         onAuthStateChanged(auth, async (user) => {
@@ -129,7 +197,9 @@
                 dashDiv.classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
                 const snap = await getDoc(doc(db, "users", user.uid));
-                if (snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
+                if (snap.exists()) {
+                    document.getElementById('credit-display').innerText = snap.data().credits;
+                }
             } else {
                 authDiv.classList.remove('hidden');
                 dashDiv.classList.add('hidden');
