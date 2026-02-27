@@ -308,74 +308,58 @@
         </div>
     </main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+        authDomain: "skillflux-c4088.firebaseapp.com",
+        projectId: "skillflux-c4088",
+        storageBucket: "skillflux-c4088.appspot.com",
+        messagingSenderId: "347039323368",
+        appId: "1:347039323368:web:0f610227dc3715581a255d"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        window.scrollToAuth = () => document.getElementById('auth-view').scrollIntoView({behavior:'smooth'});
-        window.scrollToWork = () => document.getElementById('work').scrollIntoView({behavior:'smooth'});
+    // --- ADD THIS SIGN UP FUNCTION ---
+    window.handleSignUp = async () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirmPassword').value;
 
-      // --- REPLACE YOUR OLD loadMarketplace WITH THIS ---
-function loadMarketplace() {
-    const q = query(collection(db, "skills"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snapshot) => {
-        const feed = document.getElementById('marketplace-feed');
-        feed.innerHTML = '';
-        
-        snapshot.forEach((skillDoc) => {
-            const skill = skillDoc.data();
-            const isOwnSkill = skill.ownerId === auth.currentUser.uid;
+        if (password !== confirm) {
+            alert("Passwords do not match!");
+            return;
+        }
 
-            // Notice we added skill.title and skill.ownerEmail to the button below
-            feed.innerHTML += `
-                <div class="square-board">
-                    <div>
-                        <div class="board-tag">${isOwnSkill ? 'Personal Posting' : 'Peer Offering'}</div>
-                        <h3>${skill.title}</h3>
-                        <p>${skill.desc}</p>
-                    </div>
-                    <div class="board-footer">
-                        <div class="price">${skill.cost} FLUX</div>
-                        ${!isOwnSkill ? `
-                            <button class="btn-exchange" 
-                                onclick="executeExchange('${skillDoc.id}', '${skill.ownerId}', '${skill.title}', '${skill.ownerEmail}')">
-                                Acquire
-                            </button>` : ''}
-                    </div>
-                </div>
-            `;
-        });
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // This creates the user profile with 2 initial credits
+            await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                credits: 2,
+                createdAt: new Date()
+            });
+
+            alert("Vault Initialized! Redirecting to Dashboard...");
+        } catch (error) {
+            alert("Registration Error: " + error.message);
+        }
+    };
+
+    window.scrollToAuth = () => document.getElementById('auth-view').scrollIntoView({behavior:'smooth'});
+    window.scrollToWork = () => document.getElementById('work').scrollIntoView({behavior:'smooth'});
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            window.location.href = "dashboard.html"; 
+        }
     });
-}
-
-        window.handleLogout = () => signOut(auth);
-
-        onAuthStateChanged(auth, async (user) => {
-    const landing = document.getElementById('landing-view');
-    const dash = document.getElementById('dashboard-view'); // We can remove this if moving to a new file
-
-    if (user) {
-        // This is the "Switch" that moves the user to the new page
-        window.location.href = "dashboard.html"; 
-    } else {
-        // Keep them on the landing page if they are not logged in
-        landing.classList.remove('hidden');
-    }
-});
-    </script>
-</body>
-</html>
+</script>
