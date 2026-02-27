@@ -147,18 +147,36 @@
         let userProfile = null;
 
         // AUTH GUARD
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.body.style.opacity = "1";
-                document.getElementById('display-email').innerText = user.email;
-                
-                // Real-time Credit Sync
-                onSnapshot(doc(db, "users", user.uid), (doc) => {
-                    if(doc.exists()) {
-                        userProfile = doc.data();
-                        document.getElementById('display-credits').innerText = userProfile.credits;
-                    }
-                });
+       onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        document.body.style.opacity = "1";
+        document.getElementById('display-email').innerText = user.email;
+        
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        // EXTRA SAFETY: If the user exists in Auth but not in DB yet
+        if (!userSnap.exists()) {
+            await setDoc(userRef, { 
+                email: user.email, 
+                credits: 2, 
+                createdAt: new Date() 
+            });
+        }
+
+        // Real-time Credit Sync
+        onSnapshot(userRef, (doc) => {
+            if(doc.exists()) {
+                userProfile = doc.data();
+                document.getElementById('display-credits').innerText = userProfile.credits;
+            }
+        });
+
+        loadMarketplace();
+    } else {
+        window.location.href = "index.html";
+    }
+});
 
                 loadMarketplace();
             } else {
