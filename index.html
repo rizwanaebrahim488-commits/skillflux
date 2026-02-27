@@ -1,173 +1,144 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SkillFlux | Peer-to-Peer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlux | Peer-to-Peer Skill Exchange</title>
     <style>
-        /* Simple styling to make it look clean */
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f0f2f5; }
-        .box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;}
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;}
+        :root {
+            --primary: #6f42c1;
+            --secondary: #28a745;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding-top: 40px; }
+        .box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: var(--primary); margin-bottom: 10px; font-weight: 800; }
+        p.subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        button { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 15px; transition: opacity 0.3s; }
+        button:hover { opacity: 0.9; }
+        .btn-primary { background: var(--primary); }
+        .btn-secondary { background: var(--secondary); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
         .hidden { display: none; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
+        ul { list-style: none; padding: 0; text-align: left; }
+        li { background: var(--light); padding: 10px; border-radius: 6px; margin-bottom: 5px; border-left: 4px solid var(--primary); }
+        .credit-badge { background: #fff3cd; color: #856404; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <div class="box">
         <h1>SkillFlux</h1>
+        <p class="subtitle">Exchange Skills. Build Community.</p>
         
         <div id="auth-section">
-            <input type="email" id="email" placeholder="Email">
+            <input type="email" id="email" placeholder="Email Address">
             <input type="password" id="password" placeholder="Password">
-            <button onclick="handleSignUp()">Register (Get 2 Credits)</button>
-            <button onclick="handleLogin()" style="background:#28a745">Login</button>
+            <button onclick="handleLogin()" class="btn-primary">Sign In</button>
+            <button onclick="handleSignUp()" class="btn-outline">Create Account (Get 2 Credits)</button>
         </div>
-<div id="dashboard-section" class="hidden">
-    <h3>Welcome, <span id="user-display"></span></h3>
-    <p>Your Credits: <strong id="credit-display">0</strong></p>
-    
-    <hr>
-    <h4>Add a Skill you can teach:</h4>
-    <input type="text" id="skillInput" placeholder="e.g. Python, Math, Guitar">
-    <button onclick="addSkill()" style="background:#6f42c1">Add Skill</button>
-    <ul id="skillList"></ul>
 
-    <button onclick="handleLogout()" style="background:#dc3545">Logout</button>
-</div>
+        <div id="dashboard-section" class="hidden">
+            <h3>Welcome, <span id="user-display" style="color:var(--primary)"></span></h3>
+            <p>Balance: <span class="credit-badge"><span id="credit-display">0</span> Credits</span></p>
+            
+            <hr>
+            <h4>Teach a New Skill</h4>
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="skillInput" placeholder="e.g. Graphic Design" style="margin:0">
+                <button onclick="addSkill()" class="btn-secondary" style="margin:0; width: auto;">Add</button>
+            </div>
+            <ul id="skillList"></ul>
 
+            <button onclick="handleLogout()" style="background:#6c757d">Logout</button>
+        </div>
+    </div>
 
     <script type="module">
-    // 1. Import tools from Google's servers
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 2. Your specific connection keys
-    const firebaseConfig = {
-        apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-        authDomain: "skillflux-c4088.firebaseapp.com",
-        projectId: "skillflux-c4088",
-        storageBucket: "skillflux-c4088.appspot.com",
-        messagingSenderId: "347039323368",
-        appId: "1:347039323368:web:0f610227dc3715581a255d"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
 
-    // 3. Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    // 4. Registration Function (Adds user to Auth and Database)
-    window.handleSignUp = async () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        try {
-            const result = await createUserWithEmailAndPassword(auth, email, password);
-            // This creates the user profile in Firestore with 2 credits
-            await setDoc(doc(db, "users", result.user.uid), {
-                email: email,
-                credits: 2,
-                createdAt: new Date()
-            });
-            alert("Registration successful!");
-        } catch (e) { alert(e.message); }
-    };
-
-    // 5. Login and Auth State (Handles switching the screen)
-    window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
-    window.handleLogout = () => signOut(auth);
-
-    onAuthStateChanged(auth, async (user) => {
-        const authDiv = document.getElementById('auth-section');
-        const dashDiv = document.getElementById('dashboard-section');
-        
-        if (user) {
-            authDiv.classList.add('hidden');
-            dashDiv.classList.remove('hidden');
-            document.getElementById('user-display').innerText = user.email;
-            
-            // Get credits from database
-            const snap = await getDoc(doc(db, "users", user.uid));
-            if (snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
-        } else {
-            authDiv.classList.remove('hidden');
-            dashDiv.classList.add('hidden');
-        }
-    });
-        <script type="module">
-    // 1. UPDATED IMPORTS (Add arrayUnion and updateDoc)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // 2. YOUR CONFIG (Keep this as it is)
-    const firebaseConfig = {
-        apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-        authDomain: "skillflux-c4088.firebaseapp.com",
-        projectId: "skillflux-c4088",
-        storageBucket: "skillflux-c4088.appspot.com",
-        messagingSenderId: "347039323368",
-        appId: "1:347039323368:web:0f610227dc3715581a255d"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // ... Keep your handleSignUp, handleLogin, and handleLogout functions ...
-
-    // 3. NEW ADD SKILL FUNCTION (Paste this here)
-    window.addSkill = async () => {
-        const skill = document.getElementById('skillInput').value;
-        const user = auth.currentUser;
-
-        if (skill && user) {
+        // --- AUTH FUNCTIONS ---
+        window.handleSignUp = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             try {
-                const userRef = doc(db, "users", user.uid);
-                // This pushes a new skill into the user's "skills" array in the cloud
-                await updateDoc(userRef, {
-                    skills: arrayUnion(skill)
+                const result = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", result.user.uid), {
+                    email: email,
+                    credits: 2,
+                    skills: [],
+                    createdAt: new Date()
                 });
-                alert("Skill added: " + skill);
-                document.getElementById('skillInput').value = ""; // Clear input
-                loadUserSkills(user.uid); // Refresh the list on screen
-            } catch (e) { alert("Error adding skill: " + e.message); }
-        }
-    };
+                alert("Welcome to SkillFlux! 2 Credits added.");
+            } catch (e) { alert(e.message); }
+        };
 
-    // 4. FUNCTION TO SHOW SKILLS ON SCREEN
-    async function loadUserSkills(uid) {
-        const docSnap = await getDoc(doc(db, "users", uid));
-        if (docSnap.exists() && docSnap.data().skills) {
-            const list = document.getElementById('skillList');
-            list.innerHTML = ""; // Clear old list
-            docSnap.data().skills.forEach(skill => {
-                const li = document.createElement('li');
-                li.innerText = skill;
-                list.appendChild(li);
-            });
-        }
-    }
+        window.handleLogin = () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
+        };
 
-    // 5. UPDATE AUTH STATE TRACKER (To load skills when user logs in)
-    onAuthStateChanged(auth, async (user) => {
-        const authDiv = document.getElementById('auth-section');
-        const dashDiv = document.getElementById('dashboard-section');
-        if (user) {
-            authDiv.classList.add('hidden');
-            dashDiv.classList.remove('hidden');
-            document.getElementById('user-display').innerText = user.email;
-            
-            const snap = await getDoc(doc(db, "users", user.uid));
-            if (snap.exists()) {
-                document.getElementById('credit-display').innerText = snap.data().credits;
-                loadUserSkills(user.uid); // LOAD SKILLS HERE
+        window.handleLogout = () => signOut(auth);
+
+        // --- SKILL FUNCTIONS ---
+        window.addSkill = async () => {
+            const skill = document.getElementById('skillInput').value;
+            const user = auth.currentUser;
+            if (skill && user) {
+                try {
+                    await updateDoc(doc(db, "users", user.uid), { skills: arrayUnion(skill) });
+                    document.getElementById('skillInput').value = "";
+                    loadUserSkills(user.uid);
+                } catch (e) { alert(e.message); }
             }
-        } else {
-            authDiv.classList.remove('hidden');
-            dashDiv.classList.add('hidden');
+        };
+
+        async function loadUserSkills(uid) {
+            const snap = await getDoc(doc(db, "users", uid));
+            if (snap.exists() && snap.data().skills) {
+                const list = document.getElementById('skillList');
+                list.innerHTML = snap.data().skills.map(s => `<li>${s}</li>`).join('');
+            }
         }
-    });
-</script>
-</script>
+
+        // --- STATE TRACKER ---
+        onAuthStateChanged(auth, async (user) => {
+            const authDiv = document.getElementById('auth-section');
+            const dashDiv = document.getElementById('dashboard-section');
+            if (user) {
+                authDiv.classList.add('hidden');
+                dashDiv.classList.remove('hidden');
+                document.getElementById('user-display').innerText = user.email.split('@')[0];
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    document.getElementById('credit-display').innerText = snap.data().credits;
+                    loadUserSkills(user.uid);
+                }
+            } else {
+                authDiv.classList.remove('hidden');
+                dashDiv.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
