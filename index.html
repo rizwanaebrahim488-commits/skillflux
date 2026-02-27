@@ -21,13 +21,19 @@
             <button onclick="handleSignUp()">Register (Get 2 Credits)</button>
             <button onclick="handleLogin()" style="background:#28a745">Login</button>
         </div>
+<div id="dashboard-section" class="hidden">
+    <h3>Welcome, <span id="user-display"></span></h3>
+    <p>Your Credits: <strong id="credit-display">0</strong></p>
+    
+    <hr>
+    <h4>Add a Skill you can teach:</h4>
+    <input type="text" id="skillInput" placeholder="e.g. Python, Math, Guitar">
+    <button onclick="addSkill()" style="background:#6f42c1">Add Skill</button>
+    <ul id="skillList"></ul>
 
-        <div id="dashboard-section" class="hidden">
-            <h3>Welcome, <span id="user-display"></span></h3>
-            <p>Your Credits: <strong id="credit-display">0</strong></p>
-            <button onclick="handleLogout()" style="background:#dc3545">Logout</button>
-        </div>
-    </div>
+    <button onclick="handleLogout()" style="background:#dc3545">Logout</button>
+</div>
+
 
     <script type="module">
     // 1. Import tools from Google's servers
@@ -87,6 +93,81 @@
             dashDiv.classList.add('hidden');
         }
     });
+        <script type="module">
+    // 1. UPDATED IMPORTS (Add arrayUnion and updateDoc)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 2. YOUR CONFIG (Keep this as it is)
+    const firebaseConfig = {
+        apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+        authDomain: "skillflux-c4088.firebaseapp.com",
+        projectId: "skillflux-c4088",
+        storageBucket: "skillflux-c4088.appspot.com",
+        messagingSenderId: "347039323368",
+        appId: "1:347039323368:web:0f610227dc3715581a255d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ... Keep your handleSignUp, handleLogin, and handleLogout functions ...
+
+    // 3. NEW ADD SKILL FUNCTION (Paste this here)
+    window.addSkill = async () => {
+        const skill = document.getElementById('skillInput').value;
+        const user = auth.currentUser;
+
+        if (skill && user) {
+            try {
+                const userRef = doc(db, "users", user.uid);
+                // This pushes a new skill into the user's "skills" array in the cloud
+                await updateDoc(userRef, {
+                    skills: arrayUnion(skill)
+                });
+                alert("Skill added: " + skill);
+                document.getElementById('skillInput').value = ""; // Clear input
+                loadUserSkills(user.uid); // Refresh the list on screen
+            } catch (e) { alert("Error adding skill: " + e.message); }
+        }
+    };
+
+    // 4. FUNCTION TO SHOW SKILLS ON SCREEN
+    async function loadUserSkills(uid) {
+        const docSnap = await getDoc(doc(db, "users", uid));
+        if (docSnap.exists() && docSnap.data().skills) {
+            const list = document.getElementById('skillList');
+            list.innerHTML = ""; // Clear old list
+            docSnap.data().skills.forEach(skill => {
+                const li = document.createElement('li');
+                li.innerText = skill;
+                list.appendChild(li);
+            });
+        }
+    }
+
+    // 5. UPDATE AUTH STATE TRACKER (To load skills when user logs in)
+    onAuthStateChanged(auth, async (user) => {
+        const authDiv = document.getElementById('auth-section');
+        const dashDiv = document.getElementById('dashboard-section');
+        if (user) {
+            authDiv.classList.add('hidden');
+            dashDiv.classList.remove('hidden');
+            document.getElementById('user-display').innerText = user.email;
+            
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if (snap.exists()) {
+                document.getElementById('credit-display').innerText = snap.data().credits;
+                loadUserSkills(user.uid); // LOAD SKILLS HERE
+            }
+        } else {
+            authDiv.classList.remove('hidden');
+            dashDiv.classList.add('hidden');
+        }
+    });
+</script>
 </script>
 </body>
 </html>
