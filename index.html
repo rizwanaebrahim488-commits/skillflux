@@ -174,16 +174,38 @@
         window.scrollToAuth = () => document.getElementById('auth-view').scrollIntoView({behavior:'smooth'});
         window.scrollToWork = () => document.getElementById('work').scrollIntoView({behavior:'smooth'});
 
-        window.handleSignUp = async () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            const confirm = document.getElementById('confirmPassword').value;
-            if(pass !== confirm) return alert("Passwords do not match!");
-            try {
-                const res = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
-            } catch (e) { alert(e.message); }
-        };
+      // --- REPLACE YOUR OLD loadMarketplace WITH THIS ---
+function loadMarketplace() {
+    const q = query(collection(db, "skills"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const feed = document.getElementById('marketplace-feed');
+        feed.innerHTML = '';
+        
+        snapshot.forEach((skillDoc) => {
+            const skill = skillDoc.data();
+            const isOwnSkill = skill.ownerId === auth.currentUser.uid;
+
+            // Notice we added skill.title and skill.ownerEmail to the button below
+            feed.innerHTML += `
+                <div class="square-board">
+                    <div>
+                        <div class="board-tag">${isOwnSkill ? 'Personal Posting' : 'Peer Offering'}</div>
+                        <h3>${skill.title}</h3>
+                        <p>${skill.desc}</p>
+                    </div>
+                    <div class="board-footer">
+                        <div class="price">${skill.cost} FLUX</div>
+                        ${!isOwnSkill ? `
+                            <button class="btn-exchange" 
+                                onclick="executeExchange('${skillDoc.id}', '${skill.ownerId}', '${skill.title}', '${skill.ownerEmail}')">
+                                Acquire
+                            </button>` : ''}
+                    </div>
+                </div>
+            `;
+        });
+    });
+}
 
         window.handleLogout = () => signOut(auth);
 
