@@ -217,26 +217,35 @@
         }
 
         // TRANSACTION ENGINE (THE EXCHANGE)
-        window.executeExchange = async (skillId, sellerId) => {
-            if (userProfile.credits < 1) return alert("Insufficient Liquidity. Please provide a skill to earn credits.");
-            
-            if (!confirm("Exchange 1 Flux Credit for this expertise?")) return;
+        window.executeExchange = async (skillId, sellerId, skillTitle, sellerEmail) => {
+    if (userProfile.credits < 1) return alert("Insufficient Liquidity.");
+    
+    const confirmMsg = `Exchange 1 Flux Credit for '${skillTitle}'? \n\nThis will open the scheduling portal.`;
+    if (!confirm(confirmMsg)) return;
 
-            try {
-                // 1. Deduct from Buyer
-                const buyerRef = doc(db, "users", auth.currentUser.uid);
-                await updateDoc(buyerRef, { credits: userProfile.credits - 1 });
+    try {
+        // 1. Process Credit Transfer
+        const buyerRef = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(buyerRef, { credits: userProfile.credits - 1 });
 
-                // 2. Add to Seller
-                const sellerRef = doc(db, "users", sellerId);
-                const sellerSnap = await getDoc(sellerRef);
-                await updateDoc(sellerRef, { credits: (sellerSnap.data().credits || 0) + 1 });
+        const sellerRef = doc(db, "users", sellerId);
+        const sellerSnap = await getDoc(sellerRef);
+        await updateDoc(sellerRef, { credits: (sellerSnap.data().credits || 0) + 1 });
 
-                alert("Protocol Complete. 1 Credit Transferred.");
-            } catch (e) { alert("Exchange failed: " + e.message); }
-        };
+        // 2. Generate Google Meet Link & Schedule
+        // We use a Google Calendar 'template' link that auto-fills the details
+        const startTime = new Date().toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const eventTitle = encodeURIComponent(`SkillFlux Exchange: ${skillTitle}`);
+        const details = encodeURIComponent(`Peer-to-Peer Session between ${auth.currentUser.email} and ${sellerEmail}`);
+        
+        const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&details=${details}&add=${sellerEmail}&add=${auth.currentUser.email}`;
 
-        window.handleLogout = () => signOut(auth);
-    </script>
-</body>
-</html>
+        alert("Exchange Successful! 1 Flux Credit transferred. Opening Google Calendar to finalize your Meet link...");
+        
+        // Open Calendar in a new tab so they can pick the exact time
+        window.open(gCalUrl, '_blank');
+
+    } catch (e) { 
+        alert("Exchange failed: " + e.message); 
+    }
+};
