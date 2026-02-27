@@ -3,65 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Peer-to-Peer Skill Exchange</title>
+    <title>SkillFlux | Professional Exchange</title>
     <style>
         :root {
-            --primary: #6f42c1;
-            --secondary: #28a745;
-            --danger: #dc3545;
-            --light: #f8f9fa;
-            --dark: #212529;
+            --brand-primary: #4f46e5; /* Modern Indigo */
+            --brand-success: #10b981; /* Emerald Green */
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --text-main: #1f2937;
+            --glass: rgba(255, 255, 255, 0.95);
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding-top: 40px; }
-        .box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
-        h1 { color: var(--primary); margin-bottom: 10px; font-weight: 800; }
-        p.subtitle { color: #666; margin-bottom: 30px; font-size: 0.9rem; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        button { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 15px; transition: opacity 0.3s; }
-        button:hover { opacity: 0.9; }
-        .btn-primary { background: var(--primary); }
-        .btn-secondary { background: var(--secondary); }
-        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg-gradient); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+
+        .container { 
+            background: var(--glass); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); 
+            width: 100%; 
+            max-width: 400px; 
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 { color: var(--brand-primary); font-size: 2rem; margin-bottom: 8px; font-weight: 800; }
+        .tagline { color: #6b7280; font-size: 0.95rem; margin-bottom: 32px; }
+
+        input { 
+            width: 100%; padding: 14px; margin: 10px 0; 
+            border: 1px solid #e5e7eb; border-radius: 12px; 
+            box-sizing: border-box; font-size: 1rem; transition: border 0.2s;
+        }
+
+        input:focus { outline: none; border-color: var(--brand-primary); ring: 2px solid var(--brand-primary); }
+
+        button { 
+            width: 100%; padding: 14px; border-radius: 12px; 
+            font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-size: 1rem;
+        }
+
+        .btn-main { background: var(--brand-primary); color: white; margin-top: 10px; }
+        .btn-main:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+
+        .btn-alt { background: transparent; color: var(--brand-primary); border: 2px solid var(--brand-primary); margin-top: 12px; }
+        .btn-alt:hover { background: rgba(79, 70, 229, 0.05); }
+
         .hidden { display: none; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
-        ul { list-style: none; padding: 0; text-align: left; }
-        li { background: var(--light); padding: 10px; border-radius: 6px; margin-bottom: 5px; border-left: 4px solid var(--primary); }
-        .credit-badge { background: #fff3cd; color: #856404; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
+
+        /* Dashboard Styles */
+        .credit-card { 
+            background: #fff; border: 1px solid #e5e7eb; padding: 15px; 
+            border-radius: 12px; margin: 20px 0; display: flex; 
+            justify-content: space-between; align-items: center; 
+        }
+        .credit-count { font-size: 1.5rem; font-weight: 700; color: var(--brand-success); }
     </style>
 </head>
 <body>
 
-    <div class="box">
+    <div class="container">
         <h1>SkillFlux</h1>
-        <p class="subtitle">Exchange Skills. Build Community.</p>
+        <p class="tagline">The premium peer-to-peer marketplace.</p>
         
         <div id="auth-section">
             <input type="email" id="email" placeholder="Email Address">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="handleLogin()" class="btn-primary">Sign In</button>
-            <button onclick="handleSignUp()" class="btn-outline">Create Account (Get 2 Credits)</button>
+            <input type="password" id="password" placeholder="Create Password">
+            <button onclick="handleLogin()" class="btn-main">Sign In</button>
+            <button onclick="handleSignUp()" class="btn-alt">Join Community</button>
         </div>
 
         <div id="dashboard-section" class="hidden">
-            <h3>Welcome, <span id="user-display" style="color:var(--primary)"></span></h3>
-            <p>Balance: <span class="credit-badge"><span id="credit-display">0</span> Credits</span></p>
-            
-            <hr>
-            <h4>Teach a New Skill</h4>
-            <div style="display: flex; gap: 5px;">
-                <input type="text" id="skillInput" placeholder="e.g. Graphic Design" style="margin:0">
-                <button onclick="addSkill()" class="btn-secondary" style="margin:0; width: auto;">Add</button>
+            <p>Welcome back, <strong id="user-display"></strong></p>
+            <div class="credit-card">
+                <span>Available Credits</span>
+                <span class="credit-count" id="credit-display">0</span>
             </div>
-            <ul id="skillList"></ul>
-
-            <button onclick="handleLogout()" style="background:#6c757d">Logout</button>
+            <button onclick="handleLogout()" style="color: #ef4444; background: transparent; font-size: 0.9rem;">Sign Out</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
@@ -76,52 +107,20 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- AUTH FUNCTIONS ---
+        // Logic for Login/Signup
         window.handleSignUp = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             try {
-                const result = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", result.user.uid), {
-                    email: email,
-                    credits: 2,
-                    skills: [],
-                    createdAt: new Date()
-                });
-                alert("Welcome to SkillFlux! 2 Credits added.");
+                const res = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
+                alert("Account created successfully!");
             } catch (e) { alert(e.message); }
         };
 
-        window.handleLogin = () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
-        };
-
+        window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
         window.handleLogout = () => signOut(auth);
 
-        // --- SKILL FUNCTIONS ---
-        window.addSkill = async () => {
-            const skill = document.getElementById('skillInput').value;
-            const user = auth.currentUser;
-            if (skill && user) {
-                try {
-                    await updateDoc(doc(db, "users", user.uid), { skills: arrayUnion(skill) });
-                    document.getElementById('skillInput').value = "";
-                    loadUserSkills(user.uid);
-                } catch (e) { alert(e.message); }
-            }
-        };
-
-        async function loadUserSkills(uid) {
-            const snap = await getDoc(doc(db, "users", uid));
-            if (snap.exists() && snap.data().skills) {
-                const list = document.getElementById('skillList');
-                list.innerHTML = snap.data().skills.map(s => `<li>${s}</li>`).join('');
-            }
-        }
-
-        // --- STATE TRACKER ---
         onAuthStateChanged(auth, async (user) => {
             const authDiv = document.getElementById('auth-section');
             const dashDiv = document.getElementById('dashboard-section');
@@ -130,10 +129,7 @@
                 dashDiv.classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
                 const snap = await getDoc(doc(db, "users", user.uid));
-                if (snap.exists()) {
-                    document.getElementById('credit-display').innerText = snap.data().credits;
-                    loadUserSkills(user.uid);
-                }
+                if (snap.exists()) document.getElementById('credit-display').innerText = snap.data().credits;
             } else {
                 authDiv.classList.remove('hidden');
                 dashDiv.classList.add('hidden');
