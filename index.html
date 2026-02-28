@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Elite Exchange Board</title>
+    <title>SkillFlux | Member Dashboard</title>
     <style>
         :root {
             --bg-black: #000000;
@@ -12,69 +12,60 @@
             --text-white: #ffffff;
             --text-gray: #94a3b8;
             --border-standard: #1e293b;
-            --nav-height: 90px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            background: var(--bg-black); 
-            color: var(--text-white); 
-            line-height: 1.6;
-            opacity: 0; 
-            transition: opacity 0.5s;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-black); color: var(--text-white); padding-top: 100px; }
 
+        /* ELITE NAV */
         nav {
-            position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%;
+            position: fixed; top: 0; width: 100%; height: 90px; padding: 0 6%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 1000;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); z-index: 1000;
             border-bottom: 1px solid var(--border-standard);
         }
-        .nav-left { display: flex; align-items: baseline; gap: 15px; }
-        .brand { font-size: 2rem; font-weight: 900; letter-spacing: -2px; color: white; }
+        .brand { font-size: 2rem; font-weight: 900; color: white; letter-spacing: -1.5px; }
         .brand span { color: var(--flux-blue); }
-        .p2p-description { 
-            font-size: 0.8rem; font-weight: 600; color: var(--text-gray);
-            border-left: 2px solid var(--flux-blue); padding-left: 15px;
-            text-transform: uppercase; letter-spacing: 2px;
-        }
-        .btn-logout { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .p2p-sub { font-size: 0.8rem; font-weight: 700; color: var(--text-gray); border-left: 2px solid var(--flux-blue); padding-left: 15px; text-transform: uppercase; }
 
-        main { padding: calc(var(--nav-height) + 40px) 6% 100px; max-width: 1400px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 6%; }
 
-        .vault-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
-        .vault-stats { background: var(--card-dark); border: 1px solid var(--flux-blue); padding: 25px 45px; border-radius: 24px; text-align: center; }
-        .vault-stats h1 { font-size: 4rem; color: var(--flux-blue); line-height: 1; margin: 10px 0; }
-        .vault-stats small { letter-spacing: 2px; font-weight: 800; color: var(--text-gray); }
+        /* VAULT STATS */
+        .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px; }
+        .vault-card { background: var(--card-dark); border: 1px solid var(--flux-blue); padding: 30px 50px; border-radius: 24px; }
+        .vault-card h1 { font-size: 4rem; line-height: 1; color: var(--flux-blue); }
 
-        .post-board { background: var(--card-dark); border: 1px solid var(--border-standard); padding: 40px; border-radius: 30px; margin-bottom: 80px; }
-        .post-board h3 { margin-bottom: 25px; font-size: 1.5rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: flex-end; }
-        input { background: #000; border: 1px solid var(--border-standard); padding: 18px; border-radius: 12px; color: white; width: 100%; outline: none; }
-        input:focus { border-color: var(--flux-blue); }
-        .btn-post { background: var(--flux-blue); color: white; border: none; padding: 18px 35px; border-radius: 12px; font-weight: 800; cursor: pointer; }
-
-        .exchange-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 40px; }
-        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        
-        .square-board {
+        /* POST SKILL FORM BOARD */
+        .post-skill-board {
             background: var(--card-dark); border: 1px solid var(--border-standard);
-            aspect-ratio: 1 / 1; padding: 40px; border-radius: 35px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 40px; border-radius: 24px; margin-bottom: 60px;
         }
-        .square-board:hover { border-color: var(--flux-blue); transform: translateY(-10px); background: #0c0c0c; }
-        .board-tag { font-size: 0.75rem; font-weight: 800; color: var(--flux-blue); letter-spacing: 2px; text-transform: uppercase; }
-        .square-board h3 { font-size: 1.8rem; font-weight: 800; margin: 15px 0; line-height: 1.2; }
-        .square-board p { color: var(--text-gray); font-size: 1rem; flex-grow: 1; }
-        
-        .board-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #1e293b; }
-        .price { font-weight: 900; font-size: 1.2rem; }
-        .btn-exchange { background: white; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        .btn-exchange:hover { background: var(--flux-blue); color: white; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; align-items: end; }
+        input, select { 
+            background: #000; border: 1px solid var(--border-standard); padding: 15px; 
+            border-radius: 12px; color: white; width: 100%; font-size: 1rem;
+        }
+        .btn-add { background: var(--flux-blue); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 800; cursor: pointer; }
 
-        @media (max-width: 1000px) { .form-row { grid-template-columns: 1fr; } .square-board { aspect-ratio: auto; } }
+        /* MARKETPLACE GRID (SQUARE BOXES) */
+        .section-title { font-size: 2rem; margin-bottom: 30px; letter-spacing: -1px; }
+        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        
+        .skill-card {
+            background: var(--card-dark); border: 1px solid var(--border-standard);
+            aspect-ratio: 1 / 1; padding: 35px; border-radius: 28px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: 0.3s;
+        }
+        .skill-card:hover { border-color: var(--flux-blue); transform: translateY(-10px); }
+        .skill-card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .skill-card p { color: var(--text-gray); font-size: 0.95rem; flex-grow: 1; }
+        .skill-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .price-tag { color: var(--flux-blue); font-weight: 900; }
+        .btn-request { background: #1e293b; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
+        .btn-request:hover { background: var(--flux-blue); }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -82,46 +73,47 @@
     <nav>
         <div class="nav-left">
             <div class="brand">Skill<span>Flux</span></div>
-            <div class="p2p-description">Peer-to-Peer Exchange</div>
+            <div class="p2p-sub">Peer-to-Peer Exchange</div>
         </div>
-        <button class="btn-logout" onclick="handleLogout()">Logout</button>
+        <button class="btn-add" style="background:#ef4444; padding: 10px 20px;" onclick="logout()">Logout</button>
     </nav>
 
-    <main>
-        <div class="vault-header">
+    <div class="container">
+        <div class="header-flex">
             <div>
-                <p style="color:var(--text-gray); text-transform: uppercase; letter-spacing: 1px;">Authenticated Professional</p>
-                <h2 id="display-email" style="font-size: 1.8rem;">---</h2>
+                <p style="color:var(--text-gray)">Active Professional Node</p>
+                <h2 id="user-email">Loading...</h2>
             </div>
-            <div class="vault-stats">
-                <small>FLUX LIQUIDITY</small>
-                <h1 id="display-credits">0</h1>
+            <div class="vault-card">
+                <small>FLUX CREDITS</small>
+                <h1 id="credit-count">0</h1>
             </div>
         </div>
 
-        <section class="post-board">
-            <h3>List Your Expertise</h3>
-            <div class="form-row">
+        <div class="post-skill-board">
+            <h3 style="margin-bottom: 20px;">List New Expertise</h3>
+            <div class="form-grid">
                 <div>
-                    <label style="display:block; margin-bottom:8px; font-size:0.8rem; color:var(--text-gray)">SKILL TITLE</label>
-                    <input type="text" id="skill-title" placeholder="e.g. Advanced React Architecture">
+                    <label style="font-size: 0.8rem; color: var(--text-gray);">Skill Title</label>
+                    <input type="text" id="skill-title" placeholder="e.g. UI/UX Mentorship">
                 </div>
                 <div>
-                    <label style="display:block; margin-bottom:8px; font-size:0.8rem; color:var(--text-gray)">OFFER DESCRIPTION</label>
-                    <input type="text" id="skill-desc" placeholder="1-hour deep dive session">
+                    <label style="font-size: 0.8rem; color: var(--text-gray);">Short Description</label>
+                    <input type="text" id="skill-desc" placeholder="One-on-one session for 1 hour">
                 </div>
-                <button class="btn-post" onclick="handlePostSkill()">Post Skill</button>
+                <button class="btn-add" onclick="postSkill()">Post to Exchange</button>
             </div>
-        </section>
+        </div>
 
-        <h2 class="exchange-title">Active <span style="color:var(--flux-blue)">Marketplace</span></h2>
-        <div class="skill-grid" id="marketplace-feed"></div>
-    </main>
+        <h2 class="section-title">Global <span style="color:var(--flux-blue)">Exchange</span> Feed</h2>
+        <div class="skill-grid" id="market-grid">
+            </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, getDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
@@ -136,82 +128,63 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let userProfile = null;
+        let currentUser = null;
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.body.style.opacity = "1";
-                document.getElementById('display-email').innerText = user.email;
-                
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (!userSnap.exists()) {
-                    await setDoc(userRef, { 
-                        email: user.email, 
-                        credits: 2, 
-                        createdAt: new Date() 
-                    });
-                }
-
-                onSnapshot(userRef, (doc) => {
-                    if(doc.exists()) {
-                        userProfile = doc.data();
-                        document.getElementById('display-credits').innerText = userProfile.credits;
-                    }
-                });
-
+                currentUser = user;
+                document.getElementById('user-email').innerText = user.email;
+                loadUserData(user.uid);
                 loadMarketplace();
             } else {
                 window.location.href = "index.html";
             }
         });
 
-        window.handlePostSkill = async () => {
+        async function loadUserData(uid) {
+            const snap = await getDoc(doc(db, "users", uid));
+            if(snap.exists()) document.getElementById('credit-count').innerText = snap.data().credits;
+        }
+
+        // POST SKILL LOGIC
+        window.postSkill = async () => {
             const title = document.getElementById('skill-title').value;
             const desc = document.getElementById('skill-desc').value;
+            if(!title || !desc) return alert("Fill all fields");
 
-            if(!title || !desc) return alert("Please define your skill.");
-
-            try {
-                await addDoc(collection(db, "skills"), {
-                    ownerId: auth.currentUser.uid,
-                    ownerEmail: auth.currentUser.email,
-                    title,
-                    desc,
-                    cost: 1,
-                    createdAt: serverTimestamp()
-                });
-                document.getElementById('skill-title').value = '';
-                document.getElementById('skill-desc').value = '';
-                alert("Skill added to Elite Exchange.");
-            } catch (e) { alert(e.message); }
+            await addDoc(collection(db, "skills"), {
+                title,
+                desc,
+                ownerId: currentUser.uid,
+                ownerEmail: currentUser.email,
+                cost: 1,
+                timestamp: new Date()
+            });
+            
+            document.getElementById('skill-title').value = '';
+            document.getElementById('skill-desc').value = '';
+            alert("Skill Listed on Exchange!");
         };
 
+        // LOAD MARKETPLACE (REAL-TIME)
         function loadMarketplace() {
-            const q = query(collection(db, "skills"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('marketplace-feed');
-                feed.innerHTML = '';
-                
-                snapshot.forEach((skillDoc) => {
-                    const skill = skillDoc.data();
-                    const isOwnSkill = skill.ownerId === auth.currentUser.uid;
-
-                    feed.innerHTML += `
-                        <div class="square-board">
+            onSnapshot(collection(db, "skills"), (snapshot) => {
+                const grid = document.getElementById('market-grid');
+                grid.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const isMine = data.ownerId === currentUser.uid;
+                    
+                    grid.innerHTML += `
+                        <div class="skill-card">
                             <div>
-                                <div class="board-tag">${isOwnSkill ? 'Personal Posting' : 'Peer Offering'}</div>
-                                <h3>${skill.title}</h3>
-                                <p>${skill.desc}</p>
+                                <small style="color:var(--flux-blue)">${isMine ? 'YOUR POST' : 'PEER EXCHANGE'}</small>
+                                <h3>${data.title}</h3>
+                                <p>${data.desc}</p>
                             </div>
-                            <div class="board-footer">
-                                <div class="price">${skill.cost} FLUX</div>
-                                ${!isOwnSkill ? `
-                                    <button class="btn-exchange" 
-                                        onclick="executeExchange('${skillDoc.id}', '${skill.ownerId}', '${skill.title.replace(/'/g, "\\'")}', '${skill.ownerEmail}')">
-                                        Acquire
-                                    </button>` : ''}
+                            <div class="skill-footer">
+                                <span class="price-tag">${data.cost} FLUX</span>
+                                ${!isMine ? `<button class="btn-request" onclick="requestSkill('${doc.id}', '${data.ownerId}')">Exchange</button>` : ''}
                             </div>
                         </div>
                     `;
@@ -219,34 +192,7 @@
             });
         }
 
-        window.executeExchange = async (skillId, sellerId, skillTitle, sellerEmail) => {
-            if (userProfile.credits < 1) return alert("Insufficient Liquidity.");
-            
-            const confirmMsg = `Exchange 1 Flux Credit for '${skillTitle}'? \n\nThis will open the scheduling portal.`;
-            if (!confirm(confirmMsg)) return;
-
-            try {
-                const buyerRef = doc(db, "users", auth.currentUser.uid);
-                await updateDoc(buyerRef, { credits: userProfile.credits - 1 });
-
-                const sellerRef = doc(db, "users", sellerId);
-                const sellerSnap = await getDoc(sellerRef);
-                const currentSellerCredits = sellerSnap.exists() ? sellerSnap.data().credits : 0;
-                await updateDoc(sellerRef, { credits: currentSellerCredits + 1 });
-
-                const eventTitle = encodeURIComponent(`SkillFlux Exchange: ${skillTitle}`);
-                const details = encodeURIComponent(`Peer-to-Peer Session between ${auth.currentUser.email} and ${sellerEmail}`);
-                const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&details=${details}&add=${sellerEmail}&add=${auth.currentUser.email}`;
-
-                alert("Exchange Successful! 1 Flux Credit transferred. Opening Google Calendar...");
-                window.open(gCalUrl, '_blank');
-
-            } catch (e) { 
-                alert("Exchange failed: " + e.message); 
-            }
-        };
-
-        window.handleLogout = () => signOut(auth);
+        window.logout = () => signOut(auth);
     </script>
 </body>
 </html>
