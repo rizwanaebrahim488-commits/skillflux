@@ -3,86 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Master Your Flow</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SkillFlux | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: white; font-family: 'Inter', sans-serif; }
-        .gradient-text { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        :root {
+            --bg-black: #000000;
+            --card-bg: #111111;
+            --accent-blue: #3B82F6;
+            --border-color: #1E293B;
+            --text-white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 10%;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; }
+        .logo span { color: var(--accent-blue); }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 10%;
+            background: radial-gradient(circle at top, #1e293b 0%, #000000 80%);
+        }
+
+        .hero h1 { font-size: 3rem; margin-bottom: 1.5rem; }
+        .blue-text { color: var(--accent-blue); }
+
+        /* Square Box Description Phases */
+        .phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 4rem 10%;
+        }
+
+        .phase-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .phase-box:hover { border-color: var(--accent-blue); }
+        .phase-box h3 { color: var(--accent-blue); margin-top: 0; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg); padding: 3rem; border-radius: 25px;
+            border: 1px solid var(--accent-blue); width: 350px; text-align: center;
+        }
+
+        input {
+            width: 100%; padding: 12px; margin: 10px 0; background: #000;
+            border: 1px solid var(--border-color); color: white; border-radius: 10px;
+        }
+
+        .btn-main {
+            background: var(--accent-blue); color: white; border: none;
+            padding: 15px 30px; border-radius: 10px; font-weight: 700; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto">
-        <h1 class="text-2xl font-bold tracking-tighter text-white">SKILL<span class="text-sky-400">FLUX</span></h1>
-        <div class="space-x-6 hidden md:block">
-            <a href="#how-it-works" class="hover:text-sky-400">How it works</a>
-            <a href="#auth" class="bg-sky-500 px-5 py-2 rounded-full font-medium hover:bg-sky-600 transition">Join Now</a>
-        </div>
+    <nav class="navbar">
+        <div class="logo">Skill<span>Flux</span></div>
+        <button class="btn-main" onclick="openAuth()">Login / Join</button>
     </nav>
 
-    <header class="text-center py-20 px-4">
-        <h2 class="text-5xl md:text-7xl font-extrabold mb-6">Stop Learning. Start <span class="gradient-text">Flowing.</span></h2>
-        <p class="text-slate-400 max-w-2xl mx-auto text-lg">
-            SkillFlux is a dynamic ecosystem designed to bridge the gap between static knowledge and real-world mastery. 
-            Connect with experts, track your growth, and stay ahead of the curve.
-        </p>
+    <header class="hero">
+        <h1>Peer-to-Peer <span class="blue-text">Skill Exchange</span></h1>
+        <p>A fair, transparent, and scalable community learning platform. Start with 2 FREE credits.</p>
     </header>
 
-    <section id="how-it-works" class="py-16 bg-slate-900/50">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h3 class="text-3xl font-bold mb-12">How It Works</h3>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-6 border border-slate-700 rounded-2xl">
-                    <div class="text-sky-400 text-3xl mb-4">01</div>
-                    <h4 class="text-xl font-bold mb-2">Build Your Profile</h4>
-                    <p class="text-slate-400">Identify your current expertise and the "future-proof" skills you want to acquire.</p>
-                </div>
-                <div class="p-6 border border-slate-700 rounded-2xl">
-                    <div class="text-sky-400 text-3xl mb-4">02</div>
-                    <h4 class="text-xl font-bold mb-2">Enter the Flux</h4>
-                    <p class="text-slate-400">Access real-time streams and peer-to-peer mentorship tailored to your pace.</p>
-                </div>
-                <div class="p-6 border border-slate-700 rounded-2xl">
-                    <div class="text-sky-400 text-3xl mb-4">03</div>
-                    <h4 class="text-xl font-bold mb-2">Track Mastery</h4>
-                    <p class="text-slate-400">Our Flux Score measures your practical application, not just completion hours.</p>
-                </div>
-            </div>
+    <section class="phases">
+        <div class="phase-box">
+            <h3>Step 1: Register</h3>
+            <p>Sign up with email and add skills you can teach to start with 2 default credits.</p>
+        </div>
+        <div class="phase-box">
+            <h3>Step 2: Earn</h3>
+            <p>Teach your skills to others and earn credits for every session completed.</p>
+        </div>
+        <div class="phase-box">
+            <h3>Step 3: Learn</h3>
+            <p>Spend your earned credits to learn new skills from experts in your community.</p>
         </div>
     </section>
 
-    <section id="auth" class="py-20 max-w-5xl mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-12 items-start">
-            
-            <div class="bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-700">
-                <h3 class="text-2xl font-bold mb-6">Create Account</h3>
-                <form class="space-y-4">
-                    <input type="text" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
-                    <input type="email" placeholder="Email" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
-                    <input type="password" placeholder="Password" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
-                    <button class="w-full bg-sky-500 py-3 rounded-lg font-bold hover:bg-sky-400 transition">Register</button>
-                </form>
-            </div>
-
-            <div class="p-8">
-                <h3 class="text-2xl font-bold mb-6">Welcome Back</h3>
-                <form class="space-y-4">
-                    <input type="email" placeholder="Email" class="w-full bg-slate-800 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
-                    <input type="password" placeholder="Password" class="w-full bg-slate-800 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
-                    <div class="flex justify-between text-sm text-slate-400">
-                        <label><input type="checkbox" class="mr-2"> Remember me</label>
-                        <a href="#" class="hover:text-sky-400">Forgot Password?</a>
-                    </div>
-                    <button class="w-full border border-sky-500 text-sky-500 py-3 rounded-lg font-bold hover:bg-sky-500 hover:text-white transition">Sign In</button>
-                </form>
-            </div>
-
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h2>SkillFlux Access</h2>
+            <input type="email" placeholder="Email">
+            <input type="password" placeholder="Password">
+            <button class="btn-main" style="width: 100%;">Enter Platform</button>
+            <p onclick="openAuth()" style="cursor:pointer; margin-top:15px; font-size:0.8rem;">Close</p>
         </div>
-    </section>
+    </div>
 
-    <footer class="text-center py-10 border-t border-slate-800 text-slate-500 text-sm">
-        &copy; 2026 SkillFlux. All rights reserved.
-    </footer>
-
+    <script>
+        function openAuth() {
+            const m = document.getElementById('auth-modal');
+            m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+        }
+    </script>
 </body>
 </html>
