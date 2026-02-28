@@ -2,37 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillFlux | Elite Exchange</title>
     <style>
-        :root { --bg: #000; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
-        nav { height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); }
-        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-size: 5rem; letter-spacing: -3px; margin: 0; }
-        .auth-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 400px; margin: 0 auto; text-align: center; }
-        input { width: 100%; padding: 15px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; }
-        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
+        nav { height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.8); }
+        .hero { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-size: 5rem; letter-spacing: -4px; margin: 0; }
+        .auth-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 400px; margin: 0 auto; }
+        input { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; outline: none; }
+        input:focus { border-color: var(--blue); }
+        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: 900; }
     </style>
 </head>
 <body>
     <nav>
-        <div style="font-size: 1.5rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div>
-        <div style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--gray);">Elite Exchange</div>
+        <div style="font-size: 1.8rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div>
+        <div style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; border-left: 2px solid var(--blue); padding-left: 15px;">Elite Exchange</div>
     </nav>
 
     <div class="hero">
         <h1>Elite <span style="color:var(--blue)">Exchange.</span></h1>
-        <p style="color: var(--gray);">Trade expertise in a frictionless peer-to-peer ecosystem.</p>
     </div>
 
     <div class="auth-card">
-        <h2 style="margin-bottom: 20px;">Secure Access</h2>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="handleLogin()" class="btn">Login</button>
-        <p style="margin: 15px 0; color: var(--gray);">OR</p>
-        <button onclick="handleSignUp()" class="btn" style="background: transparent; border: 1px solid var(--blue);">Create Vault</button>
+        <button onclick="handleLogin()" class="btn">Access Vault</button>
+        <p style="text-align:center; color:#666; margin: 15px 0;">— OR —</p>
+        <button onclick="handleSignUp()" class="btn" style="background:transparent; border: 1px solid var(--blue);">Initialize New Vault</button>
     </div>
 
     <script type="module">
@@ -59,20 +57,18 @@
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2 });
-                alert("Account Created!");
             } catch (e) { alert(e.message); }
         };
 
         window.handleLogin = async () => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (e) { alert("Login Failed: " + e.message); }
+            try { await signInWithEmailAndPassword(auth, email, password); } 
+            catch (e) { alert(e.message); }
         };
 
         onAuthStateChanged(auth, (user) => {
-            if (user) window.location.href = "dashboard.html";
+            if (user) window.location.href = "dashboard.html"; // Moves to the next file
         });
     </script>
 </body>
