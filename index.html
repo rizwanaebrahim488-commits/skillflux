@@ -44,14 +44,13 @@
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
-
+    apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+    authDomain: "skillflux-c4088.firebaseapp.com",
+    projectId: "skillflux-c4088",
+    storageBucket: "skillflux-c4088.appspot.com",
+    messagingSenderId: "347039323368",
+    appId: "1:347039323368:web:0f610227dc3715581a255d"
+};
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
