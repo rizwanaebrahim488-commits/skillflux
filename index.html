@@ -2,45 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Peer-to-Peer Exchange  </title>
+    <title>SkillFlux | Peer-to-Peer Exchange</title>
     <style>
         :root { --bg: #0a0a0a; --card: #161616; --blue: #3b82f6; --border: #262626; --text: #e5e5e5; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.5; }
-        nav { height: 70px; display: flex; align-items: center; padding: 0 5%; border-bottom: 1px solid var(--border); }
-        .hero { padding: 60px 5%; text-align: center; max-width: 800px; margin: 0 auto; }
-        h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin: 0; }
-        
-        .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 30px 5%; }
-        .phase-box { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; border-bottom: 3px solid var(--blue); }
-        .phase-box h3 { margin: 0 0 10px 0; color: var(--blue); font-size: 1rem; }
-        .phase-box p { font-size: 0.9rem; color: #a3a3a3; margin: 0; }
-
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; text-align: center; }
+        nav { height: 70px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); }
+        .hero { padding: 60px 5%; }
+        .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 30px 5%; max-width: 1000px; margin: 0 auto; }
+        .phase-box { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; text-align: left; }
         .auth-card { background: var(--card); border: 1px solid var(--border); padding: 40px; border-radius: 16px; width: 100%; max-width: 380px; margin: 20px auto; }
-        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-        .btn { background: var(--blue); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; }
-        .btn-alt { background: transparent; color: var(--blue); border: 1px solid var(--blue); margin-top: 10px; }
+        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: var(--blue); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; }
     </style>
 </head>
 <body>
-    <nav><div style="font-size: 1.4rem; font-weight: 700;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
-
+    <nav><div style="font-size: 1.5rem; font-weight: 700;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
     <div class="hero">
-        <h1>Peer-to-Peer Exchange</h1>
-        <p style="color:#a3a3a3;">Decentralized knowledge liquidity protocol.</p>
+        <h1>Peer-to-Peer Knowledge Exchange</h1>
+        <p style="color:#a3a3a3;">Post to earn. Acquire to learn.</p>
     </div>
 
     <div class="phase-grid">
-        <div class="phase-box"><h3>[Phase 1: Sync]</h3><p>Register to unlock your 2-credit initial baseline.</p></div>
-        <div class="phase-box"><h3>[Phase 2: Flux]</h3><p>Upload skills to the feed to generate network value.</p></div>
-        <div class="phase-box"><h3>[Phase 3: Gain]</h3><p>Acquire skills from peers by redeeming flux credits.</p></div>
+        <div class="phase-box"><h3>1. Offer</h3><p>Post a skill offer to the network to earn 2 Flux credits.</p></div>
+        <div class="phase-box"><h3>2. Exchange</h3><p>Your skills become available for others to discover.</p></div>
+        <div class="phase-box"><h3>3. Acquire</h3><p>Spend 1 credit to acquire a skill from a peer.</p></div>
     </div>
 
     <div class="auth-card">
-        <input type="email" id="email" placeholder="Email Address">
+        <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
-        <button id="regBtn" class="btn">Sync Vault (Get 2 Credits)</button>
-        <button id="loginBtn" class="btn btn-alt">Login</button>
+        <button id="regBtn" class="btn">Register Vault</button>
+        <button id="loginBtn" class="btn" style="background:transparent; border:1px solid var(--blue); margin-top:10px;">Login</button>
     </div>
 
     <script type="module">
@@ -48,7 +40,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
+        const firebaseConfig = { 
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
             authDomain: "skillflux-c4088.firebaseapp.com",
             projectId: "skillflux-c4088",
@@ -66,9 +58,9 @@
             const p = document.getElementById('password').value;
             try {
                 const res = await createUserWithEmailAndPassword(auth, e, p);
-                // Granting 2 Credits immediately on sync
-                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 2 });
-                alert("Vault Synced! 2 Credits added.");
+                // START WITH 0 CREDITS
+                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 0 });
+                alert("Vault Registered! Post a skill to earn credits.");
             } catch (err) { alert(err.message); }
         };
 
