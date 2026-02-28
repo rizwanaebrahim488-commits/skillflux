@@ -2,74 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SkillFlux | Member Vault</title>
+    <title>SkillFlux | Dashboard</title>
     <style>
-        :root { --bg: #000; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 120px 6% 40px; }
-        
-        nav { position: fixed; top: 0; left: 0; width: 100%; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); z-index: 1000; box-sizing: border-box; }
-        
-        .vault-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; }
-        .credit-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 30px 50px; border-radius: 24px; text-align: center; box-shadow: 0 0 30px rgba(59, 130, 246, 0.1); }
-        .credit-card h1 { font-size: 4rem; color: var(--blue); margin: 0; line-height: 1; }
-        
-        .btn-logout { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        :root { --bg: #000; --blue: #3b82f6; --border: #1e293b; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 100px 6%; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); box-sizing: border-box; }
+        .credit-box { background: #0a0a0a; border: 1px solid var(--blue); padding: 25px; border-radius: 20px; text-align: center; }
+        .skill-feed { margin-top: 40px; display: grid; gap: 15px; }
+        .skill-card { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 15px; }
     </style>
 </head>
 <body>
     <nav>
-        <div style="font-size: 1.5rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div>
-        <button onclick="logOut()" class="btn-logout">Disconnect</button>
+        <div style="font-size: 1.5rem; font-weight: 900;">SkillFlux</div>
+        <button onclick="auth.signOut()" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">Logout</button>
     </nav>
 
-    <div class="vault-header">
-        <div>
-            <p style="color:var(--gray); letter-spacing: 3px; font-weight: 700; font-size: 0.7rem; margin-bottom: 10px;">AUTHORIZED IDENTITY</p>
-            <h2 id="user-email" style="font-size: 2.5rem; margin: 0; letter-spacing: -1px;">Verifying...</h2>
-        </div>
-        <div class="credit-card">
-            <small style="font-weight: 900; color: var(--gray); letter-spacing: 2px;">FLUX LIQUIDITY</small>
-            <h1 id="user-credits">0</h1>
-        </div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 id="user-email">Loading...</h2>
+        <div class="credit-box"><small>CREDITS</small><h1 id="user-credits" style="margin:0; color:var(--blue)">0</h1></div>
     </div>
 
-    <div style="border-top: 1px solid var(--border); padding-top: 40px;">
-        <h3 style="color: var(--gray);">Active Protocol: Peer-to-Peer Exchange</h3>
-        <p>Your vault is synchronized. You can now trade knowledge assets across the network.</p>
+    <div style="margin-top:40px;">
+        <h3>Post a New Skill</h3>
+        <input type="text" id="skill-title" style="padding:10px; width:250px; border-radius:5px;" placeholder="What can you teach?">
+        <button onclick="postSkill()" style="padding:10px 20px; background:var(--blue); border:none; color:white; border-radius:5px; cursor:pointer;">Post</button>
     </div>
+
+    <h3>Marketplace</h3>
+    <div id="feed" class="skill-feed"></div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
+        /* Import Firebase same as index.html */
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = "index.html";
-            } else {
+            if (!user) window.location.href = "index.html";
+            else {
                 document.getElementById('user-email').innerText = user.email;
                 onSnapshot(doc(db, "users", user.uid), (snap) => {
-                    if (snap.exists()) {
-                        document.getElementById('user-credits').innerText = snap.data().credits;
-                    }
+                    if (snap.exists()) document.getElementById('user-credits').innerText = snap.data().credits;
                 });
+                loadSkills();
             }
         });
 
-        window.logOut = () => signOut(auth);
+        window.postSkill = async () => {
+            const title = document.getElementById('skill-title').value;
+            if(!title) return;
+            await addDoc(collection(db, "skills"), { title, owner: auth.currentUser.email, createdAt: new Date() });
+            document.getElementById('skill-title').value = '';
+        };
+
+        function loadSkills() {
+            onSnapshot(collection(db, "skills"), (snap) => {
+                const feed = document.getElementById('feed');
+                feed.innerHTML = '';
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    feed.innerHTML += `<div class="skill-card"><strong>${data.title}</strong><br><small>By: ${data.owner}</small></div>`;
+                });
+            });
+        }
     </script>
 </body>
 </html>
