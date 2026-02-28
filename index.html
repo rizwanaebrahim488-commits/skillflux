@@ -8,28 +8,26 @@
         :root { --bg: #000; --flux: #3b82f6; --card: #0a0a0a; --border: #1e293b; --text: #94a3b8; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
         .auth-card { background: var(--card); border: 1px solid var(--border); padding: 50px; border-radius: 40px; width: 100%; max-width: 450px; text-align: center; }
         .brand { font-size: 2.5rem; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; }
         .brand span { color: var(--flux); }
-        
-        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: white; }
-        .btn { width: 100%; padding: 18px; background: var(--flux); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem; margin-top: 10px; }
+        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: white; outline: none; }
+        input:focus { border-color: var(--flux); }
+        .btn { width: 100%; padding: 18px; background: var(--flux); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem; }
         .toggle { margin-top: 25px; color: var(--text); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
-
     <div class="auth-card">
         <div class="brand">Skill<span>Flux</span></div>
         <h2 id="title">Initialize Vault</h2>
-        <p id="sub" style="color:var(--text); margin-bottom: 30px; font-size: 0.9rem;">Register to receive 2 Flux Credits</p>
-        
+        <p id="sub" style="color:var(--text); margin-bottom: 30px; font-size: 0.9rem;">Receive 2 Flux Credits upon entry</p>
         <input type="email" id="email" placeholder="Professional Email">
         <input type="password" id="pass" placeholder="Password">
-        <input type="password" id="confirm" placeholder="Confirm Password">
-        
+        <div id="signup-fields">
+            <input type="password" id="confirm" placeholder="Confirm Password">
+        </div>
         <button class="btn" onclick="handleAuth()" id="btn-text">Create Account</button>
         <div class="toggle" onclick="toggleMode()" id="toggle-text">Already have a vault? Login</div>
     </div>
@@ -60,7 +58,7 @@
             isLogin = !isLogin;
             document.getElementById('title').innerText = isLogin ? "Vault Access" : "Initialize Vault";
             document.getElementById('btn-text').innerText = isLogin ? "Enter Vault" : "Create Account";
-            document.getElementById('confirm').classList.toggle('hidden', isLogin);
+            document.getElementById('signup-fields').classList.toggle('hidden', isLogin);
             document.getElementById('sub').classList.toggle('hidden', isLogin);
         };
 
@@ -71,6 +69,8 @@
                 if(isLogin) {
                     await signInWithEmailAndPassword(auth, email, pass);
                 } else {
+                    const confirm = document.getElementById('confirm').value;
+                    if(pass !== confirm) return alert("Passwords mismatch.");
                     const res = await createUserWithEmailAndPassword(auth, email, pass);
                     await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
                 }
