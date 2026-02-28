@@ -1,93 +1,196 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>SkillFlux</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlux | Elite Exchange</title>
+    <style>
+        :root {
+            --bg-black: #000;
+            --card-dark: #0a0a0a;
+            --flux-blue: #3b82f6;
+            --text-white: #fff;
+            --text-gray: #94a3b8;
+            --border: #1e293b;
+            --nav-height: 100px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg-black); 
+            color: var(--text-white); 
+            line-height: 1.6; 
+        }
+
+        /* NAVIGATION */
+        nav { 
+            position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 1000; 
+            border-bottom: 1px solid var(--border); 
+        }
+        
+        .nav-left { display: flex; align-items: baseline; gap: 20px; }
+        .brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; }
+        .brand span { color: var(--flux-blue); }
+        .p2p-tag { 
+            font-size: 0.85rem; font-weight: 600; color: var(--text-gray); 
+            border-left: 2px solid var(--flux-blue); padding-left: 15px; 
+            text-transform: uppercase; letter-spacing: 2px; white-space: nowrap;
+        }
+
+        /* HERO SECTION */
+        main { margin-top: var(--nav-height); }
+        
+        .hero { 
+            height: 60vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            text-align: center; padding: 0 8%; 
+        }
+        
+        .hero h1 { 
+            font-size: clamp(3rem, 10vw, 7rem); 
+            font-weight: 950; letter-spacing: -5px; line-height: 0.9; 
+        }
+
+        /* PHASES / PROTOCOL SECTION */
+        .protocol-section { padding: 100px 8%; background: #050505; }
+        .phase-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; max-width: 1200px; margin: 0 auto; 
+        }
+        .phase-card { 
+            background: var(--card-dark); border: 1px solid var(--border); 
+            padding: 45px; border-radius: 32px; transition: 0.3s;
+        }
+        .phase-card:hover { border-color: var(--flux-blue); }
+        .phase-num { color: var(--flux-blue); font-weight: 800; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 20px; }
+
+        /* AUTH SECTION */
+        #auth-view { padding: 100px 8%; display: flex; justify-content: center; }
+        .auth-card { 
+            background: var(--card-dark); border: 1px solid var(--border); 
+            padding: 60px; border-radius: 40px; width: 100%; max-width: 480px; 
+        }
+        
+        input { 
+            width: 100%; padding: 20px; margin-bottom: 15px; 
+            background: #000; border: 1px solid var(--border); 
+            border-radius: 14px; color: white; font-size: 1rem; outline: none;
+        }
+        input:focus { border-color: var(--flux-blue); }
+
+        .btn-join { 
+            background: var(--flux-blue); color: white; border: none; 
+            padding: 20px; border-radius: 14px; font-weight: 800; 
+            cursor: pointer; width: 100%; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+    </style>
 </head>
 <body>
 
-  <h1>SkillFlux Register/Login</h1>
+    <nav>
+        <div class="nav-left">
+            <div class="brand">Skill<span>Flux</span></div>
+            <div class="p2p-tag">Elite Exchange</div>
+        </div>
+        <button class="btn-join" style="width: auto; padding: 12px 28px;" onclick="document.getElementById('auth-view').scrollIntoView({behavior:'smooth'})">
+            Initialize Vault
+        </button>
+    </nav>
 
-  <h2>Register</h2>
-  <input type="email" id="regEmail" placeholder="Enter Email">
-  <input type="password" id="regPassword" placeholder="Enter Password">
-  <button onclick="register()">Register</button>
+    <main>
+        <header class="hero">
+            <h1>Elite Knowledge<br><span style="color:var(--flux-blue)">Liquidity.</span></h1>
+            <p style="color:var(--text-gray); font-size: 1.4rem; max-width: 700px; margin-top: 30px;">
+                The professional standard for peer-to-peer expertise exchange. Secure your vault and start trading skills in a frictionless ecosystem.
+            </p>
+        </header>
 
-  <h2>Login</h2>
-  <input type="email" id="loginEmail" placeholder="Enter Email">
-  <input type="password" id="loginPassword" placeholder="Enter Password">
-  <button onclick="login()">Login</button>
+        <section class="protocol-section">
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-num">PHASE 01</div>
+                    <h3>Vault Sync</h3>
+                    <p style="color: var(--text-gray); margin-top: 15px;">Initialize your identity to receive a 2 Flux Credit allocation. Your vault secures your digital knowledge capital.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-num">PHASE 02</div>
+                    <h3>Liquidity</h3>
+                    <p style="color: var(--text-gray); margin-top: 15px;">Broadcast your specialized skills to the global index. Earn credits for every verified peer-to-peer mentorship session.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-num">PHASE 03</div>
+                    <h3>Acquisition</h3>
+                    <p style="color: var(--text-gray); margin-top: 15px;">Redeem Flux Credits to acquire one-on-one sessions with industry leading experts across the entire network.</p>
+                </div>
+            </div>
+        </section>
 
-  <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-      from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-      import { getFirestore, doc, setDoc } 
-  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        <section id="auth-view">
+            <div class="auth-card">
+                <h2 style="margin-bottom: 35px; text-align:center; font-size: 2rem;">Secure Access</h2>
+                <input type="email" id="email" placeholder="Professional Email">
+                <input type="password" id="password" placeholder="Vault Password">
+                <input type="password" id="confirmPassword" placeholder="Confirm Password">
+                <button onclick="handleSignUp()" class="btn-join">Create Account</button>
+            </div>
+        </section>
+    </main>
 
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-      authDomain: "skillflux-c4088.firebaseapp.com",
-      projectId: "skillflux-c4088",
-      storageBucket: "skillflux-c4088.appspot.com",
-      messagingSenderId: "347039323368",
-      appId: "1:347039323368:web:0f610227dc3715581a255d",
-      measurementId: "G-PM1XXGSYYB"
-    };
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
 
-    // Register function
-    window.register = async function() {
-  const email = document.getElementById("regEmail").value;
-  const password = document.getElementById("regPassword").value;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+        window.handleSignUp = async () => {
+            const email = document.getElementById('email').value.trim(); // Fixed the invalid-email error
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
 
-    // Create user document in Firestore
-    await setDoc(doc(db, "users", user.uid), {
-      email: user.email,
-      credits: 2,
-      createdAt: new Date()
-    });
+            if (!email || !password) return alert("Please fill all fields.");
+            if (password !== confirm) return alert("Passwords do not match!");
+            if (password.length < 6) return alert("Password must be at least 6 characters.");
 
-    alert("User Registered with 2 Credits: " + user.email);
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-  } catch (error) {
-    alert("Error: " + error.message);
-  }
-}
+                // Create the user profile in Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    email: email,
+                    credits: 2,
+                    createdAt: new Date()
+                });
 
-    // Login function
-    window.login = function() {
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
+                alert("Vault Initialized! Redirecting to Marketplace...");
+            } catch (error) {
+                alert("Registration Error: " + error.message);
+            }
+        };
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Logged in as: " + userCredential.user.email);
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
+        // Redirect logic
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = "dashboard.html";
+            }
         });
-    }
-    
-    import { onAuthStateChanged } 
-  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("User logged in:", user.email);
-  } else {
-    console.log("No user logged in");
-  }
-});
-  </script>
-
+    </script>
 </body>
 </html>
