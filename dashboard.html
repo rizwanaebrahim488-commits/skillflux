@@ -4,124 +4,93 @@
     <meta charset="UTF-8">
     <title>SkillFlux | Member Vault</title>
     <style>
-        :root { --bg: #000; --blue: #00d2ff; --text: #fff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 150px 10% 100px; }
-        
-        nav { position: fixed; top: 0; left: 0; width: 100%; height: 120px; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; background: #000; border-bottom: 4px solid #111; z-index: 1000; box-sizing: border-box; }
-        
-        /* GIANT BALANCE CARD */
-        .credit-card { background: #050505; border: 4px solid var(--blue); padding: 40px 80px; border-radius: 40px; text-align: center; }
-        .credit-card h1 { font-size: 6rem; margin: 0; color: var(--blue); line-height: 1; }
-        .credit-card span { font-size: 1.5rem; font-weight: 900; letter-spacing: 5px; }
-
-        .upload-zone { background: #0a0a0a; border: 4px solid #222; padding: 80px; border-radius: 50px; margin: 80px 0; }
-        .upload-zone h2 { font-size: 4rem; margin-top: 0; letter-spacing: -2px; }
-        
-        /* HUGE SKILL CARDS */
-        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 40px; }
-        .skill-card { background: #0a0a0a; border: 4px solid #222; padding: 50px; border-radius: 40px; border-left: 20px solid var(--blue); }
-        .skill-card strong { font-size: 3rem; display: block; margin-bottom: 20px; line-height: 1; }
-        .skill-card p { font-size: 1.5rem; color: #666; margin-bottom: 30px; }
-
-        input { padding: 30px; width: 65%; border-radius: 25px; border: 4px solid #333; background: #000; color: white; font-size: 2rem; margin-right: 20px; outline: none; }
-        .btn { background: var(--blue); color: #000; border: none; padding: 30px 60px; border-radius: 25px; cursor: pointer; font-weight: 900; font-size: 1.8rem; }
-        .btn-acquire { width: 100%; background: transparent; border: 4px solid var(--blue); color: var(--blue); }
+        :root { --bg: #000; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 120px 6% 40px; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); z-index: 1000; box-sizing: border-box; }
+        .credit-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 30px; border-radius: 20px; text-align: center; display: inline-block; min-width: 200px; }
+        .credit-card h1 { font-size: 3.5rem; color: var(--blue); margin: 5px 0; }
+        .post-box { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; margin: 40px 0; }
+        .skill-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .skill-card { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 15px; }
+        .btn { background: var(--blue); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <nav>
-        <div style="font-size: 3rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div>
-        <button onclick="auth.signOut()" class="btn" style="background:red; color:white; font-size: 1.2rem;">LOGOUT</button>
+        <div style="font-size: 1.5rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div>
+        <button onclick="logOut()" class="btn" style="background:#ef4444">Disconnect</button>
     </nav>
 
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="font-size: 4rem; letter-spacing: -3px;">OPERATOR VAULT</h2>
+        <div>
+            <p style="color:var(--gray); letter-spacing: 2px;">VAULT IDENTITY</p>
+            <h2 id="user-email" style="font-size: 2rem; margin: 0;">Loading...</h2>
+        </div>
         <div class="credit-card">
-            <span>FLUX CREDITS</span>
+            <small>FLUX CREDITS</small>
             <h1 id="user-credits">0</h1>
         </div>
     </div>
 
-    <div class="upload-zone">
-        <h2>Post New Offer</h2>
-        <p style="font-size: 1.8rem; color: #555;">Posting an offer grants you **+1 Credit** instantly.</p>
-        <div style="display:flex; margin-top: 40px;">
-            <input type="text" id="skillTitle" placeholder="Skill Name...">
-            <button id="postBtn" class="btn">POST & EARN +1</button>
-        </div>
+    <div class="post-box">
+        <h3>Broadcast Expertise</h3>
+        <input type="text" id="skillTitle" placeholder="Skill Title (e.g. Graphic Design)" style="padding:15px; width:300px; border-radius:10px; border:1px solid var(--border); background:#000; color:#white; margin-right:10px;">
+        <button id="postBtn" class="btn">Post to Marketplace</button>
     </div>
 
-    <h2 style="font-size: 4rem; margin-bottom: 50px;">Marketplace</h2>
-    <div id="feed" class="skill-grid"></div>
+    <h2 style="margin-bottom:20px;">Global Exchange Feed</h2>
+    <div id="skillFeed" class="skill-feed"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, collection, addDoc, query, orderBy, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, collection, addDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { /* Paste your Firebase Config here */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentCredits = 0;
-
         onAuthStateChanged(auth, (user) => {
             if (!user) window.location.href = "index.html";
             else {
-                onSnapshot(doc(db, "users", user.uid), (s) => { 
-                    if(s.exists()) {
-                        currentCredits = s.data().credits;
-                        document.getElementById('user-credits').innerText = currentCredits;
-                    }
+                document.getElementById('user-email').innerText = user.email;
+                onSnapshot(doc(db, "users", user.uid), (snap) => {
+                    if (snap.exists()) document.getElementById('user-credits').innerText = snap.data().credits;
                 });
-                loadFeed();
+                loadSkills();
             }
         });
 
-        // OFFER = EARN 1
-        document.getElementById('postBtn').onclick = async () => {
+        document.getElementById('postBtn').addEventListener('click', async () => {
             const title = document.getElementById('skillTitle').value;
-            if(!title) return;
-            try {
-                await runTransaction(db, async (t) => {
-                    const uRef = doc(db, "users", auth.currentUser.uid);
-                    await addDoc(collection(db, "skills"), { title, owner: auth.currentUser.email, ownerId: auth.currentUser.uid, time: new Date() });
-                    t.update(uRef, { credits: currentCredits + 1 });
-                });
+            if (title) {
+                await addDoc(collection(db, "skills"), { title, owner: auth.currentUser.email, time: new Date() });
                 document.getElementById('skillTitle').value = '';
-            } catch (e) { alert(e.message); }
-        };
+            }
+        });
 
-        // ACQUIRE = SPEND 1
-        window.acquireSkill = async (ownerId) => {
-            if(ownerId === auth.currentUser.uid) return alert("You own this.");
-            if(currentCredits < 1) return alert("Insufficient Credits.");
-            try {
-                await runTransaction(db, async (t) => {
-                    const uRef = doc(db, "users", auth.currentUser.uid);
-                    t.update(uRef, { credits: currentCredits - 1 });
-                });
-                alert("Skill Acquired!");
-            } catch (e) { alert(e.message); }
-        };
-
-        function loadFeed() {
+        function loadSkills() {
             const q = query(collection(db, "skills"), orderBy("time", "desc"));
             onSnapshot(q, (snap) => {
-                const f = document.getElementById('feed');
-                f.innerHTML = '';
+                const feed = document.getElementById('skillFeed');
+                feed.innerHTML = '';
                 snap.forEach(d => {
                     const s = d.data();
-                    f.innerHTML += `
-                        <div class="skill-card">
-                            <strong>${s.title}</strong>
-                            <p>From: ${s.owner}</p>
-                            <button onclick="acquireSkill('${s.ownerId}')" class="btn btn-acquire">ACQUIRE (-1 CREDIT)</button>
-                        </div>`;
+                    feed.innerHTML += `<div class="skill-card"><strong>${s.title}</strong><br><small style="color:var(--gray)">By: ${s.owner}</small></div>`;
                 });
             });
         }
+
+        window.logOut = () => signOut(auth);
     </script>
 </body>
 </html>
