@@ -2,123 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SkillFlux | Member Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlux | Peer-to-Peer Exchange</title>
     <style>
         :root { --bg: #0a0a0a; --card: #161616; --blue: #3b82f6; --border: #262626; --text: #e5e5e5; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 100px 5% 50px; }
-        nav { position: fixed; top: 0; left: 0; width: 100%; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 1000; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.5; }
+        nav { height: 70px; display: flex; align-items: center; padding: 0 5%; border-bottom: 1px solid var(--border); }
+        .hero { padding: 60px 5%; text-align: center; max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin: 0; }
         
-        .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
-        .credit-display { background: var(--card); border: 1px solid var(--blue); padding: 20px 40px; border-radius: 12px; text-align: center; }
-        .credit-display h1 { font-size: 2.5rem; margin: 0; color: var(--blue); }
+        .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 30px 5%; }
+        .phase-box { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; border-bottom: 3px solid var(--blue); }
+        .phase-box h3 { margin: 0 0 10px 0; color: var(--blue); font-size: 1rem; }
+        .phase-box p { font-size: 0.9rem; color: #a3a3a3; margin: 0; }
 
-        .upload-card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 16px; margin-bottom: 40px; }
-        .input-group { display: flex; gap: 10px; margin-top: 15px; }
-        input { flex: 1; padding: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; }
-        
-        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .skill-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid var(--blue); }
-        .btn { background: var(--blue); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .btn-small { font-size: 0.85rem; margin-top: 15px; }
+        .auth-card { background: var(--card); border: 1px solid var(--border); padding: 40px; border-radius: 16px; width: 100%; max-width: 380px; margin: 20px auto; }
+        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .btn { background: var(--blue); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; }
+        .btn-alt { background: transparent; color: var(--blue); border: 1px solid var(--blue); margin-top: 10px; }
     </style>
 </head>
 <body>
-    <nav>
-        <div style="font-size: 1.2rem; font-weight: 700;">Skill<span style="color:var(--blue)">Flux</span></div>
-        <button onclick="auth.signOut()" style="background:transparent; color:#ef4444; border:none; cursor:pointer;">Disconnect</button>
-    </nav>
+    <nav><div style="font-size: 1.4rem; font-weight: 700;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
 
-    <div class="header-flex">
-        <div>
-            <p style="color:#737373; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Vault Operator</p>
-            <h2 id="user-email" style="margin:0;">Verified User</h2>
-        </div>
-        <div class="credit-display">
-            <small>FLUX CREDITS</small>
-            <h1 id="user-credits">0</h1>
-        </div>
+    <div class="hero">
+        <h1>Peer-to-Peer Exchange</h1>
+        <p style="color:#a3a3a3;">Decentralized knowledge liquidity protocol.</p>
     </div>
 
-    <div class="upload-card">
-        <h3 style="margin-top:0;">Upload Skill</h3>
-        <p style="color:#a3a3a3; font-size: 0.9rem;">Broadcast your expertise to the feed to participate in the exchange.</p>
-        <div class="input-group">
-            <input type="text" id="skillTitle" placeholder="Expertise Title (e.g. Data Analysis)">
-            <button id="uploadBtn" class="btn">Post Skill</button>
-        </div>
+    <div class="phase-grid">
+        <div class="phase-box"><h3>[Phase 1: Sync]</h3><p>Register to unlock your 2-credit initial baseline.</p></div>
+        <div class="phase-box"><h3>[Phase 2: Flux]</h3><p>Upload skills to the feed to generate network value.</p></div>
+        <div class="phase-box"><h3>[Phase 3: Gain]</h3><p>Acquire skills from peers by redeeming flux credits.</p></div>
     </div>
 
-    <h2 style="font-size: 1.5rem; margin-bottom: 20px;">Live Feed</h2>
-    <div id="skillFeed" class="skill-grid"></div>
+    <div class="auth-card">
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="password" id="password" placeholder="Password">
+        <button id="regBtn" class="btn">Sync Vault (Get 2 Credits)</button>
+        <button id="loginBtn" class="btn btn-alt">Login</button>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, collection, addDoc, query, orderBy, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { /* USE YOUR PREVIOUS CONFIG HERE */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        window.auth = auth;
 
-        let userBalance = 0;
-
-        onAuthStateChanged(auth, (user) => {
-            if (!user) window.location.href = "index.html";
-            else {
-                document.getElementById('user-email').innerText = user.email;
-                onSnapshot(doc(db, "users", user.uid), (snap) => {
-                    if (snap.exists()) {
-                        userBalance = snap.data().credits;
-                        document.getElementById('user-credits').innerText = userBalance;
-                    }
-                });
-                loadSkills();
-            }
-        });
-
-        // UPLOAD SKILL (PHASE 2)
-        document.getElementById('uploadBtn').onclick = async () => {
-            const skill = document.getElementById('skillTitle').value;
-            if(skill) {
-                await addDoc(collection(db, "skills"), { skill, owner: auth.currentUser.email, ownerId: auth.currentUser.uid, time: new Date() });
-                document.getElementById('skillTitle').value = '';
-            }
-        };
-
-        // ACQUIRE SKILL (PHASE 3) - Costs 1 credit
-        window.acquireSkill = async (ownerId) => {
-            if(ownerId === auth.currentUser.uid) return alert("You already own this skill.");
-            if(userBalance < 1) return alert("Insufficient Flux Credits.");
-
+        document.getElementById('regBtn').onclick = async () => {
+            const e = document.getElementById('email').value.trim();
+            const p = document.getElementById('password').value;
             try {
-                await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", auth.currentUser.uid);
-                    transaction.update(userRef, { credits: userBalance - 1 });
-                });
-                alert("Skill Acquired. 1 Credit Deducted.");
-            } catch (e) { alert("Transaction Failed: " + e.message); }
+                const res = await createUserWithEmailAndPassword(auth, e, p);
+                // Granting 2 Credits immediately on sync
+                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 2 });
+                alert("Vault Synced! 2 Credits added.");
+            } catch (err) { alert(err.message); }
         };
 
-        function loadSkills() {
-            const q = query(collection(db, "skills"), orderBy("time", "desc"));
-            onSnapshot(q, (snap) => {
-                const feed = document.getElementById('skillFeed');
-                feed.innerHTML = '';
-                snap.forEach(d => {
-                    const s = d.data();
-                    feed.innerHTML += `
-                        <div class="skill-card">
-                            <div>
-                                <strong style="font-size: 1.1rem;">${s.skill}</strong><br>
-                                <small style="color:#737373">By: ${s.owner}</small>
-                            </div>
-                            <button onclick="acquireSkill('${s.ownerId}')" class="btn btn-small">Acquire (1 Credit)</button>
-                        </div>`;
-                });
-            });
-        }
+        document.getElementById('loginBtn').onclick = async () => {
+            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } 
+            catch (err) { alert(err.message); }
+        };
+
+        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
     </script>
 </body>
 </html>
