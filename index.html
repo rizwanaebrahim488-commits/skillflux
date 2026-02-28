@@ -2,46 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SkillFlux | Elite Exchange</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlux | Elite Gateway</title>
     <style>
-        :root { --bg: #000; --blue: #00d2ff; --text: #fff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; text-align: center; }
+        :root { --bg: #000; --flux: #3b82f6; --card: #0a0a0a; --border: #1e293b; --text: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        /* GIGANTIC HERO */
-        .hero { padding: 120px 20px; }
-        .hero h1 { font-size: 6rem; font-weight: 900; letter-spacing: -5px; margin: 0; text-transform: uppercase; }
-        .flux-glow { color: var(--blue); text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); }
-        .hero p { font-size: 2rem; color: #666; font-weight: 300; }
-
-        /* HUGE SQUARE BOXES */
-        .phase-grid { display: flex; justify-content: center; gap: 40px; padding: 60px; flex-wrap: wrap; }
-        .phase-box { background: #0a0a0a; border: 4px solid #222; padding: 50px; border-radius: 40px; width: 350px; text-align: left; border-bottom: 12px solid var(--blue); }
-        .phase-box h3 { font-size: 2.2rem; margin: 0 0 20px 0; color: var(--blue); }
-        .phase-box p { font-size: 1.4rem; color: #999; line-height: 1.4; }
-
-        /* MASSIVE LOGIN */
-        .auth-card { background: #0a0a0a; border: 2px solid var(--blue); padding: 80px; border-radius: 60px; width: 600px; margin: 40px auto; }
-        input { width: 100%; padding: 30px; margin-bottom: 25px; background: #000; border: 3px solid #333; color: white; border-radius: 20px; font-size: 1.8rem; box-sizing: border-box; }
-        .btn { background: var(--blue); color: #000; border: none; padding: 30px; width: 100%; border-radius: 20px; cursor: pointer; font-weight: 900; font-size: 2rem; text-transform: uppercase; }
+        .auth-card { background: var(--card); border: 1px solid var(--border); padding: 50px; border-radius: 40px; width: 100%; max-width: 450px; text-align: center; }
+        .brand { font-size: 2.5rem; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; }
+        .brand span { color: var(--flux); }
+        
+        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: white; }
+        .btn { width: 100%; padding: 18px; background: var(--flux); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem; margin-top: 10px; }
+        .toggle { margin-top: 25px; color: var(--text); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>Skill<span class="flux-glow">Flux</span></h1>
-        <p>The High-Velocity Knowledge Marketplace.</p>
-    </div>
-
-    <div class="phase-grid">
-        <div class="phase-box"><h3>[Phase 1]</h3><p>Sync your identity and receive **2 Credits** instantly.</p></div>
-        <div class="phase-box"><h3>[Phase 2]</h3><p>Upload a skill offer to the feed to earn **+1 Credit**.</p></div>
-        <div class="phase-box"><h3>[Phase 3]</h3><p>Acquire a peer's skill by spending **1 Credit**.</p></div>
-    </div>
 
     <div class="auth-card">
-        <input type="email" id="email" placeholder="Email Address">
-        <input type="password" id="password" placeholder="Password">
-        <button id="regBtn" class="btn">Register & Get 2 Credits</button>
-        <button id="loginBtn" class="btn" style="background:transparent; border: 3px solid var(--blue); margin-top: 20px; color: var(--blue);">Login</button>
+        <div class="brand">Skill<span>Flux</span></div>
+        <h2 id="title">Initialize Vault</h2>
+        <p id="sub" style="color:var(--text); margin-bottom: 30px; font-size: 0.9rem;">Register to receive 2 Flux Credits</p>
+        
+        <input type="email" id="email" placeholder="Professional Email">
+        <input type="password" id="pass" placeholder="Password">
+        <input type="password" id="confirm" placeholder="Confirm Password">
+        
+        <button class="btn" onclick="handleAuth()" id="btn-text">Create Account</button>
+        <div class="toggle" onclick="toggleMode()" id="toggle-text">Already have a vault? Login</div>
     </div>
 
     <script type="module">
@@ -49,27 +39,44 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { /* Paste your Firebase Config here */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        document.getElementById('regBtn').onclick = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('password').value;
+        let isLogin = false;
+
+        onAuthStateChanged(auth, (user) => { if(user) window.location.href = "dashboard.html"; });
+
+        window.toggleMode = () => {
+            isLogin = !isLogin;
+            document.getElementById('title').innerText = isLogin ? "Vault Access" : "Initialize Vault";
+            document.getElementById('btn-text').innerText = isLogin ? "Enter Vault" : "Create Account";
+            document.getElementById('confirm').classList.toggle('hidden', isLogin);
+            document.getElementById('sub').classList.toggle('hidden', isLogin);
+        };
+
+        window.handleAuth = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
             try {
-                const res = await createUserWithEmailAndPassword(auth, e, p);
-                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 2 });
-                alert("Vault Synced: 2 Credits Active.");
-            } catch (err) { alert(err.message); }
+                if(isLogin) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                } else {
+                    const res = await createUserWithEmailAndPassword(auth, email, pass);
+                    await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
+                }
+                window.location.href = "dashboard.html";
+            } catch (e) { alert(e.message); }
         };
-
-        document.getElementById('loginBtn').onclick = async () => {
-            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } 
-            catch (err) { alert(err.message); }
-        };
-
-        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
     </script>
 </body>
 </html>
