@@ -4,23 +4,38 @@
     <meta charset="UTF-8">
     <title>SkillFlux | Elite Exchange</title>
     <style>
-        :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; }
-        .auth-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 380px; text-align: center; }
-        .brand { font-size: 2.5rem; font-weight: 900; margin-bottom: 30px; }
-        input { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 12px; outline: none; box-sizing: border-box; }
-        .btn { background: var(--blue); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; margin-top: 5px; }
-        .btn-alt { background: transparent; border: 1px solid var(--blue); margin-top: 10px; }
+        :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
+        nav { height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); }
+        .hero { padding: 100px 6%; text-align: center; }
+        .hero h1 { font-size: 4rem; letter-spacing: -3px; }
+        .phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 50px 6%; }
+        .phase-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; }
+        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 380px; margin: 40px auto; text-align: center; }
+        input { width: 100%; padding: 15px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; }
+        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="brand">Skill<span style="color:var(--blue)">Flux</span></div>
+    <nav><div style="font-size: 1.8rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
+
+    <div class="hero">
+        <h1>Elite <span style="color:var(--blue)">Exchange.</span></h1>
+        <p style="color: var(--gray); font-size: 1.2rem;">A peer-to-peer protocol for knowledge liquidity.</p>
+    </div>
+
+    <div class="phases">
+        <div class="phase-card"><h3>Phase 1: Sync</h3><p>Initialize your vault and receive 2 starter credits.</p></div>
+        <div class="phase-card"><h3>Phase 2: List</h3><p>Post your skills to earn credits from others.</p></div>
+        <div class="phase-card"><h3>Phase 3: Acquire</h3><p>Spend credits to gain expertise from elite mentors.</p></div>
+    </div>
+
     <div class="auth-card">
-        <h2 style="margin-bottom: 20px;">Secure Access</h2>
-        <input type="email" id="email" placeholder="Email Address">
-        <input type="password" id="password" placeholder="Vault Password">
-        <button onclick="handleLogin()" class="btn">Access Vault</button>
-        <button onclick="handleSignUp()" class="btn btn-alt">Initialize New Vault</button>
+        <h2>Secure Access</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="handleLogin()" class="btn">Login</button>
+        <button onclick="handleSignUp()" class="btn" style="background:transparent; border: 1px solid var(--blue); margin-top:10px;">Register</button>
     </div>
 
     <script type="module">
@@ -28,15 +43,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
-
+        const firebaseConfig = { /* YOUR CONFIG HERE */ };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -47,19 +54,18 @@
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2 });
-            } catch (e) { alert("Registration Error: " + e.message); }
+                alert("Registered! Your vault has 2 credits.");
+            } catch (e) { alert(e.message); }
         };
 
         window.handleLogin = async () => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             try { await signInWithEmailAndPassword(auth, email, password); } 
-            catch (e) { alert("Login Error: " + e.message); }
+            catch (e) { alert(e.message); }
         };
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) window.location.href = "dashboard.html";
-        });
+        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
     </script>
 </body>
 </html>
