@@ -2,34 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Elite Gateway</title>
+    <title>SkillFlux | Elite Exchange</title>
     <style>
-        :root { --bg: #000; --flux: #3b82f6; --card: #0a0a0a; --border: #1e293b; --text: #94a3b8; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .auth-card { background: var(--card); border: 1px solid var(--border); padding: 50px; border-radius: 40px; width: 100%; max-width: 450px; text-align: center; }
-        .brand { font-size: 2.5rem; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; }
-        .brand span { color: var(--flux); }
-        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: white; outline: none; }
-        input:focus { border-color: var(--flux); }
-        .btn { width: 100%; padding: 18px; background: var(--flux); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem; }
-        .toggle { margin-top: 25px; color: var(--text); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
-        .hidden { display: none; }
+        :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        nav { height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); background: #000; }
+        .brand { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
+        .brand span { color: var(--blue); }
+
+        .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; }
+        .hero h1 { font-size: clamp(3rem, 8vw, 6rem); letter-spacing: -4px; margin: 0; line-height: 1; }
+        
+        .auth-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 100%; max-width: 400px; box-sizing: border-box; }
+        input { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 12px; outline: none; box-sizing: border-box; }
+        input:focus { border-color: var(--blue); }
+        .btn { background: var(--blue); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 1rem; transition: 0.3s; }
+        .btn-alt { background: transparent; border: 1px solid var(--blue); margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="auth-card">
+    <nav>
         <div class="brand">Skill<span>Flux</span></div>
-        <h2 id="title">Initialize Vault</h2>
-        <p id="sub" style="color:var(--text); margin-bottom: 30px; font-size: 0.9rem;">Receive 2 Flux Credits upon entry</p>
-        <input type="email" id="email" placeholder="Professional Email">
-        <input type="password" id="pass" placeholder="Password">
-        <div id="signup-fields">
-            <input type="password" id="confirm" placeholder="Confirm Password">
+        <div style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; color: var(--gray); border-left: 2px solid var(--blue); padding-left: 15px;">Elite Exchange</div>
+    </nav>
+
+    <div class="hero">
+        <h1 style="margin-bottom: 40px;">Elite <span style="color:var(--blue)">Exchange.</span></h1>
+        
+        <div class="auth-card">
+            <input type="email" id="email" placeholder="Professional Email">
+            <input type="password" id="password" placeholder="Vault Password">
+            <button onclick="handleLogin()" class="btn">Access Vault</button>
+            <button onclick="handleSignUp()" class="btn btn-alt">Initialize New Vault</button>
         </div>
-        <button class="btn" onclick="handleAuth()" id="btn-text">Create Account</button>
-        <div class="toggle" onclick="toggleMode()" id="toggle-text">Already have a vault? Login</div>
     </div>
 
     <script type="module">
@@ -50,33 +56,26 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let isLogin = false;
-
-        onAuthStateChanged(auth, (user) => { if(user) window.location.href = "dashboard.html"; });
-
-        window.toggleMode = () => {
-            isLogin = !isLogin;
-            document.getElementById('title').innerText = isLogin ? "Vault Access" : "Initialize Vault";
-            document.getElementById('btn-text').innerText = isLogin ? "Enter Vault" : "Create Account";
-            document.getElementById('signup-fields').classList.toggle('hidden', isLogin);
-            document.getElementById('sub').classList.toggle('hidden', isLogin);
-        };
-
-        window.handleAuth = async () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
+        window.handleSignUp = async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
             try {
-                if(isLogin) {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                } else {
-                    const confirm = document.getElementById('confirm').value;
-                    if(pass !== confirm) return alert("Passwords mismatch.");
-                    const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    await setDoc(doc(db, "users", res.user.uid), { email, credits: 2, createdAt: new Date() });
-                }
-                window.location.href = "dashboard.html";
+                const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2, createdAt: new Date() });
+                alert("Vault Initialized with 2 Credits!");
             } catch (e) { alert(e.message); }
         };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            try { await signInWithEmailAndPassword(auth, email, password); } 
+            catch (e) { alert("Login Error: " + e.message); }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) window.location.href = "dashboard.html";
+        });
     </script>
 </body>
 </html>
