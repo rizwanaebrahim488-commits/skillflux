@@ -78,48 +78,67 @@
         </div>
     </section>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+        authDomain: "skillflux-c4088.firebaseapp.com",
+        projectId: "skillflux-c4088",
+        storageBucket: "skillflux-c4088.appspot.com",
+        messagingSenderId: "347039323368",
+        appId: "1:347039323368:web:0f610227dc3715581a255d"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        window.handleSignUp = async () => {
-            const email = document.getElementById('email').value.trim(); // TRIM FIXES INVALID EMAIL
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('confirm').value;
+    // --- NEW: LOGIN FUNCTION ---
+    window.handleLogin = async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
 
-            if (password !== confirm) return alert("Passwords do not match!");
-            if (password.length < 6) return alert("Password must be 6+ characters.");
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            // The onAuthStateChanged listener below will handle the redirect
+        } catch (error) {
+            alert("Login Failed: " + error.message);
+        }
+    };
 
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", userCredential.user.uid), {
-                    email: email,
-                    credits: 2,
-                    createdAt: new Date()
-                });
-                alert("Vault Initialized!");
-            } catch (error) {
-                alert("Registration Error: " + error.message);
-            }
-        };
+    // --- UPDATED: REGISTRATION FUNCTION ---
+    window.handleSignUp = async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm').value;
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) window.location.href = "dashboard.html";
-        });
-    </script>
+        if (password !== confirm) return alert("Passwords do not match!");
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            // Initialize the user document with 2 credits
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+                email: email,
+                credits: 2,
+                createdAt: new Date()
+            });
+            alert("Vault Initialized!");
+        } catch (error) {
+            alert("Registration Error: " + error.message);
+        }
+    };
+
+    // --- CRITICAL: THE REDIRECTOR ---
+    // This watches for ANY successful sign-in/up and moves the user
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("User detected, redirecting...");
+            window.location.href = "dashboard.html"; 
+        }
+    });
+</script>
 </body>
 </html>
