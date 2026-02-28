@@ -10,10 +10,9 @@
         .hero { padding: 60px 20px; }
         .hero h1 { font-size: 4rem; letter-spacing: -3px; margin: 0; }
         .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 40px 6%; }
-        .phase-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; }
+        .phase-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; text-align: left; }
         .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 100%; max-width: 400px; margin: 20px auto; box-sizing: border-box; }
         input { width: 100%; padding: 15px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--blue); }
         .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
@@ -26,16 +25,16 @@
     </div>
 
     <div class="phase-grid">
-        <div class="phase-card"><h3>Phase 1: Sync</h3><p>Register to initialize your vault with 2 free Flux credits.</p></div>
-        <div class="phase-card"><h3>Phase 2: Trade</h3><p>Post skills to earn credits or browse the marketplace.</p></div>
-        <div class="phase-card"><h3>Phase 3: Acquire</h3><p>Redeem credits for 1-on-1 sessions with expert mentors.</p></div>
+        <div class="phase-card"><h3>[Phase 1: Sync]</h3><p>Initialize your vault identity. New users receive 2 Flux credits automatically.</p></div>
+        <div class="phase-card"><h3>[Phase 2: Flux]</h3><p>Upload your skills to the marketplace to earn and trade credits.</p></div>
+        <div class="phase-card"><h3>[Phase 3: Gain]</h3><p>Redeem your credits to acquire 1-on-1 sessions with expert mentors.</p></div>
     </div>
 
     <div class="auth-card">
         <h2 style="margin-bottom:20px;">Secure Access</h2>
         <input type="email" id="email" placeholder="Email Address">
         <input type="password" id="password" placeholder="Vault Password">
-        <button id="regBtn" class="btn">Register (New User)</button>
+        <button id="regBtn" class="btn">Register (Get 2 Credits)</button>
         <button id="loginBtn" class="btn" style="background:transparent; border: 1px solid var(--blue);">Login (Existing User)</button>
     </div>
 
@@ -57,13 +56,15 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Registration with 2 Credits Logic
         document.getElementById('regBtn').addEventListener('click', async () => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                // Creating the user document with 2 initial credits
                 await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2 });
-                alert("Vault Registered! 2 Credits added.");
+                alert("Vault Synced! 2 Credits added to your account.");
             } catch (e) { alert("Registration Error: " + e.message); }
         });
 
