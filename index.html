@@ -4,44 +4,39 @@
     <meta charset="UTF-8">
     <title>SkillFlux | Elite Exchange</title>
     <style>
-        :root { --bg: #000; --blue: #00d2ff; --text: #fff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; text-align: center; }
-        
-        /* GIGANTIC HERO */
-        .hero { padding: 120px 20px; }
-        .hero h1 { font-size: 6rem; font-weight: 900; letter-spacing: -5px; margin: 0; text-transform: uppercase; }
-        .flux-glow { color: var(--blue); text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); }
-        .hero p { font-size: 2rem; color: #666; font-weight: 300; }
-
-        /* HUGE SQUARE BOXES */
-        .phase-grid { display: flex; justify-content: center; gap: 40px; padding: 60px; flex-wrap: wrap; }
-        .phase-box { background: #0a0a0a; border: 4px solid #222; padding: 50px; border-radius: 40px; width: 350px; text-align: left; border-bottom: 12px solid var(--blue); }
-        .phase-box h3 { font-size: 2.2rem; margin: 0 0 20px 0; color: var(--blue); }
-        .phase-box p { font-size: 1.4rem; color: #999; line-height: 1.4; }
-
-        /* MASSIVE LOGIN */
-        .auth-card { background: #0a0a0a; border: 2px solid var(--blue); padding: 80px; border-radius: 60px; width: 600px; margin: 40px auto; }
-        input { width: 100%; padding: 30px; margin-bottom: 25px; background: #000; border: 3px solid #333; color: white; border-radius: 20px; font-size: 1.8rem; box-sizing: border-box; }
-        .btn { background: var(--blue); color: #000; border: none; padding: 30px; width: 100%; border-radius: 20px; cursor: pointer; font-weight: 900; font-size: 2rem; text-transform: uppercase; }
+        :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; text-align: center; }
+        nav { height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); }
+        .hero { padding: 60px 20px; }
+        .hero h1 { font-size: 4rem; letter-spacing: -3px; margin: 0; }
+        .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 40px 6%; }
+        .phase-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; }
+        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 100%; max-width: 400px; margin: 20px auto; box-sizing: border-box; }
+        input { width: 100%; padding: 15px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--blue); }
+        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
+    <nav><div style="font-size: 1.8rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
+
     <div class="hero">
-        <h1>Skill<span class="flux-glow">Flux</span></h1>
-        <p>The High-Velocity Knowledge Marketplace.</p>
+        <h1>Elite <span style="color:var(--blue)">Exchange.</span></h1>
+        <p style="color: var(--gray);">Master skills through peer-to-peer knowledge liquidity.</p>
     </div>
 
     <div class="phase-grid">
-        <div class="phase-box"><h3>[Phase 1]</h3><p>Sync your identity and receive **2 Credits** instantly.</p></div>
-        <div class="phase-box"><h3>[Phase 2]</h3><p>Upload a skill offer to the feed to earn **+1 Credit**.</p></div>
-        <div class="phase-box"><h3>[Phase 3]</h3><p>Acquire a peer's skill by spending **1 Credit**.</p></div>
+        <div class="phase-card"><h3>Phase 1: Sync</h3><p>Register to initialize your vault with 2 free Flux credits.</p></div>
+        <div class="phase-card"><h3>Phase 2: Trade</h3><p>Post skills to earn credits or browse the marketplace.</p></div>
+        <div class="phase-card"><h3>Phase 3: Acquire</h3><p>Redeem credits for 1-on-1 sessions with expert mentors.</p></div>
     </div>
 
     <div class="auth-card">
+        <h2 style="margin-bottom:20px;">Secure Access</h2>
         <input type="email" id="email" placeholder="Email Address">
-        <input type="password" id="password" placeholder="Password">
-        <button id="regBtn" class="btn">Register & Get 2 Credits</button>
-        <button id="loginBtn" class="btn" style="background:transparent; border: 3px solid var(--blue); margin-top: 20px; color: var(--blue);">Login</button>
+        <input type="password" id="password" placeholder="Vault Password">
+        <button id="regBtn" class="btn">Register (New User)</button>
+        <button id="loginBtn" class="btn" style="background:transparent; border: 1px solid var(--blue);">Login (Existing User)</button>
     </div>
 
     <script type="module">
@@ -49,25 +44,35 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { /* Paste your Firebase Config here */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        document.getElementById('regBtn').onclick = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('password').value;
+        document.getElementById('regBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
             try {
-                const res = await createUserWithEmailAndPassword(auth, e, p);
-                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 2 });
-                alert("Vault Synced: 2 Credits Active.");
-            } catch (err) { alert(err.message); }
-        };
+                const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2 });
+                alert("Vault Registered! 2 Credits added.");
+            } catch (e) { alert("Registration Error: " + e.message); }
+        });
 
-        document.getElementById('loginBtn').onclick = async () => {
-            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } 
-            catch (err) { alert(err.message); }
-        };
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            try { await signInWithEmailAndPassword(auth, email, password); } 
+            catch (e) { alert("Login Error: " + e.message); }
+        });
 
         onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
     </script>
