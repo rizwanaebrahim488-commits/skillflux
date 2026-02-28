@@ -11,20 +11,20 @@
         .credit-card h1 { font-size: 3.5rem; color: var(--blue); margin: 5px 0; }
         .post-box { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; margin: 40px 0; }
         .skill-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .skill-card { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 15px; }
+        .skill-card { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 15px; border-left: 4px solid var(--blue); }
         .btn { background: var(--blue); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <nav>
         <div style="font-size: 1.5rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div>
-        <button onclick="logOut()" class="btn" style="background:#ef4444">Disconnect</button>
+        <button id="logoutBtn" class="btn" style="background:#ef4444">Disconnect</button>
     </nav>
 
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
             <p style="color:var(--gray); letter-spacing: 2px;">VAULT IDENTITY</p>
-            <h2 id="user-email" style="font-size: 2rem; margin: 0;">Loading...</h2>
+            <h2 id="user-email" style="font-size: 1.6rem; margin: 0;">Loading...</h2>
         </div>
         <div class="credit-card">
             <small>FLUX CREDITS</small>
@@ -33,8 +33,8 @@
     </div>
 
     <div class="post-box">
-        <h3>Broadcast Expertise</h3>
-        <input type="text" id="skillTitle" placeholder="Skill Title (e.g. Graphic Design)" style="padding:15px; width:300px; border-radius:10px; border:1px solid var(--border); background:#000; color:#white; margin-right:10px;">
+        <h3>Upload Skill</h3>
+        <input type="text" id="skillTitle" placeholder="Skill Name (e.g. JavaScript)" style="padding:15px; width:300px; border-radius:10px; border:1px solid var(--border); background:#000; color:white; margin-right:10px; outline:none;">
         <button id="postBtn" class="btn">Post to Marketplace</button>
     </div>
 
@@ -60,9 +60,11 @@
         const db = getFirestore(app);
 
         onAuthStateChanged(auth, (user) => {
-            if (!user) window.location.href = "index.html";
-            else {
+            if (!user) {
+                window.location.href = "index.html";
+            } else {
                 document.getElementById('user-email').innerText = user.email;
+                // Listen for real-time credit updates
                 onSnapshot(doc(db, "users", user.uid), (snap) => {
                     if (snap.exists()) document.getElementById('user-credits').innerText = snap.data().credits;
                 });
@@ -70,14 +72,20 @@
             }
         });
 
+        // Upload Skill Logic
         document.getElementById('postBtn').addEventListener('click', async () => {
             const title = document.getElementById('skillTitle').value;
             if (title) {
-                await addDoc(collection(db, "skills"), { title, owner: auth.currentUser.email, time: new Date() });
+                await addDoc(collection(db, "skills"), { 
+                    title, 
+                    owner: auth.currentUser.email, 
+                    time: new Date() 
+                });
                 document.getElementById('skillTitle').value = '';
             }
         });
 
+        // Receive / Load Skills Feed
         function loadSkills() {
             const q = query(collection(db, "skills"), orderBy("time", "desc"));
             onSnapshot(q, (snap) => {
@@ -85,12 +93,12 @@
                 feed.innerHTML = '';
                 snap.forEach(d => {
                     const s = d.data();
-                    feed.innerHTML += `<div class="skill-card"><strong>${s.title}</strong><br><small style="color:var(--gray)">By: ${s.owner}</small></div>`;
+                    feed.innerHTML += `<div class="skill-card"><strong>${s.title}</strong><br><small style="color:var(--gray)">Expert: ${s.owner}</small></div>`;
                 });
             });
         }
 
-        window.logOut = () => signOut(auth);
+        document.getElementById('logoutBtn').onclick = () => signOut(auth);
     </script>
 </body>
 </html>
