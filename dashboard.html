@@ -130,16 +130,18 @@
 
         let currentUser = null;
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('user-email').innerText = user.email;
-                loadUserData(user.uid);
-                loadMarketplace();
-            } else {
-                window.location.href = "index.html";
-            }
-        });
+       onAuthStateChanged(auth, async (user) => {
+    const landing = document.getElementById('landing-view');
+    const dash = document.getElementById('dashboard-view'); // We can remove this if moving to a new file
+
+    if (user) {
+        // This is the "Switch" that moves the user to the new page
+        window.location.href = "dashboard.html"; 
+    } else {
+        // Keep them on the landing page if they are not logged in
+        landing.classList.remove('hidden');
+    }
+});
 
         async function loadUserData(uid) {
             const snap = await getDoc(doc(db, "users", uid));
