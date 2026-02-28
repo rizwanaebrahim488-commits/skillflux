@@ -2,241 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Elite Exchange Board</title>
+    <title>SkillFlux | Elite Exchange</title>
     <style>
-        :root {
-            --bg-black: #000000;
-            --card-dark: #0a0a0a;
-            --flux-blue: #3b82f6; 
-            --text-white: #ffffff;
-            --text-gray: #94a3b8;
-            --border-standard: #1e293b;
-            --nav-height: 90px;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            background: var(--bg-black); 
-            color: var(--text-white); 
-            line-height: 1.6;
-            opacity: 0; /* Hidden until Auth check */
-            transition: opacity 0.5s;
-        }
-
-        /* NAVIGATION */
-        nav {
-            position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%;
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 1000;
-            border-bottom: 1px solid var(--border-standard);
-        }
-        .nav-left { display: flex; align-items: baseline; gap: 15px; }
-        .brand { font-size: 2rem; font-weight: 900; letter-spacing: -2px; color: white; }
-        .brand span { color: var(--flux-blue); }
-        .p2p-description { 
-            font-size: 0.8rem; font-weight: 600; color: var(--text-gray);
-            border-left: 2px solid var(--flux-blue); padding-left: 15px;
-            text-transform: uppercase; letter-spacing: 2px;
-        }
-        .btn-logout { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-
-        /* MAIN LAYOUT */
-        main { padding: calc(var(--nav-height) + 40px) 6% 100px; max-width: 1400px; margin: 0 auto; }
-
-        /* VAULT SUMMARY */
-        .vault-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
-        .vault-stats { background: var(--card-dark); border: 1px solid var(--flux-blue); padding: 25px 45px; border-radius: 24px; text-align: center; }
-        .vault-stats h1 { font-size: 4rem; color: var(--flux-blue); line-height: 1; margin: 10px 0; }
-        .vault-stats small { letter-spacing: 2px; font-weight: 800; color: var(--text-gray); }
-
-        /* POST SKILL FORM */
-        .post-board { background: var(--card-dark); border: 1px solid var(--border-standard); padding: 40px; border-radius: 30px; margin-bottom: 80px; }
-        .post-board h3 { margin-bottom: 25px; font-size: 1.5rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: flex-end; }
-        input { background: #000; border: 1px solid var(--border-standard); padding: 18px; border-radius: 12px; color: white; width: 100%; outline: none; }
-        input:focus { border-color: var(--flux-blue); }
-        .btn-post { background: var(--flux-blue); color: white; border: none; padding: 18px 35px; border-radius: 12px; font-weight: 800; cursor: pointer; }
-
-        /* MARKETPLACE GRID */
-        .exchange-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 40px; }
-        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        :root { --bg: #000; --blue: #00d2ff; --text: #fff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; text-align: center; }
         
-        /* THE ELITE SQUARE BOX */
-        .square-board {
-            background: var(--card-dark); border: 1px solid var(--border-standard);
-            aspect-ratio: 1 / 1; padding: 40px; border-radius: 35px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .square-board:hover { border-color: var(--flux-blue); transform: translateY(-10px); background: #0c0c0c; }
-        .board-tag { font-size: 0.75rem; font-weight: 800; color: var(--flux-blue); letter-spacing: 2px; text-transform: uppercase; }
-        .square-board h3 { font-size: 1.8rem; font-weight: 800; margin: 15px 0; line-height: 1.2; }
-        .square-board p { color: var(--text-gray); font-size: 1rem; flex-grow: 1; }
-        
-        .board-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #1e293b; }
-        .price { font-weight: 900; font-size: 1.2rem; }
-        .btn-exchange { background: white; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        .btn-exchange:hover { background: var(--flux-blue); color: white; }
+        /* GIGANTIC HERO */
+        .hero { padding: 120px 20px; }
+        .hero h1 { font-size: 6rem; font-weight: 900; letter-spacing: -5px; margin: 0; text-transform: uppercase; }
+        .flux-glow { color: var(--blue); text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); }
+        .hero p { font-size: 2rem; color: #666; font-weight: 300; }
 
-        @media (max-width: 1000px) { .form-row { grid-template-columns: 1fr; } .square-board { aspect-ratio: auto; } }
+        /* HUGE SQUARE BOXES */
+        .phase-grid { display: flex; justify-content: center; gap: 40px; padding: 60px; flex-wrap: wrap; }
+        .phase-box { background: #0a0a0a; border: 4px solid #222; padding: 50px; border-radius: 40px; width: 350px; text-align: left; border-bottom: 12px solid var(--blue); }
+        .phase-box h3 { font-size: 2.2rem; margin: 0 0 20px 0; color: var(--blue); }
+        .phase-box p { font-size: 1.4rem; color: #999; line-height: 1.4; }
+
+        /* MASSIVE LOGIN */
+        .auth-card { background: #0a0a0a; border: 2px solid var(--blue); padding: 80px; border-radius: 60px; width: 600px; margin: 40px auto; }
+        input { width: 100%; padding: 30px; margin-bottom: 25px; background: #000; border: 3px solid #333; color: white; border-radius: 20px; font-size: 1.8rem; box-sizing: border-box; }
+        .btn { background: var(--blue); color: #000; border: none; padding: 30px; width: 100%; border-radius: 20px; cursor: pointer; font-weight: 900; font-size: 2rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
+    <div class="hero">
+        <h1>Skill<span class="flux-glow">Flux</span></h1>
+        <p>The High-Velocity Knowledge Marketplace.</p>
+    </div>
 
-    <nav>
-        <div class="nav-left">
-            <div class="brand">Skill<span>Flux</span></div>
-            <div class="p2p-description">Peer-to-Peer Exchange</div>
-        </div>
-        <button class="btn-logout" onclick="handleLogout()">Logout</button>
-    </nav>
+    <div class="phase-grid">
+        <div class="phase-box"><h3>[Phase 1]</h3><p>Sync your identity and receive **2 Credits** instantly.</p></div>
+        <div class="phase-box"><h3>[Phase 2]</h3><p>Upload a skill offer to the feed to earn **+1 Credit**.</p></div>
+        <div class="phase-box"><h3>[Phase 3]</h3><p>Acquire a peer's skill by spending **1 Credit**.</p></div>
+    </div>
 
-    <main>
-        <div class="vault-header">
-            <div>
-                <p style="color:var(--text-gray); text-transform: uppercase; letter-spacing: 1px;">Authenticated Professional</p>
-                <h2 id="display-email" style="font-size: 1.8rem;">---</h2>
-            </div>
-            <div class="vault-stats">
-                <small>FLUX LIQUIDITY</small>
-                <h1 id="display-credits">0</h1>
-            </div>
-        </div>
-
-        <section class="post-board">
-            <h3>List Your Expertise</h3>
-            <div class="form-row">
-                <div>
-                    <label style="display:block; margin-bottom:8px; font-size:0.8rem; color:var(--text-gray)">SKILL TITLE</label>
-                    <input type="text" id="skill-title" placeholder="e.g. Advanced React Architecture">
-                </div>
-                <div>
-                    <label style="display:block; margin-bottom:8px; font-size:0.8rem; color:var(--text-gray)">OFFER DESCRIPTION</label>
-                    <input type="text" id="skill-desc" placeholder="1-hour deep dive session">
-                </div>
-                <button class="btn-post" onclick="handlePostSkill()">Post Skill</button>
-            </div>
-        </section>
-
-        <h2 class="exchange-title">Active <span style="color:var(--flux-blue)">Marketplace</span></h2>
-        <div class="skill-grid" id="marketplace-feed">
-            </div>
-    </main>
+    <div class="auth-card">
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="password" id="password" placeholder="Password">
+        <button id="regBtn" class="btn">Register & Get 2 Credits</button>
+        <button id="loginBtn" class="btn" style="background:transparent; border: 3px solid var(--blue); margin-top: 20px; color: var(--blue);">Login</button>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
-
+        const firebaseConfig = { /* Paste your Firebase Config here */ };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let userProfile = null;
-
-        // AUTH GUARD
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.body.style.opacity = "1";
-                document.getElementById('display-email').innerText = user.email;
-                
-                // Real-time Credit Sync
-                onSnapshot(doc(db, "users", user.uid), (doc) => {
-                    if(doc.exists()) {
-                        userProfile = doc.data();
-                        document.getElementById('display-credits').innerText = userProfile.credits;
-                    }
-                });
-
-                loadMarketplace();
-            } else {
-                window.location.href = "index.html"; // Kick out if not logged in
-            }
-        });
-
-        // POST SKILL LOGIC
-        window.handlePostSkill = async () => {
-            const title = document.getElementById('skill-title').value;
-            const desc = document.getElementById('skill-desc').value;
-
-            if(!title || !desc) return alert("Please define your skill.");
-
+        document.getElementById('regBtn').onclick = async () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
             try {
-                await addDoc(collection(db, "skills"), {
-                    ownerId: auth.currentUser.uid,
-                    ownerEmail: auth.currentUser.email,
-                    title,
-                    desc,
-                    cost: 1,
-                    createdAt: serverTimestamp()
-                });
-                document.getElementById('skill-title').value = '';
-                document.getElementById('skill-desc').value = '';
-                alert("Skill added to Elite Exchange.");
-            } catch (e) { alert(e.message); }
+                const res = await createUserWithEmailAndPassword(auth, e, p);
+                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 2 });
+                alert("Vault Synced: 2 Credits Active.");
+            } catch (err) { alert(err.message); }
         };
 
-        // LOAD MARKETPLACE
-        function loadMarketplace() {
-            const q = query(collection(db, "skills"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('marketplace-feed');
-                feed.innerHTML = '';
-                
-                snapshot.forEach((skillDoc) => {
-                    const skill = skillDoc.data();
-                    const isOwnSkill = skill.ownerId === auth.currentUser.uid;
-
-                    feed.innerHTML += `
-                        <div class="square-board">
-                            <div>
-                                <div class="board-tag">${isOwnSkill ? 'Personal Posting' : 'Peer Offering'}</div>
-                                <h3>${skill.title}</h3>
-                                <p>${skill.desc}</p>
-                            </div>
-                            <div class="board-footer">
-                                <div class="price">${skill.cost} FLUX</div>
-                                ${!isOwnSkill ? `<button class="btn-exchange" onclick="executeExchange('${skillDoc.id}', '${skill.ownerId}')">Acquire</button>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        // TRANSACTION ENGINE (THE EXCHANGE)
-        window.executeExchange = async (skillId, sellerId) => {
-            if (userProfile.credits < 1) return alert("Insufficient Liquidity. Please provide a skill to earn credits.");
-            
-            if (!confirm("Exchange 1 Flux Credit for this expertise?")) return;
-
-            try {
-                // 1. Deduct from Buyer
-                const buyerRef = doc(db, "users", auth.currentUser.uid);
-                await updateDoc(buyerRef, { credits: userProfile.credits - 1 });
-
-                // 2. Add to Seller
-                const sellerRef = doc(db, "users", sellerId);
-                const sellerSnap = await getDoc(sellerRef);
-                await updateDoc(sellerRef, { credits: (sellerSnap.data().credits || 0) + 1 });
-
-                alert("Protocol Complete. 1 Credit Transferred.");
-            } catch (e) { alert("Exchange failed: " + e.message); }
+        document.getElementById('loginBtn').onclick = async () => {
+            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } 
+            catch (err) { alert(err.message); }
         };
 
-        window.handleLogout = () => signOut(auth);
+        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
     </script>
 </body>
 </html>
