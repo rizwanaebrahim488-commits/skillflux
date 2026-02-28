@@ -3,125 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Dashboard</title>
+    <title>SkillFlux | Marketplace</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-black: #000000;
-            --card-bg: #111111;
-            --accent-blue: #3B82F6;
-            --border-color: #1E293B;
-        }
-
-        body { background: var(--bg-black); color: white; font-family: 'Inter', sans-serif; margin: 0; }
-        
-        .navbar { display: flex; justify-content: space-between; padding: 1.5rem 10%; border-bottom: 1px solid var(--border-color); align-items: center; }
-        .credit-badge { background: var(--accent-blue); padding: 8px 18px; border-radius: 25px; font-weight: 800; font-size: 0.9rem; }
-
+        :root { --bg: #000; --card: #111; --blue: #3B82F6; --border: #1E293B; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; }
+        .nav { display: flex; justify-content: space-between; padding: 1.5rem 10%; border-bottom: 1px solid var(--border); align-items: center; }
+        .badge { background: var(--blue); padding: 8px 15px; border-radius: 20px; font-weight: 800; }
         .container { padding: 3rem 10%; }
-
-        /* Post Skill Action Box */
-        .post-skill-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 2.5rem;
-            border-radius: 25px;
-            max-width: 500px;
-            margin: 0 auto 5rem auto;
-            text-align: center;
-        }
-
-        .btn-post {
-            background: var(--accent-blue);
-            width: 100%;
-            padding: 16px;
-            border: none;
-            color: white;
-            font-weight: 800;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        /* Active Marketplace Section */
-        .market-header { font-size: 3rem; margin-bottom: 2.5rem; font-weight: 800; }
-        .blue { color: var(--accent-blue); }
-
-        .market-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 30px;
-        }
-
-        /* Exact Replica of your Image Card */
-        .peer-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 35px;
-            padding: 3rem 2.5rem;
-            transition: transform 0.2s;
-        }
-
-        .peer-card:hover { border-color: var(--accent-blue); transform: scale(1.02); }
-
-        .label { color: var(--accent-blue); font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 1rem; }
-        .skill-name { font-size: 2.5rem; margin: 10px 0; font-weight: 700; }
-        .skill-desc { color: #777; margin-bottom: 2.5rem; font-size: 1.2rem; }
-        
-        .line { border: 0; border-top: 1px solid #222; margin-bottom: 2rem; }
-
-        .card-bottom { display: flex; justify-content: space-between; align-items: center; }
-        .flux-cost { font-size: 1.5rem; font-weight: 800; }
-        
-        .btn-acquire {
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
+        .post-box { background: var(--card); border: 1px solid var(--border); padding: 2rem; border-radius: 20px; max-width: 500px; margin: 0 auto 3rem; text-align: center; }
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 2rem; }
+        .label { color: var(--blue); font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; }
+        .title { font-size: 2rem; margin: 10px 0; }
+        .btn-blue { background: var(--blue); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div style="font-weight: 800; font-size: 1.6rem;">Skill<span class="blue">Flux</span></div>
-        <div class="credit-badge">2 FLUX</div>
+    <div class="nav">
+        <div style="font-weight: 800; font-size: 1.5rem;">Skill<span style="color:var(--blue)">Flux</span></div>
+        <div class="badge"><span id="user-credits">0</span> FLUX</div>
     </div>
 
     <div class="container">
-        <div class="post-skill-box">
-            <button class="btn-post">Post Skill</button>
+        <div class="post-box">
+            <input type="text" id="s-name" placeholder="Skill Name">
+            <input type="text" id="s-desc" placeholder="Description">
+            <button class="btn-blue" style="width:100%" onclick="postToMarket()">Post Skill</button>
         </div>
 
-        <h1 class="market-header">Active <span class="blue">Marketplace</span></h1>
-
-        <div class="market-grid">
-            <div class="peer-card">
-                <p class="label">PEER OFFERING</p>
-                <h2 class="skill-name">code</h2>
-                <p class="skill-desc">it cover baiscs</p>
-                <hr class="line">
-                <div class="card-bottom">
-                    <span class="flux-cost">1 FLUX</span>
-                    <button class="btn-acquire">Acquire</button>
-                </div>
-            </div>
-
-            <div class="peer-card">
-                <p class="label">PEER OFFERING</p>
-                <h2 class="skill-name">guitar</h2>
-                <p class="skill-desc">basic chords and rhythm</p>
-                <hr class="line">
-                <div class="card-bottom">
-                    <span class="flux-cost">1 FLUX</span>
-                    <button class="btn-acquire">Acquire</button>
-                </div>
-            </div>
-        </div>
+        <h1 style="font-size: 2.5rem;">Active <span style="color:var(--blue)">Marketplace</span></h1>
+        <div class="market-grid" id="market"></div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // PASTE SAME FIREBASE CONFIG HERE
+        const firebaseConfig = { ... };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                db.collection("users").doc(user.uid).onSnapshot(doc => {
+                    document.getElementById('user-credits').innerText = doc.data().credits;
+                });
+                loadMarket();
+            } else { window.location.href = "index.html"; }
+        });
+
+        async function postToMarket() {
+            const s = document.getElementById('s-name').value;
+            const d = document.getElementById('s-desc').value;
+            await db.collection("requests").add({
+                skill: s, desc: d, providerId: auth.currentUser.uid, status: "pending"
+            });
+            alert("Skill Posted!");
+        }
+
+        async function loadMarket() {
+            const grid = document.getElementById('market');
+            db.collection("requests").where("status", "==", "pending").onSnapshot(snap => {
+                grid.innerHTML = "";
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if(data.providerId === auth.currentUser.uid) return;
+                    grid.innerHTML += `
+                        <div class="skill-card">
+                            <p class="label">PEER OFFERING</p>
+                            <h2 class="title">${data.skill}</h2>
+                            <p style="color:#777">${data.desc}</p>
+                            <hr style="border:0; border-top:1px solid #333; margin:1rem 0;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-weight:800">1 FLUX</span>
+                                <button class="btn-blue" onclick="acquire('${doc.id}', '${data.providerId}')">Acquire</button>
+                            </div>
+                        </div>`;
+                });
+            });
+        }
+
+        async function acquire(rid, pid) {
+            const batch = db.batch();
+            batch.update(db.collection("users").doc(auth.currentUser.uid), { credits: firebase.firestore.FieldValue.increment(-1) });
+            batch.update(db.collection("users").doc(pid), { credits: firebase.firestore.FieldValue.increment(1) });
+            batch.update(db.collection("requests").doc(rid), { status: "completed" });
+            await batch.commit();
+            alert("Skill Acquired!");
+        }
+    </script>
 </body>
 </html>
