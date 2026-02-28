@@ -2,37 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SkillFlux | Member Vault</title>
+    <title>SkillFlux | Dashboard</title>
     <style>
-        :root { --bg: #000; --blue: #3b82f6; --border: #1e293b; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 40px; }
-        nav { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        .credit-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 15px 30px; border-radius: 12px; text-align: center; }
-        .skill-input { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; margin: 30px 0; }
-        .feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-        .skill-card { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; }
-        .btn { background: var(--blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        :root { --bg: #0a0a0a; --card: #161616; --blue: #3b82f6; --border: #262626; --text: #e5e5e5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 90px 5% 40px; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; background: rgba(10,10,10,0.9); border-bottom: 1px solid var(--border); z-index: 1000; box-sizing: border-box; }
+        
+        .user-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .credit-box { background: var(--card); border: 1px solid var(--blue); padding: 15px 30px; border-radius: 12px; }
+        .credit-box h1 { margin: 0; color: var(--blue); font-size: 2rem; }
+
+        .upload-section { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 16px; margin-bottom: 40px; }
+        .input-row { display: flex; gap: 10px; margin-top: 15px; }
+        input { flex: 1; padding: 12px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; outline: none; }
+        
+        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .skill-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; border-left: 4px solid var(--blue); }
+        .btn { background: var(--blue); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-acquire { width: 100%; margin-top: 15px; background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+        .btn-acquire:hover { background: var(--blue); color: white; }
     </style>
 </head>
 <body>
     <nav>
-        <h2>SkillFlux Vault</h2>
-        <div class="credit-card">FLUX BALANCE: <span id="user-credits" style="color:var(--blue); font-size: 1.5rem; font-weight: 900;">0</span></div>
+        <div style="font-size: 1.2rem; font-weight: 700;">Skill<span style="color:var(--blue)">Flux</span></div>
+        <button onclick="auth.signOut()" class="btn" style="background:#ef4444; padding:8px 15px;">Logout</button>
     </nav>
 
-    <div class="skill-input">
-        <h3>Upload Skill</h3>
-        <input type="text" id="skillIn" placeholder="What can you teach?" style="padding:12px; width:280px; border-radius:8px; border:1px solid var(--border); background:#000; color:white;">
-        <button id="postBtn" class="btn">Post to Network</button>
+    <div class="user-bar">
+        <div>
+            <p style="color:#737373; margin:0; font-size: 0.8rem; letter-spacing: 1px;">VAULT IDENTITY</p>
+            <h2 id="user-email" style="margin:0;">...</h2>
+        </div>
+        <div class="credit-box">
+            <small>FLUX CREDITS</small>
+            <h1 id="user-credits">0</h1>
+        </div>
     </div>
 
-    <h3>Global Exchange Feed</h3>
-    <div id="feed" class="feed"></div>
+    <div class="upload-section">
+        <h3 style="margin:0;">Upload Skill</h3>
+        <p style="color:#a3a3a3; font-size: 0.9rem;">Add your expertise to the peer-to-peer exchange feed.</p>
+        <div class="input-row">
+            <input type="text" id="skillTitle" placeholder="Skill Name (e.g. Video Editing)">
+            <button id="uploadBtn" class="btn">Post Skill</button>
+        </div>
+    </div>
+
+    <h2 style="font-size: 1.5rem; margin-bottom: 20px;">Global Feed</h2>
+    <div id="skillFeed" class="skill-grid"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, collection, addDoc, query, orderBy, updateDoc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, collection, addDoc, query, orderBy, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
@@ -46,56 +69,64 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        window.auth = auth;
 
-        let currentCredits = 0;
+        let userCredits = 0;
 
         onAuthStateChanged(auth, (user) => {
             if (!user) window.location.href = "index.html";
             else {
-                onSnapshot(doc(db, "users", user.uid), (s) => { 
-                    if(s.exists()) {
-                        currentCredits = s.data().credits;
-                        document.getElementById('user-credits').innerText = currentCredits;
+                document.getElementById('user-email').innerText = user.email;
+                onSnapshot(doc(db, "users", user.uid), (snap) => {
+                    if (snap.exists()) {
+                        userCredits = snap.data().credits;
+                        document.getElementById('user-credits').innerText = userCredits;
                     }
                 });
-                loadFeed();
+                loadSkills();
             }
         });
 
-        // [UPLOADING SKILL]
-        document.getElementById('postBtn').onclick = async () => {
-            const skill = document.getElementById('skillIn').value;
-            if(skill) {
-                await addDoc(collection(db, "skills"), { skill, owner: auth.currentUser.email, ownerId: auth.currentUser.uid, time: new Date() });
-                document.getElementById('skillIn').value = '';
+        // UPLOAD SKILL
+        document.getElementById('uploadBtn').onclick = async () => {
+            const title = document.getElementById('skillTitle').value;
+            if(title) {
+                await addDoc(collection(db, "skills"), { 
+                    title, 
+                    owner: auth.currentUser.email, 
+                    ownerId: auth.currentUser.uid, 
+                    time: new Date() 
+                });
+                document.getElementById('skillTitle').value = '';
             }
         };
 
-        // [ACQUIRING SKILL]
-        window.acquireSkill = async (skillId, ownerId) => {
-            if (ownerId === auth.currentUser.uid) return alert("You already own this skill.");
-            if (currentCredits < 1) return alert("Insufficient Flux Credits.");
+        // ACQUIRE SKILL (Exchange Logic)
+        window.acquireSkill = async (ownerId) => {
+            if(ownerId === auth.currentUser.uid) return alert("You already own this skill.");
+            if(userCredits < 1) return alert("Insufficient credits to acquire.");
 
             try {
                 await runTransaction(db, async (transaction) => {
                     const userRef = doc(db, "users", auth.currentUser.uid);
-                    transaction.update(userRef, { credits: currentCredits - 1 });
+                    transaction.update(userRef, { credits: userCredits - 1 });
                 });
                 alert("Skill Acquired! 1 Credit deducted.");
-            } catch (e) { alert("Transaction failed: " + e.message); }
+            } catch (e) { alert("Exchange failed: " + e.message); }
         };
 
-        function loadFeed() {
+        function loadSkills() {
             const q = query(collection(db, "skills"), orderBy("time", "desc"));
             onSnapshot(q, (snap) => {
-                const f = document.getElementById('feed');
-                f.innerHTML = '';
+                const feed = document.getElementById('skillFeed');
+                feed.innerHTML = '';
                 snap.forEach(d => {
-                    const data = d.data();
-                    f.innerHTML += `
+                    const s = d.data();
+                    feed.innerHTML += `
                         <div class="skill-card">
-                            <div><strong>${data.skill}</strong><br><small style="color:#94a3b8">Expert: ${data.owner}</small></div>
-                            <button onclick="acquireSkill('${d.id}', '${data.ownerId}')" class="btn">Acquire (1 Credit)</button>
+                            <strong style="font-size: 1.1rem;">${s.title}</strong><br>
+                            <small style="color:#737373">Exchange with: ${s.owner}</small>
+                            <button onclick="acquireSkill('${s.ownerId}')" class="btn btn-acquire">Acquire Skill (1 Credit)</button>
                         </div>`;
                 });
             });
