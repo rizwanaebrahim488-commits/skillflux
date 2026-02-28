@@ -2,70 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SkillFlux | Elite Exchange</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlux | Master Your Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
-        nav { height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); }
-        .hero { padding: 100px 6%; text-align: center; }
-        .hero h1 { font-size: 4rem; letter-spacing: -3px; }
-        .phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 50px 6%; }
-        .phase-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; }
-        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 380px; margin: 40px auto; text-align: center; }
-        input { width: 100%; padding: 15px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; }
-        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        body { background-color: #0f172a; color: white; font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body>
-    <nav><div style="font-size: 1.8rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
 
-    <div class="hero">
-        <h1>Elite <span style="color:var(--blue)">Exchange.</span></h1>
-        <p style="color: var(--gray); font-size: 1.2rem;">A peer-to-peer protocol for knowledge liquidity.</p>
-    </div>
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto">
+        <h1 class="text-2xl font-bold tracking-tighter text-white">SKILL<span class="text-sky-400">FLUX</span></h1>
+        <div class="space-x-6 hidden md:block">
+            <a href="#how-it-works" class="hover:text-sky-400">How it works</a>
+            <a href="#auth" class="bg-sky-500 px-5 py-2 rounded-full font-medium hover:bg-sky-600 transition">Join Now</a>
+        </div>
+    </nav>
 
-    <div class="phases">
-        <div class="phase-card"><h3>Phase 1: Sync</h3><p>Initialize your vault and receive 2 starter credits.</p></div>
-        <div class="phase-card"><h3>Phase 2: List</h3><p>Post your skills to earn credits from others.</p></div>
-        <div class="phase-card"><h3>Phase 3: Acquire</h3><p>Spend credits to gain expertise from elite mentors.</p></div>
-    </div>
+    <header class="text-center py-20 px-4">
+        <h2 class="text-5xl md:text-7xl font-extrabold mb-6">Stop Learning. Start <span class="gradient-text">Flowing.</span></h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+            SkillFlux is a dynamic ecosystem designed to bridge the gap between static knowledge and real-world mastery. 
+            Connect with experts, track your growth, and stay ahead of the curve.
+        </p>
+    </header>
 
-    <div class="auth-card">
-        <h2>Secure Access</h2>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="handleLogin()" class="btn">Login</button>
-        <button onclick="handleSignUp()" class="btn" style="background:transparent; border: 1px solid var(--blue); margin-top:10px;">Register</button>
-    </div>
+    <section id="how-it-works" class="py-16 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="text-3xl font-bold mb-12">How It Works</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 border border-slate-700 rounded-2xl">
+                    <div class="text-sky-400 text-3xl mb-4">01</div>
+                    <h4 class="text-xl font-bold mb-2">Build Your Profile</h4>
+                    <p class="text-slate-400">Identify your current expertise and the "future-proof" skills you want to acquire.</p>
+                </div>
+                <div class="p-6 border border-slate-700 rounded-2xl">
+                    <div class="text-sky-400 text-3xl mb-4">02</div>
+                    <h4 class="text-xl font-bold mb-2">Enter the Flux</h4>
+                    <p class="text-slate-400">Access real-time streams and peer-to-peer mentorship tailored to your pace.</p>
+                </div>
+                <div class="p-6 border border-slate-700 rounded-2xl">
+                    <div class="text-sky-400 text-3xl mb-4">03</div>
+                    <h4 class="text-xl font-bold mb-2">Track Mastery</h4>
+                    <p class="text-slate-400">Our Flux Score measures your practical application, not just completion hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <section id="auth" class="py-20 max-w-5xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            
+            <div class="bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-700">
+                <h3 class="text-2xl font-bold mb-6">Create Account</h3>
+                <form class="space-y-4">
+                    <input type="text" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
+                    <input type="email" placeholder="Email" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
+                    <input type="password" placeholder="Password" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
+                    <button class="w-full bg-sky-500 py-3 rounded-lg font-bold hover:bg-sky-400 transition">Register</button>
+                </form>
+            </div>
 
-        const firebaseConfig = { /* YOUR CONFIG HERE */ };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+            <div class="p-8">
+                <h3 class="text-2xl font-bold mb-6">Welcome Back</h3>
+                <form class="space-y-4">
+                    <input type="email" placeholder="Email" class="w-full bg-slate-800 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
+                    <input type="password" placeholder="Password" class="w-full bg-slate-800 border border-slate-700 p-3 rounded-lg focus:outline-sky-500">
+                    <div class="flex justify-between text-sm text-slate-400">
+                        <label><input type="checkbox" class="mr-2"> Remember me</label>
+                        <a href="#" class="hover:text-sky-400">Forgot Password?</a>
+                    </div>
+                    <button class="w-full border border-sky-500 text-sky-500 py-3 rounded-lg font-bold hover:bg-sky-500 hover:text-white transition">Sign In</button>
+                </form>
+            </div>
 
-        window.handleSignUp = async () => {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            try {
-                const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2 });
-                alert("Registered! Your vault has 2 credits.");
-            } catch (e) { alert(e.message); }
-        };
+        </div>
+    </section>
 
-        window.handleLogin = async () => {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            try { await signInWithEmailAndPassword(auth, email, password); } 
-            catch (e) { alert(e.message); }
-        };
+    <footer class="text-center py-10 border-t border-slate-800 text-slate-500 text-sm">
+        &copy; 2026 SkillFlux. All rights reserved.
+    </footer>
 
-        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
-    </script>
 </body>
 </html>
