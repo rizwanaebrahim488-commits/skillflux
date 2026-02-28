@@ -8,36 +8,48 @@
         :root { --bg-black: #000; --card-dark: #0a0a0a; --flux-blue: #3b82f6; --text-white: #fff; --text-gray: #94a3b8; --border: #1e293b; --nav-height: 100px; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-black); color: var(--text-white); line-height: 1.6; }
-        nav { position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border); }
+        
+        nav { 
+            position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 6%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border); 
+        }
         .brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; }
         .brand span { color: var(--flux-blue); }
-        .btn-join { background: var(--flux-blue); color: white; border: none; padding: 12px 28px; border-radius: 10px; font-weight: 800; cursor: pointer; }
-        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 8%; }
-        .hero h1 { font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 950; letter-spacing: -6px; line-height: 0.85; margin-bottom: 25px; }
-        #auth-view { padding: 80px 8%; display: flex; justify-content: center; }
-        .auth-card { background: var(--card-dark); border: 1px solid var(--border); padding: 60px; border-radius: 40px; width: 100%; max-width: 500px; }
-        input { width: 100%; padding: 20px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); border-radius: 14px; color: white; }
+        .p2p-tag { font-size: 0.8rem; color: var(--text-gray); border-left: 2px solid var(--flux-blue); padding-left: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .hero { height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 8%; }
+        .hero h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 950; letter-spacing: -5px; line-height: 0.9; }
+        
+        #auth-view { padding: 100px 8%; display: flex; justify-content: center; background: #050505; }
+        .auth-card { background: var(--card-dark); border: 1px solid var(--border); padding: 50px; border-radius: 40px; width: 100%; max-width: 450px; }
+        input { width: 100%; padding: 18px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: white; outline: none; }
+        input:focus { border-color: var(--flux-blue); }
+        .btn-join { background: var(--flux-blue); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; font-size: 1.1rem; }
     </style>
 </head>
 <body>
     <nav>
-        <div class="brand">Skill<span>Flux</span></div>
-        <button class="btn-join" onclick="document.getElementById('auth-view').scrollIntoView({behavior:'smooth'})">Initialize Vault</button>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <div class="brand">Skill<span>Flux</span></div>
+            <div class="p2p-tag">Elite Exchange</div>
+        </div>
+        <button class="btn-join" style="width:auto; padding: 12px 25px;" onclick="document.getElementById('auth-view').scrollIntoView({behavior:'smooth'})">Join Network</button>
     </nav>
 
     <main>
         <header class="hero">
-            <h1>Elite <span style="color:var(--flux-blue)">Exchange.</span></h1>
-            <p style="color:var(--text-gray); font-size: 1.4rem; max-width: 700px;">Trade expertise, earn credits, and master new domains in a frictionless peer-to-peer ecosystem.</p>
+            <h1>Elite Knowledge<br><span style="color:var(--flux-blue)">Liquidity.</span></h1>
+            <p style="color:var(--text-gray); font-size: 1.3rem; max-width: 600px; margin-top: 30px;">The professional standard for peer-to-peer expertise exchange. Secure your vault and start trading skills.</p>
         </header>
 
         <section id="auth-view">
             <div class="auth-card">
-                <h2 style="margin-bottom: 35px; text-align:center; font-size: 2rem;">Secure Access</h2>
+                <h2 style="margin-bottom: 30px; text-align:center;">Initialize Vault</h2>
                 <input type="email" id="email" placeholder="Professional Email">
-                <input type="password" id="password" placeholder="Vault Password">
+                <input type="password" id="password" placeholder="Choose Password">
                 <input type="password" id="confirmPassword" placeholder="Confirm Password">
-                <button onclick="handleSignUp()" class="btn-join" style="width:100%; padding:20px;">Create Account</button>
+                <button onclick="handleSignUp()" class="btn-join">Access Exchange</button>
             </div>
         </section>
     </main>
@@ -61,27 +73,28 @@
         const db = getFirestore(app);
 
         window.handleSignUp = async () => {
-            const email = document.getElementById('email').value.trim(); // Fixed spacing error
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirm = document.getElementById('confirmPassword').value;
 
             if (password !== confirm) return alert("Passwords do not match!");
+            if (!email || password.length < 6) return alert("Valid email and 6-char password required.");
 
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, "users", userCredential.user.uid), {
                     email: email,
-                    credits: 2, // New accounts start with 2 credits
+                    credits: 2,
                     createdAt: new Date()
                 });
-                alert("Vault Initialized!");
+                alert("Vault Secured.");
             } catch (error) {
-                alert("Registration Error: " + error.message);
+                alert("Error: " + error.message);
             }
         };
 
         onAuthStateChanged(auth, (user) => {
-            if (user) window.location.href = "dashboard.html"; // Redirects upon success
+            if (user) window.location.href = "dashboard.html";
         });
     </script>
 </body>
