@@ -2,35 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SkillFlux | Elite Exchange</title>
+    <title>SkillFlux | Elite Knowledge Exchange</title>
     <style>
         :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; text-align: center; }
-        nav { height: 80px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid var(--border); }
-        .hero { padding: 40px 20px; }
-        .phase-grid { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; }
-        .phase-box { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 12px; width: 220px; text-align: left; border-bottom: 3px solid var(--blue); }
-        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 350px; margin: 20px auto; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
+        nav { height: 100px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid var(--border); }
+        .hero { padding: 100px 20px; text-align: center; }
+        .hero h1 { font-size: 6rem; letter-spacing: -5px; margin: 0; line-height: 1; }
+        .hero p { font-size: 1.5rem; color: var(--gray); margin-top: 20px; }
+        
+        /* Large Phase Boxes */
+        .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 60px 10%; }
+        .phase-box { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 24px; border-bottom: 5px solid var(--blue); transition: 0.3s; }
+        .phase-box:hover { transform: translateY(-10px); border-color: white; }
+        .phase-box h3 { font-size: 1.8rem; margin-top: 0; color: var(--blue); }
+        .phase-box p { font-size: 1.1rem; line-height: 1.6; color: var(--gray); }
+
+        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 50px; border-radius: 40px; width: 100%; max-width: 500px; margin: 40px auto; box-sizing: border-box; }
+        input { width: 100%; padding: 20px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); color: white; border-radius: 15px; font-size: 1.1rem; box-sizing: border-box; }
+        .btn { background: var(--blue); color: white; border: none; padding: 20px; width: 100%; border-radius: 15px; cursor: pointer; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-alt { background: transparent; border: 1px solid var(--blue); margin-top: 15px; }
     </style>
 </head>
 <body>
-    <nav><div style="font-size: 1.8rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
+    <nav><div style="font-size: 2.5rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
 
     <div class="hero">
-        <h1>Elite Exchange.</h1>
-        <p style="color: var(--gray);">Master skills through peer-to-peer knowledge liquidity.</p>
+        <h1>Elite <span style="color:var(--blue)">Exchange.</span></h1>
+        <p>Peer-to-Peer Knowledge Liquidity & Human Capital Trading.</p>
     </div>
 
     <div class="phase-grid">
-        <div class="phase-box"><strong>[Phase 1: Sync]</strong><p style="font-size: 0.8rem; color: var(--gray);">Vault initialization and 2-credit baseline sync.</p></div>
-        <div class="phase-box"><strong>[Phase 2: Flux]</strong><p style="font-size: 0.8rem; color: var(--gray);">Upload skills to generate network liquidity.</p></div>
-        <div class="phase-box"><strong>[Phase 3: Gain]</strong><p style="font-size: 0.8rem; color: var(--gray);">Acquire human capital by redeeming flux credits.</p></div>
+        <div class="phase-box">
+            <h3>[Phase 1: Sync]</h3>
+            <p>Establish your vault identity on the secure ledger. Every new verified operator is initialized with a <b>2-credit baseline</b> to begin trading immediately.</p>
+        </div>
+        <div class="phase-box">
+            <h3>[Phase 2: Flux]</h3>
+            <p>Broadcast your expertise to the global feed. By <b>Uploading Skills</b>, you create network liquidity and earn the right to request knowledge from others.</p>
+        </div>
+        <div class="phase-box">
+            <h3>[Phase 3: Gain]</h3>
+            <p><b>Acquire</b> specialized assets. Redeem your accumulated Flux credits to unlock direct pathways to master-level mentors and elite skill sets.</p>
+        </div>
     </div>
 
     <div class="auth-card">
-        <input type="email" id="email" placeholder="Email Address">
-        <input type="password" id="password" placeholder="Vault Password">
-        <button id="regBtn" class="btn">Register (Get 2 Credits)</button>
-        <button id="loginBtn" class="btn" style="background:transparent; border:
+        <h2 style="font-size: 2rem; margin-bottom: 30px;">Initialize Vault</h2>
+        <input type="email" id="email" placeholder="Operator Email">
+        <input type="password" id="password" placeholder="Secure Password">
+        <button id="regBtn" class="btn">Register & Get 2 Credits</button>
+        <button id="loginBtn" class="btn btn-alt">Login to Existing Vault</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
+            authDomain: "skillflux-c4088.firebaseapp.com",
+            projectId: "skillflux-c4088",
+            storageBucket: "skillflux-c4088.appspot.com",
+            messagingSenderId: "347039323368",
+            appId: "1:347039323368:web:0f610227dc3715581a255d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        document.getElementById('regBtn').onclick = async () => {
+            const e = document.getElementById('email').value.trim();
+            const p = document.getElementById('password').value;
+            try {
+                const res = await createUserWithEmailAndPassword(auth, e, p);
+                await setDoc(doc(db, "users", res.user.uid), { email: e, credits: 2 });
+                alert("Identity Synced. 2 Credits loaded into vault.");
+            } catch (err) { alert(err.message); }
+        };
+
+        document.getElementById('loginBtn').onclick = async () => {
+            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } 
+            catch (err) { alert(err.message); }
+        };
+
+        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
+    </script>
+</body>
+</html>
