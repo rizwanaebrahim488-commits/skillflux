@@ -6,76 +6,31 @@
     <style>
         :root { --bg: #050505; --blue: #3b82f6; --border: #1e293b; --gray: #94a3b8; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; text-align: center; }
-        nav { height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; border-bottom: 1px solid var(--border); }
-        .hero { padding: 60px 20px; }
-        .hero h1 { font-size: 4rem; letter-spacing: -3px; margin: 0; }
-        .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 40px 6%; }
-        .phase-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 20px; text-align: left; }
-        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 100%; max-width: 400px; margin: 20px auto; box-sizing: border-box; }
-        input { width: 100%; padding: 15px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; outline: none; }
-        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
+        nav { height: 80px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid var(--border); }
+        .hero { padding: 40px 20px; }
+        .phase-grid { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; }
+        .phase-box { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; border-radius: 12px; width: 220px; text-align: left; border-bottom: 3px solid var(--blue); }
+        .auth-card { background: #0a0a0a; border: 1px solid var(--blue); padding: 40px; border-radius: 30px; width: 350px; margin: 20px auto; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: var(--blue); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <nav><div style="font-size: 1.8rem; font-weight: 900;">Skill<span style="color:var(--blue)">Flux</span></div></nav>
 
     <div class="hero">
-        <h1>Elite <span style="color:var(--blue)">Exchange.</span></h1>
+        <h1>Elite Exchange.</h1>
         <p style="color: var(--gray);">Master skills through peer-to-peer knowledge liquidity.</p>
     </div>
 
     <div class="phase-grid">
-        <div class="phase-card"><h3>[Phase 1: Sync]</h3><p>Initialize your vault identity. New users receive 2 Flux credits automatically.</p></div>
-        <div class="phase-card"><h3>[Phase 2: Flux]</h3><p>Upload your skills to the marketplace to earn and trade credits.</p></div>
-        <div class="phase-card"><h3>[Phase 3: Gain]</h3><p>Redeem your credits to acquire 1-on-1 sessions with expert mentors.</p></div>
+        <div class="phase-box"><strong>[Phase 1: Sync]</strong><p style="font-size: 0.8rem; color: var(--gray);">Vault initialization and 2-credit baseline sync.</p></div>
+        <div class="phase-box"><strong>[Phase 2: Flux]</strong><p style="font-size: 0.8rem; color: var(--gray);">Upload skills to generate network liquidity.</p></div>
+        <div class="phase-box"><strong>[Phase 3: Gain]</strong><p style="font-size: 0.8rem; color: var(--gray);">Acquire human capital by redeeming flux credits.</p></div>
     </div>
 
     <div class="auth-card">
-        <h2 style="margin-bottom:20px;">Secure Access</h2>
         <input type="email" id="email" placeholder="Email Address">
         <input type="password" id="password" placeholder="Vault Password">
         <button id="regBtn" class="btn">Register (Get 2 Credits)</button>
-        <button id="loginBtn" class="btn" style="background:transparent; border: 1px solid var(--blue);">Login (Existing User)</button>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHSJX5F_mZjLqPSuofyBANQ3pC69gC14o",
-            authDomain: "skillflux-c4088.firebaseapp.com",
-            projectId: "skillflux-c4088",
-            storageBucket: "skillflux-c4088.appspot.com",
-            messagingSenderId: "347039323368",
-            appId: "1:347039323368:web:0f610227dc3715581a255d"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Registration with 2 Credits Logic
-        document.getElementById('regBtn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            try {
-                const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                // Creating the user document with 2 initial credits
-                await setDoc(doc(db, "users", userCred.user.uid), { email, credits: 2 });
-                alert("Vault Synced! 2 Credits added to your account.");
-            } catch (e) { alert("Registration Error: " + e.message); }
-        });
-
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            try { await signInWithEmailAndPassword(auth, email, password); } 
-            catch (e) { alert("Login Error: " + e.message); }
-        });
-
-        onAuthStateChanged(auth, (user) => { if (user) window.location.href = "dashboard.html"; });
-    </script>
-</body>
-</html>
+        <button id="loginBtn" class="btn" style="background:transparent; border:
